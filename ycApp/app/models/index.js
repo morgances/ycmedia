@@ -29,8 +29,12 @@
 
 import init from './init';
 import router from './router';
+import culture_news from './culture_news'
+import login from './login'
 
 export const Models = [
   init,
   router,
+  culture_news,
+  login
 ];

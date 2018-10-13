@@ -26,11 +26,118 @@
  * Revision History:
  *     Initial: 2018/01/16        Feng Yifei
  */
+import {
+  TabNavigator,
+} from 'react-navigation';
 
-import Main from './pages/Main';
+import FontsSize from './res/Fonts/size';
+import Colors from './res/Colors';
+import Styles from './res/Styles';
+
+import MainScreen from './pages/Main';
+import ActivityScreen from './pages/Activity';
+import GuideScreen from './pages/Guide'
+import MineScreen from './pages/Mine'
+import LoginScreen from './pages/Login'
+import SignScreen from './pages/Sign'
+import CultureScreen from './pages/MainModules/Culture'
+import ArtScreen from './pages/MainModules/Art'
+import IntangibleScreen from './pages/MainModules/Intangible'
+import TravelScreen from './pages/MainModules/Travel'
+import BookScreen from './pages/MainModules/Book'
+import VolunteerScreen from './pages/MainModules/Volunteer'
+import SchoolScreen from './pages/MainModules/School'
+import MovieScreen from './pages/MainModules/Movie'
+import MemoryScreen from './pages/MainModules/Memory'
+import MassCultureScreen from './pages/MainModules/MassCulture'
+import TrainingScreen from './pages/ActivityModules/Training'
+import MassActivityScreen from './pages/ActivityModules/MassActivity'
+
+const BasicApp = TabNavigator({
+  Main: {
+    screen: MainScreen
+  },
+  Activity: {
+    screen: ActivityScreen
+  },
+  Guide: {
+    screen: GuideScreen
+  },
+  Mine: {
+    screen: MineScreen
+  },
+},{
+  initialRouteName: 'Main',
+  tabBarPosition: 'bottom',
+  animationEnabled: true,
+  lazy: true,
+  tabBarOptions: {
+    showIcon: true,
+    activeTintColor: Colors.primary,
+    inactiveTintColor: Colors.gray2,
+    pressOpacity: 4,
+    labelStyle: {
+      fontSize: FontsSize.small,
+      paddingBottom: Styles.Height(10)
+    },
+    iconStyle: {
+      marginBottom: Styles.Height(-5),
+      marginTop: Styles.Height(-5)
+    },
+    style: {
+      backgroundColor: Colors.white,
+      height: Styles.Height(98),
+    },
+    indicatorStyle: {
+      height: 0,
+    },
+  },
+})
 
 const Navigations = {
-  Main: { screen: Main },
+  Basic: { screen: BasicApp },
+  Culture: { 
+    screen: CultureScreen 
+  },
+  Art: {
+    screen: ArtScreen
+  },
+  Intangible: {
+    screen: IntangibleScreen
+  },
+  Travel: {
+    screen: TravelScreen
+  },
+  Book: {
+    screen: BookScreen
+  },
+  Volunteer: {
+    screen: VolunteerScreen
+  },
+  School: {
+    screen: SchoolScreen
+  },
+  Movie: {
+    screen: MovieScreen
+  },
+  Memory: {
+    screen: MemoryScreen
+  },
+  MassCulture: {
+    screen: MassCultureScreen
+  },
+  Training: {
+    screen: TrainingScreen
+  },
+  MassActivity: {
+    screen: MassActivityScreen
+  },
+  Login: {
+    screen: LoginScreen
+  },
+  Sign: {
+    screen: SignScreen
+  }
 };
 
 export default Navigations;
