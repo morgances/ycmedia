@@ -2,9 +2,9 @@ import React from 'react';
 import { Text, StyleSheet, Image, View } from 'react-native';
 import { Flex } from 'antd-mobile-rn';
 
-import Colors from '../../../../res/Colors'
-import Styles from '../../../../res/Styles'
-import FontSize from '../../../../res/Fonts/size'
+import Colors from '../res/Colors'
+import Styles from '../res/Styles'
+import FontSize from '../res/Fonts/size'
 
 export default (props) => {
   function List() {

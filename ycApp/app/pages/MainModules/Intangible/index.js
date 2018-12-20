@@ -8,12 +8,14 @@ import React, { Component } from 'react'
 import { Text, View, Image } from 'react-native'
 import { Tabs } from 'antd-mobile-rn'
 
-import Styles from '../../../res/Styles'
 import Colors from '../../../res/Colors'
+import Size from '../../../res/Fonts/size'
+import Culture from './components/Culture'
+import Smriti from './components/Smriti'
 
 export default class Main extends Component<{}> {
   static navigationOptions = {
-    title: '非遗传承',
+    title: '遗脉相承',
     headerStyle: {
       backgroundColor: Colors.primary,
       elevation: 0,
@@ -21,25 +23,19 @@ export default class Main extends Component<{}> {
     },
     headerTintColor: Colors.white,
     headerTitleStyle: {
+      fontSize: Size.large,
+      fontWeight: null,
       alignSelf: 'center'
     },
-    headerRight: (
-      <Image style={{ height: Styles.Height(34), width: Styles.Width(34), marginRight: Styles.Width(30)}} source={require('../../../assets/images/Total/search.jpg')}></Image>
-    ),
+    headerRight: <View />
   }
   render() {
     const tabs = [
       {
-        title: '项目名录'
+        title: '文化遗产'
       },
       {
-        title: '非遗展馆'
-      },
-      {
-        title: '传承基地'
-      },
-      {
-        title: '传承人'
+        title: '非遗传承'
       }
     ]
     return (
@@ -50,19 +46,13 @@ export default class Main extends Component<{}> {
           tabs={tabs}
           initialPage={0}
           tabBarActiveTextColor={Colors.white}
-          tabBarInactiveTextColor={Colors.white}
+          tabBarInactiveTextColor={Colors.black}
           tabBarUnderlineStyle={{backgroundColor: Colors.white}}>
           <View>
-            <Text>Content of First Tab</Text>
+            <Culture></Culture>
           </View>
           <View>
-            <Text>Content of First Tab</Text>
-          </View>
-          <View>
-            <Text>Content of First Tab</Text>
-          </View>
-          <View>
-            <Text>Content of First Tab</Text>
+            <Smriti></Smriti>
           </View>
         </Tabs>
       </View>

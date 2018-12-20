@@ -30,11 +30,13 @@
 import init from './init';
 import router from './router';
 import culture_news from './culture_news'
-import login from './login'
+import intangible_culture from './Intangible/culture'
+import intangible_smriti from './Intangible/smriti'
 
 export const Models = [
   init,
   router,
   culture_news,
-  login
+  intangible_culture,
+  intangible_smriti
 ];

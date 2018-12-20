@@ -9,7 +9,8 @@ import { Text, View, Image } from 'react-native';
 import { Tabs } from 'antd-mobile-rn';
 
 import Styles from '../../../res/Styles';
-import Colors from '../../../res/Colors'
+import Colors from '../../../res/Colors';
+import Size from '../../../res/Fonts/size'
 
 import News from  './components/New'
 
@@ -23,22 +24,25 @@ export default class Main extends Component<{}> {
     },
     headerTintColor: Colors.white,
     headerTitleStyle: {
+      fontSize: Size.large,
+      fontWeight: null,
       alignSelf: 'center'
     },
-    headerRight: (
-      <Image style={{ height: Styles.Height(34), width: Styles.Width(34), marginRight: Styles.Width(30)}} source={require('../../../assets/images/Total/search.jpg')}></Image>
-    ),
+    headerRight: <View />
   }
   render() {
     const tabs = [
       {
-        title: '新闻资讯'
+        title: '文化动态'
       },
       {
         title: '通知公告'
       },
       {
-        title: '文化政策'
+        title: '政策法规'
+      },
+      {
+        title: '免费开放'
       }
     ]
     return (
@@ -49,7 +53,7 @@ export default class Main extends Component<{}> {
           tabs={tabs}
           initialPage={0}
           tabBarActiveTextColor={Colors.white}
-          tabBarInactiveTextColor={Colors.white}
+          tabBarInactiveTextColor={Colors.black}
           tabBarUnderlineStyle={{backgroundColor: Colors.white}}>
           <View>
             <News></News>

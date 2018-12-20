@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import Colors from '../../../../res/Colors'
 
-import Item from './Item'
+import Item from '../../../../components/Item'
 
 class News extends React.Component {
   render() {

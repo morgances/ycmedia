@@ -8,8 +8,9 @@ import React, { Component } from 'react'
 import { Text, View, Image } from 'react-native'
 import { Tabs } from 'antd-mobile-rn'
 
-import Styles from '../../../res/Styles'
-import Colors from '../../../res/Colors'
+import Size from '../../../res/Fonts/size';
+import Colors from '../../../res/Colors';
+import Books from './components/Books';
 
 export default class Main extends Component<{}> {
   static navigationOptions = {
@@ -21,15 +22,50 @@ export default class Main extends Component<{}> {
     },
     headerTintColor: Colors.white,
     headerTitleStyle: {
+      fontSize: Size.large,
+      fontWeight: null,
       alignSelf: 'center'
     },
-    headerRight: (
-      <Text style={{ height: Styles.Height(34), width: Styles.Width(34), marginRight: Styles.Width(30)}}></Text>
-    ),
+    headerRight: <View />
   }
   render() {
+    const tabs = [
+      {
+        title: '图书借阅'
+      },
+      {
+        title: '服务指南'
+      },
+      {
+        title: '数字资源'
+      },
+      {
+        title: '好书推荐'
+      }
+    ]
     return (
       <View style={{flex: 1}}>
+        <Tabs 
+          tabBarBackgroundColor={Colors.primary}
+          tabBarPosition='top'
+          tabs={tabs}
+          initialPage={0}
+          tabBarActiveTextColor={Colors.white}
+          tabBarInactiveTextColor={Colors.black}
+          tabBarUnderlineStyle={{backgroundColor: Colors.white}}>
+          <View>
+            <Text>Content of First Tab</Text>
+          </View>
+          <View>
+            <Text>Content of First Tab</Text>
+          </View>
+          <View>
+            <Text>Content of First Tab</Text>
+          </View>
+          <View>
+            <Books></Books>
+          </View>
+        </Tabs>
       </View>
     );
   }

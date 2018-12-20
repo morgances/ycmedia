@@ -2,10 +2,10 @@ const FontsSize = {
   mini: 8,
   tiny: 10,
   small: 12,
-  xmedium: 13,
+  xmedium: 14,
   medium: 16,
-  large: 20,
-  xlarge: 26,
+  xlarge: 18,
+  large: 20
 };
   
 export default FontsSize;

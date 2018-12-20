@@ -5,9 +5,11 @@
  */
 
 import React, { Component } from 'react';
-import { ScrollView, StyleSheet, ImageBackground, Image } from 'react-native';
+import { ScrollView, StyleSheet, StatusBar, View } from 'react-native';
 
 import Styles from '../../res/Styles'
+import Colors from '../../res/Colors'
+import Size from '../../res/Fonts/size'
 
 import Carousel from './components/Carousel'
 import Modules from './components/Modules'
@@ -15,40 +17,38 @@ import News from './components/News'
 
 export default class Main extends Component<{}> {
   static navigationOptions = {
-    header: null,
-    tabBarLabel: '首页',
-    tabBarIcon: ({ focused }) => (
-      <Image 
-        source={focused ? require('../../assets/images/Navigation/home__active.jpg'): require('../../assets/images/Navigation/home.jpg')}
-        style={styles.iconSize}
-      >
-      </Image>
-    )
+    title: '银川公共文化',
+    headerStyle: {
+      backgroundColor: Colors.primary,
+      elevation: 0,
+      shadowOpacity: 0,
+    },
+    headerTintColor: Colors.white,
+    headerTitleStyle: {
+      fontSize: Size.large,
+      fontWeight: null,
+      alignSelf: 'center'
+    }
   }
   
   render() {
     return (
       <ScrollView
         showsVerticalScrollIndicator={false}>
-        <ImageBackground style={styles.background} source={require('../../assets/images/Main/background.jpg')}>
+        <StatusBar  
+          animated={true}
+          hidden={false}  
+          backgroundColor={Colors.primary} 
+          translucent={false}
+          barStyle={'light-content'}
+        >  
+        </StatusBar>
+        <View style={{backgroundColor: '#f2f3f5'}}>
           <Carousel></Carousel>
-          <ImageBackground style={{height: Styles.Height(26)}} source={require('../../assets/images/Main/border__top.jpg')}></ImageBackground>
           <Modules navigation={this.props.navigation}></Modules>
           <News></News>
-        </ImageBackground>
+        </View> 
       </ScrollView>
     )
   }
 }
-
-
-const styles = StyleSheet.create({
-  background: {
-    width: Styles.Width()
-  },
-  iconSize: {
-    height: Styles.Height(48),
-    width: Styles.Width(48),
-    marginBottom: Styles.Height(-10)
-  }
-})

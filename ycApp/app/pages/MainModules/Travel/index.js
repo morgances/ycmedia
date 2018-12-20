@@ -23,7 +23,7 @@ export default class Main extends Component<{}> {
       alignSelf: 'center'
     },
     headerRight: (
-      <Image style={{ height: Styles.Height(34), width: Styles.Width(34), marginRight: Styles.Width(30)}} source={require('../../../assets/images/Total/search.jpg')}></Image>
+      <View></View>
     ),
   }
   render() {

@@ -53,51 +53,12 @@ import MassCultureScreen from './pages/MainModules/MassCulture'
 import TrainingScreen from './pages/ActivityModules/Training'
 import MassActivityScreen from './pages/ActivityModules/MassActivity'
 
-const BasicApp = TabNavigator({
-  Main: {
+const Navigations = {
+  Basic: { 
     screen: MainScreen
   },
-  Activity: {
-    screen: ActivityScreen
-  },
-  Guide: {
-    screen: GuideScreen
-  },
-  Mine: {
-    screen: MineScreen
-  },
-},{
-  initialRouteName: 'Main',
-  tabBarPosition: 'bottom',
-  animationEnabled: true,
-  lazy: true,
-  tabBarOptions: {
-    showIcon: true,
-    activeTintColor: Colors.primary,
-    inactiveTintColor: Colors.gray2,
-    pressOpacity: 4,
-    labelStyle: {
-      fontSize: FontsSize.small,
-      paddingBottom: Styles.Height(10)
-    },
-    iconStyle: {
-      marginBottom: Styles.Height(-5),
-      marginTop: Styles.Height(-5)
-    },
-    style: {
-      backgroundColor: Colors.white,
-      height: Styles.Height(98),
-    },
-    indicatorStyle: {
-      height: 0,
-    },
-  },
-})
-
-const Navigations = {
-  Basic: { screen: BasicApp },
   Culture: { 
-    screen: CultureScreen 
+    screen: CultureScreen
   },
   Art: {
     screen: ArtScreen
