@@ -1,21 +1,16 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
 
 import React, { Component } from 'react'
-import { Text, View, Image } from 'react-native'
+import { View } from 'react-native'
 import { Tabs } from 'antd-mobile-rn'
 
 import Colors from '../../../res/Colors'
 import Size from '../../../res/Fonts/size'
-import Culture from './components/Culture'
-import Smriti from './components/Smriti'
+import Cinema from './components/Cinema'
+import Theatre from './components/Theatre'
 
 export default class Main extends Component<{}> {
   static navigationOptions = {
-    title: '遗脉相承',
+    title: '文化消费',
     headerStyle: {
       backgroundColor: Colors.primary,
       elevation: 0,
@@ -33,14 +28,14 @@ export default class Main extends Component<{}> {
   render() {
     const tabs = [
       {
-        title: '文化遗产'
+        title: '银川影院'
       },
       {
-        title: '非遗传承'
+        title: '艺术剧院'
       }
     ]
     return (
-      <View style={{flex: 1}}>
+      <View style={{ flex: 1, backgroundColor: Colors.white }}>
         <Tabs 
           tabBarBackgroundColor={Colors.primary}
           tabBarPosition='top'
@@ -50,10 +45,10 @@ export default class Main extends Component<{}> {
           tabBarInactiveTextColor={Colors.black}
           tabBarUnderlineStyle={{backgroundColor: Colors.white}}>
           <View>
-            <Culture></Culture>
+            <Cinema></Cinema>
           </View>
           <View>
-            <Smriti></Smriti>
+            <Theatre></Theatre>
           </View>
         </Tabs>
       </View>

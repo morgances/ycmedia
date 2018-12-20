@@ -6,8 +6,8 @@ import { connect } from 'react-redux';
 import Colors from '../../../../res/Colors'
 import Styles from '../../../../res/Styles'
 
-import Item from '../../../../components/Item'
-import Lists from './ItemListSmriti'
+import Item from '../../../../components/Item_time'
+import Lists from '../../../../components/ItemList'
 
 class Culture extends React.Component {
   render() {
@@ -17,10 +17,12 @@ class Culture extends React.Component {
         style={{backgroundColor: Colors.white}}>
         <View>
           <WingBlank size="lg">
-            <Flex style={{marginTop: Styles.Height(20)}} wrap="wrap" justify="center">
-              <Lists></Lists>
+            <Flex style={{marginTop: Styles.Height(20)}} wrap="wrap" justify="around">
+              <Lists data={this.props}></Lists>
             </Flex>
-            <Item data={this.props.show}></Item>
+            <Flex style={{marginTop: Styles.Height(5)}} justify="between" wrap="wrap">
+              <Item data={this.props.show}></Item>
+            </Flex>
           </WingBlank>
         </View>
       </ScrollView>

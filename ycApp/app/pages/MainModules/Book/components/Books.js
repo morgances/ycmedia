@@ -5,9 +5,9 @@ import { connect } from 'react-redux';
 
 import Colors from '../../../../res/Colors'
 
-import Item from '../../../../components/Item'
+import Item from '../../../../components/Item_time'
 
-class News extends React.Component {
+class Books extends React.Component {
   render() {
     return (
       <ScrollView
@@ -23,6 +23,6 @@ class News extends React.Component {
   }
 }
 
-export default connect(({ culture_news }) => ({
-  ...culture_news,
-}))(News);
+export default connect(({ book_books }) => ({
+  ...book_books,
+}))(Books);

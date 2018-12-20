@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     paddingTop: Styles.Height(10),
   },
   news_content: {
-    borderBottomColor: Colors.gray,
+    borderBottomColor: Colors.gray1,
     borderBottomWidth: 1,
     borderStyle: 'solid',
     paddingTop: Styles.Height(20),

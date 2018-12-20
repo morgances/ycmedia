@@ -30,28 +30,15 @@ import {
   TabNavigator,
 } from 'react-navigation';
 
-import FontsSize from './res/Fonts/size';
-import Colors from './res/Colors';
-import Styles from './res/Styles';
-
 import MainScreen from './pages/Main';
-import ActivityScreen from './pages/Activity';
-import GuideScreen from './pages/Guide'
-import MineScreen from './pages/Mine'
-import LoginScreen from './pages/Login'
-import SignScreen from './pages/Sign'
 import CultureScreen from './pages/MainModules/Culture'
 import ArtScreen from './pages/MainModules/Art'
 import IntangibleScreen from './pages/MainModules/Intangible'
 import TravelScreen from './pages/MainModules/Travel'
 import BookScreen from './pages/MainModules/Book'
-import VolunteerScreen from './pages/MainModules/Volunteer'
-import SchoolScreen from './pages/MainModules/School'
-import MovieScreen from './pages/MainModules/Movie'
-import MemoryScreen from './pages/MainModules/Memory'
-import MassCultureScreen from './pages/MainModules/MassCulture'
-import TrainingScreen from './pages/ActivityModules/Training'
-import MassActivityScreen from './pages/ActivityModules/MassActivity'
+import SpendingScreen from './pages/MainModules/Spending'
+import BrandScreen from './pages/MainModules/Brand'
+import CityScreen from './pages/MainModules/City'
 
 const Navigations = {
   Basic: { 
@@ -72,33 +59,15 @@ const Navigations = {
   Book: {
     screen: BookScreen
   },
-  Volunteer: {
-    screen: VolunteerScreen
+  Spending: {
+    screen: SpendingScreen
   },
-  School: {
-    screen: SchoolScreen
+  Brand: {
+    screen: BrandScreen
   },
-  Movie: {
-    screen: MovieScreen
+  City: {
+    screen: CityScreen
   },
-  Memory: {
-    screen: MemoryScreen
-  },
-  MassCulture: {
-    screen: MassCultureScreen
-  },
-  Training: {
-    screen: TrainingScreen
-  },
-  MassActivity: {
-    screen: MassActivityScreen
-  },
-  Login: {
-    screen: LoginScreen
-  },
-  Sign: {
-    screen: SignScreen
-  }
 };
 
 export default Navigations;

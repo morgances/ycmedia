@@ -29,14 +29,30 @@
 
 import init from './init';
 import router from './router';
-import culture_news from './culture_news'
+import culture_news from './Culture/news'
+import book_books from './Book/books'
 import intangible_culture from './Intangible/culture'
 import intangible_smriti from './Intangible/smriti'
+import travel from './Travel/index'
+import art_display from './Art/display'
+import spending_cinema from './Spending/cinema'
+import spending_theatre from './Spending/theatre'
+import brand from './Brand/index'
+import city_culture from './City/culture'
+import city_memory from './City/memory'
 
 export const Models = [
   init,
   router,
   culture_news,
+  book_books,
   intangible_culture,
-  intangible_smriti
+  intangible_smriti,
+  travel,
+  art_display,
+  spending_cinema,
+  spending_theatre,
+  brand,
+  city_culture,
+  city_memory
 ];

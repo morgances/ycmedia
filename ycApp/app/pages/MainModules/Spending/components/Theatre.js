@@ -3,21 +3,20 @@ import { View, ScrollView, ImageBackground } from 'react-native';
 import { WingBlank, Flex } from 'antd-mobile-rn';
 import { connect } from 'react-redux';
 
-import Colors from '../../../../res/Colors'
 import Styles from '../../../../res/Styles'
+import Colors from '../../../../res/Colors'
 
-import Item from '../../../../components/Item_time'
+import Item from '../../../../components/Item_instruction'
 import Lists from '../../../../components/ItemList'
 
-class Culture extends React.Component {
+class Theatre extends React.Component {
   render() {
     return (
       <ScrollView
-        showsVerticalScrollIndicator={false}
-        style={{backgroundColor: Colors.white}}>
+        showsVerticalScrollIndicator={false}>
         <View>
           <WingBlank size="lg">
-            <Flex style={{marginTop: Styles.Height(20)}} justify="around" wrap="wrap">
+            <Flex style={{marginTop: Styles.Height(20)}} justify="between" wrap="wrap">
               <Lists data={this.props}></Lists>
             </Flex>
             <Flex style={{marginTop: Styles.Height(5)}} justify="between" wrap="wrap">
@@ -30,6 +29,6 @@ class Culture extends React.Component {
   }
 }
 
-export default connect(({ intangible_culture }) => ({
-  ...intangible_culture,
-}))(Culture);
+export default connect(({ spending_theatre }) => ({
+  ...spending_theatre,
+}))(Theatre);

@@ -56,7 +56,7 @@ export default class Modules extends React.Component {
             </TouchableOpacity>
           </Flex.Item>
           <Flex.Item style={styles.module}>
-            <TouchableOpacity onPress={() => dispatch(Navigator.navigate('Volunteer'))}>
+            <TouchableOpacity onPress={() => dispatch(Navigator.navigate('Spending'))}>
               <View style={styles.viewFlex}>
                 <Image style={styles.image} source={require('../../../assets/images/Main/module_six.png')}></Image>
                 <Text style={styles.text}>文化消费</Text>
@@ -66,7 +66,7 @@ export default class Modules extends React.Component {
         </Flex>
         <Flex>
           <Flex.Item style={styles.module}>
-            <TouchableOpacity onPress={() => dispatch(Navigator.navigate('School'))}>
+            <TouchableOpacity onPress={() => dispatch(Navigator.navigate('Brand'))}>
               <View style={styles.viewFlex}>
                 <Image style={styles.image} source={require('../../../assets/images/Main/module_seven.png')}></Image>
                 <Text style={styles.text}>文化品牌</Text>
@@ -74,7 +74,7 @@ export default class Modules extends React.Component {
             </TouchableOpacity>
           </Flex.Item>
           <Flex.Item style={styles.module}>
-            <TouchableOpacity onPress={() => dispatch(Navigator.navigate('Movie'))}>
+            <TouchableOpacity onPress={() => dispatch(Navigator.navigate('City'))}>
               <View style={styles.viewFlex}>
                 <Image style={styles.image} source={require('../../../assets/images/Main/module_eight.png')}></Image>
                 <Text style={styles.text}>凤城演绎</Text>

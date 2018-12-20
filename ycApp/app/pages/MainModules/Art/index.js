@@ -5,54 +5,65 @@
  */
 
 import React, { Component } from 'react';
-import { Text, View, Image, StyleSheet } from 'react-native';
+import { Text, View } from 'react-native';
 import { Tabs } from 'antd-mobile-rn';
 
-import Styles from '../../../res/Styles';
+import Size from '../../../res/Fonts/size';
 import Colors from '../../../res/Colors'
+import Display from './components/Display'
 
 // import News from  './components/New'
 
 export default class Main extends Component<{}> {
   static navigationOptions = {
-    title: '艺术鉴赏',
+    title: '艺术空间',
     headerStyle: {
       backgroundColor: Colors.primary,
       elevation: 0,
       shadowOpacity: 0,
+      height: 44
     },
     headerTintColor: Colors.white,
     headerTitleStyle: {
+      fontSize: Size.large,
+      fontWeight: null,
       alignSelf: 'center'
     },
-    headerRight: (
-      <Image style={{ height: Styles.Height(34), width: Styles.Width(34), marginRight: Styles.Width(30)}} source={require('../../../assets/images/Total/search.jpg')}></Image>
-    ),
+    headerRight: <View />
   }
   render() {
     const tabs = [
       {
-        title: '银川美术'
+        title: '艺术资讯'
       },
       {
-        title: '文化遗产'
+        title: '名家介绍'
+      },
+      {
+        title: '艺术展示'
+      },
+      {
+        title: '艺术场馆'
       }
     ]
     return (
-      <View style={{flex: 1}}>
+      <View style={{ flex: 1, backgroundColor: Colors.white }}>
         <Tabs 
           tabBarBackgroundColor={Colors.primary}
           tabBarPosition='top'
           tabs={tabs}
           initialPage={0}
           tabBarActiveTextColor={Colors.white}
-          tabBarInactiveTextColor={Colors.white}
+          tabBarInactiveTextColor={Colors.black}
           tabBarUnderlineStyle={{backgroundColor: Colors.white}}>
           <View>
-            {/* <News></News> */}
+            <Text>Content of First Tab</Text>
           </View>
           <View>
             <Text>Content of First Tab</Text>
+          </View>
+          <View>
+            <Display></Display>
           </View>
           <View>
             <Text>Content of First Tab</Text>

@@ -11,6 +11,7 @@ import { Tabs } from 'antd-mobile-rn'
 import Size from '../../../res/Fonts/size';
 import Colors from '../../../res/Colors';
 import Books from './components/Books';
+import Web from './components/Web'
 
 export default class Main extends Component<{}> {
   static navigationOptions = {
@@ -19,6 +20,7 @@ export default class Main extends Component<{}> {
       backgroundColor: Colors.primary,
       elevation: 0,
       shadowOpacity: 0,
+      height: 44
     },
     headerTintColor: Colors.white,
     headerTitleStyle: {
@@ -54,7 +56,7 @@ export default class Main extends Component<{}> {
           tabBarInactiveTextColor={Colors.black}
           tabBarUnderlineStyle={{backgroundColor: Colors.white}}>
           <View>
-            <Text>Content of First Tab</Text>
+            <Web></Web>
           </View>
           <View>
             <Text>Content of First Tab</Text>

@@ -5,9 +5,8 @@
  */
 
 import React, { Component } from 'react';
-import { ScrollView, StyleSheet, StatusBar, View } from 'react-native';
+import { ScrollView, StatusBar, View } from 'react-native';
 
-import Styles from '../../res/Styles'
 import Colors from '../../res/Colors'
 import Size from '../../res/Fonts/size'
 
@@ -22,6 +21,7 @@ export default class Main extends Component<{}> {
       backgroundColor: Colors.primary,
       elevation: 0,
       shadowOpacity: 0,
+      height: 44
     },
     headerTintColor: Colors.white,
     headerTitleStyle: {

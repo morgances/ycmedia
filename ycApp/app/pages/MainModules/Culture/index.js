@@ -21,6 +21,7 @@ export default class Main extends Component<{}> {
       backgroundColor: Colors.primary,
       elevation: 0,
       shadowOpacity: 0,
+      height: 44
     },
     headerTintColor: Colors.white,
     headerTitleStyle: {

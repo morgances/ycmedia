@@ -6,16 +6,19 @@
 
 import React, { Component } from 'react'
 import { View, ScrollView } from 'react-native'
-import { WingBlank } from 'antd-mobile-rn';
+import { WingBlank, Flex } from 'antd-mobile-rn'
 import { connect } from 'react-redux';
 
 import Size from '../../../res/Fonts/size'
 import Colors from '../../../res/Colors'
-import Item from '../../../components/Item_instruction'
+import Styles from '../../../res/Styles'
 
-class Main extends Component<{}> {
+import Item from '../../../components/Item_instruction'
+import Lists from '../../../components/ItemList'
+
+class Brand extends Component<{}> {
   static navigationOptions = {
-    title: '银川旅游',
+    title: '文化品牌',
     headerStyle: {
       backgroundColor: Colors.primary,
       elevation: 0,
@@ -37,7 +40,12 @@ class Main extends Component<{}> {
         style={{backgroundColor: Colors.white}}>
         <View>
           <WingBlank size="lg">
-            <Item data={this.props.show}></Item>
+            <Flex style={{marginTop: Styles.Height(20)}} justify="start" wrap="wrap">
+              <Lists data={this.props}></Lists>
+            </Flex>
+            <Flex style={{marginTop: Styles.Height(5)}} justify="between" wrap="wrap">
+              <Item data={this.props.show}></Item>
+            </Flex>
           </WingBlank>
         </View>
       </ScrollView>
@@ -45,6 +53,6 @@ class Main extends Component<{}> {
   }
 }
 
-export default connect(({ travel }) => ({
-  ...travel,
-}))(Main);
+export default connect(({ brand }) => ({
+  ...brand,
+}))(Brand);

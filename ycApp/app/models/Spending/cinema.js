@@ -1,25 +1,25 @@
 export default {
-  namespace: 'travel',
+  namespace: 'spending_cinema',
   state: {
     show: [
       {
-        title: '苏峪口国家森林公园',
+        title: '银川奥斯卡影城',
         instruction: '宁夏贺兰山苏峪口国家森林公园位于贺兰山国家级自然保护区内，阿啦啦啦',
         image: require('../../assets/images/Main/news_one.png'),
       },
       {
-        title: '时空隧道——水洞沟',
+        title: '天一国际影城',
         instruction: '水沟洞是中国最早发掘的旧石器时代文化遗址',
         image: require('../../assets/images/Main/news_one.png'),
       },
       {
-        title: '灵武高庙',
-        instruction: '灵武高庙又称上帝庙，其前身为“玄武观”',
+        title: '宁夏人民会堂国际影城',
+        instruction: '隶属于宁夏人民会堂管理中心，于 2011 年 5 月 1 日正式营业，是“第十”',
         image: require('../../assets/images/Main/news_one.png'),
       },
       {
-        title: '月牙湖',
-        instruction: '公元前33年，昭君出塞和亲，行至黄河渡口处',
+        title: '东城影院',
+        instruction: '是国内西北地区首创同步影厅和视听馆相结合的特色影院',
         image: require('../../assets/images/Main/news_one.png'),
       },
       {

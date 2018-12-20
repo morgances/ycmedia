@@ -8,14 +8,15 @@ import React, { Component } from 'react'
 import { Text, View, Image } from 'react-native'
 import { Tabs } from 'antd-mobile-rn'
 
-import Colors from '../../../res/Colors'
 import Size from '../../../res/Fonts/size'
+import Colors from '../../../res/Colors'
+
+import Memory from './components/Memory'
 import Culture from './components/Culture'
-import Smriti from './components/Smriti'
 
 export default class Main extends Component<{}> {
   static navigationOptions = {
-    title: '遗脉相承',
+    title: '凤城演绎',
     headerStyle: {
       backgroundColor: Colors.primary,
       elevation: 0,
@@ -33,10 +34,10 @@ export default class Main extends Component<{}> {
   render() {
     const tabs = [
       {
-        title: '文化遗产'
+        title: '群众文化'
       },
       {
-        title: '非遗传承'
+        title: '银川记忆'
       }
     ]
     return (
@@ -53,7 +54,7 @@ export default class Main extends Component<{}> {
             <Culture></Culture>
           </View>
           <View>
-            <Smriti></Smriti>
+            <Memory></Memory>
           </View>
         </Tabs>
       </View>
