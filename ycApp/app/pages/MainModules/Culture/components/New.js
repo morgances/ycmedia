@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, ScrollView, ImageBackground } from 'react-native';
-import { WingBlank, Flex } from 'antd-mobile-rn';
+import { View, ScrollView } from 'react-native';
+import { WingBlank } from 'antd-mobile-rn';
 import { connect } from 'react-redux';
 
 import Colors from '../../../../res/Colors'

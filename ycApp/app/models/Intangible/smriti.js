@@ -55,6 +55,41 @@ export default {
         image: require('../../assets/images/Main/news_one.png'),
       }
     ],
+    protect: [
+      {
+        title: '传承保护',
+        time: '2017-01-02',
+        image: require('../../assets/images/Main/news_one.png'),
+      }
+    ],
+    hall: [
+      {
+        title: '非遗展馆',
+        time: '2017-01-02',
+        image: require('../../assets/images/Main/news_one.png'),
+      }
+    ],
+    activity: [
+      {
+        title: '民俗活动',
+        time: '2017-01-02',
+        image: require('../../assets/images/Main/news_one.png'),
+      }
+    ],
+    base: [
+      {
+        title: '传承基地',
+        time: '2017-01-02',
+        image: require('../../assets/images/Main/news_one.png'),
+      }
+    ],
+    person: [
+      {
+        title: '传承人',
+        time: '2017-01-02',
+        image: require('../../assets/images/Main/news_one.png'),
+      }
+    ],
     show: [
       {
         title: '青山拦不住、岩画书千秋',

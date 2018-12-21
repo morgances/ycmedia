@@ -43,6 +43,20 @@ export default {
         image: require('../../assets/images/Main/news_one.png'),
       }
     ],
+    play: [
+      {
+        title: '剧目介绍',
+        instruction: '黄沙古渡原生态旅游景区是...',
+        image: require('../../assets/images/Main/news_one.png'),
+      }
+    ],
+    performance: [
+      {
+        title: '商业演出',
+        instruction: '黄沙古渡原生态旅游景区是...',
+        image: require('../../assets/images/Main/news_one.png'),
+      }
+    ],
     show: [
       {
         title: '银川奥斯卡影城',

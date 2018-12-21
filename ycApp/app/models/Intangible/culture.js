@@ -43,6 +43,60 @@ export default {
         image: require('../../assets/images/Main/news_one.png'),
       }
     ],
+    relics: [
+      {
+        title: '文物鉴赏',
+        time: '2017-01-02',
+        image: require('../../assets/images/Main/news_one.png'),
+      },
+      {
+        title: '在银川南城墙远眺西塔',
+        time: '2017-01-02',
+        image: require('../../assets/images/Main/news_one.png'),
+      },
+      {
+        title: '二十世纪五十年代，工人们在银川西门东侧修筑',
+        time: '2017-01-02',
+        image: require('../../assets/images/Main/news_one.png'),
+      },
+      {
+        title: '1959 年宁夏回族自治区人民委员会大门',
+        time: '2017-01-02',
+        image: require('../../assets/images/Main/news_one.png'),
+      },
+      {
+        title: '1985 自治区成立之时的银川市貌',
+        time: '2017-01-02',
+        image: require('../../assets/images/Main/news_one.png'),
+      }
+    ],
+    portect: [
+      {
+        title: '文化保护',
+        time: '2017-01-02',
+        image: require('../../assets/images/Main/news_one.png'),
+      },
+      {
+        title: '在银川南城墙远眺西塔',
+        time: '2017-01-02',
+        image: require('../../assets/images/Main/news_one.png'),
+      },
+      {
+        title: '二十世纪五十年代，工人们在银川西门东侧修筑',
+        time: '2017-01-02',
+        image: require('../../assets/images/Main/news_one.png'),
+      },
+      {
+        title: '1959 年宁夏回族自治区人民委员会大门',
+        time: '2017-01-02',
+        image: require('../../assets/images/Main/news_one.png'),
+      },
+      {
+        title: '1985 自治区成立之时的银川市貌',
+        time: '2017-01-02',
+        image: require('../../assets/images/Main/news_one.png'),
+      }
+    ],
     show: [
       {
         title: '青山拦不住、岩画书千秋',

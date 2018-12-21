@@ -5,14 +5,16 @@
  */
 
 import React, { Component } from 'react';
-import { Text, View, Image } from 'react-native';
+import { Text, View } from 'react-native';
 import { Tabs } from 'antd-mobile-rn';
 
-import Styles from '../../../res/Styles';
 import Colors from '../../../res/Colors';
 import Size from '../../../res/Fonts/size'
 
 import News from  './components/New'
+import Inform from './components/Inform'
+import Policies from './components/Policies'
+import Free from './components/Free'
 
 export default class Main extends Component<{}> {
   static navigationOptions = {
@@ -60,10 +62,13 @@ export default class Main extends Component<{}> {
             <News></News>
           </View>
           <View>
-            <Text>Content of First Tab</Text>
+            <Inform></Inform>
           </View>
           <View>
-            <Text>Content of First Tab</Text>
+            <Policies></Policies>
+          </View>
+          <View>
+            <Free></Free>
           </View>
         </Tabs>
       </View>

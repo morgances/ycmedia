@@ -19,7 +19,7 @@ export default {
         listName: 'exhibition'
       }
     ],
-    focus: 3,
+    focus: 0,
     exhibition: [
       {
         title: '彩色高原摄影',
@@ -42,24 +42,30 @@ export default {
         image: require('../../assets/images/Main/news_one.png'),
       }
     ],
+    calligraphy: [
+      {
+        title: '书法',
+        time: '2017-01-02',
+        image: require('../../assets/images/Main/news_one.png'),
+      }
+    ],
+    music: [
+      {
+        title: '音乐',
+        time: '2017-01-02',
+        image: require('../../assets/images/Main/news_one.png'),
+      }
+    ],
+    painting: [
+      {
+        title: '绘画',
+        time: '2017-01-02',
+        image: require('../../assets/images/Main/news_one.png'),
+      }
+    ],
     show: [
       {
-        title: '彩色高原摄影',
-        time: '2017-01-02',
-        image: require('../../assets/images/Main/news_one.png'),
-      },
-      {
-        title: '水墨山水摄影',
-        time: '2017-01-02',
-        image: require('../../assets/images/Main/news_one.png'),
-      },
-      {
-        title: '雪山远景摄影集',
-        time: '2017-01-02',
-        image: require('../../assets/images/Main/news_one.png'),
-      },
-      {
-        title: '设计博物馆',
+        title: '绘画',
         time: '2017-01-02',
         image: require('../../assets/images/Main/news_one.png'),
       }

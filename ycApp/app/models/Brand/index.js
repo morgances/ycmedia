@@ -34,6 +34,18 @@ export default {
         image: require('../../assets/images/Main/news_one.png'),
       }
     ],
+    activity: [
+      {
+        title: '公益性文化活动',
+        image: require('../../assets/images/Main/news_one.png'),
+      }
+    ],
+    culture: [
+      {
+        title: '中华优秀传统文化与民族文化',
+        image: require('../../assets/images/Main/news_one.png'),
+      }
+    ],
     show: [
       {
         title: '宁夏中银视界文化艺术发展有限公司',

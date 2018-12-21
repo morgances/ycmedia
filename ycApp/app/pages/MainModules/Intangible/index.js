@@ -40,7 +40,7 @@ export default class Main extends Component<{}> {
       }
     ]
     return (
-      <View style={{flex: 1}}>
+      <View style={{flex: 1, backgroundColor: Colors.white}}>
         <Tabs 
           tabBarBackgroundColor={Colors.primary}
           tabBarPosition='top'

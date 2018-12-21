@@ -18,7 +18,7 @@ class Culture extends React.Component {
         <View>
           <WingBlank size="lg">
             <Flex style={{marginTop: Styles.Height(20)}} wrap="wrap" justify="around">
-              <Lists data={this.props}></Lists>
+              <Lists data={this.props} name={'intangible_smriti'}></Lists>
             </Flex>
             <Flex style={{marginTop: Styles.Height(5)}} justify="between" wrap="wrap">
               <Item data={this.props.show}></Item>

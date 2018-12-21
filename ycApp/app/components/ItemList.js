@@ -8,10 +8,11 @@ import Size from '../res/Fonts/size'
 export default class Lists extends React.Component {
   render() {
     const data = this.props.data
+    const name = this.props.name
     function change(value) {
       const { dispatch } = data
       dispatch({
-        type: 'intangible_culture/change',
+        type: `${name}/change`,
         payload: value,
       })
     }

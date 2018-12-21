@@ -1,9 +1,9 @@
 export default {
-  namespace: 'culture_news',
+  namespace: 'culture_policies',
   state: {
     culture: [
       {
-        title: '银川市举办欢聚一堂美术展览少儿活动',
+        title: '政策法规',
         time: '2017-01-02',
         image: require('../../assets/images/Main/news_one.png'),
       },

@@ -79,6 +79,13 @@ export default {
         image: require('../../assets/images/Main/news_one.png'),
       }
     ],
+    bygone: [
+      {
+        title: '老银川',
+        time: '2017/01/02',
+        image: require('../../assets/images/Main/news_one.png'),
+      }
+    ],
     focus: 0,
     show: [
       {

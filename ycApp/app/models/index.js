@@ -30,11 +30,19 @@
 import init from './init';
 import router from './router';
 import culture_news from './Culture/news'
+import culture_policies from './Culture/policies'
+import culture_inform from './Culture/inform'
+import culture_free from './Culture/free'
 import book_books from './Book/books'
+import book_service from './Book/service'
+import book_resources from './Book/resources'
 import intangible_culture from './Intangible/culture'
 import intangible_smriti from './Intangible/smriti'
 import travel from './Travel/index'
 import art_display from './Art/display'
+import art_news from './Art/news'
+import art_artists from './Art/artists'
+import art_venues from './Art/venues'
 import spending_cinema from './Spending/cinema'
 import spending_theatre from './Spending/theatre'
 import brand from './Brand/index'
@@ -45,11 +53,19 @@ export const Models = [
   init,
   router,
   culture_news,
+  culture_policies,
+  culture_inform,
+  culture_free,
   book_books,
+  book_service,
+  book_resources,
   intangible_culture,
   intangible_smriti,
   travel,
   art_display,
+  art_news,
+  art_artists,
+  art_venues,
   spending_cinema,
   spending_theatre,
   brand,

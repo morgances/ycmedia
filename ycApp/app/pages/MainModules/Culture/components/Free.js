@@ -7,7 +7,7 @@ import Colors from '../../../../res/Colors'
 
 import Item from '../../../../components/Item_time'
 
-class Books extends React.Component {
+class Free extends React.Component {
   render() {
     return (
       <ScrollView
@@ -23,6 +23,6 @@ class Books extends React.Component {
   }
 }
 
-export default connect(({ book_books }) => ({
-  ...book_books,
-}))(Books);
+export default connect(({ culture_free }) => ({
+  ...culture_free,
+}))(Free);

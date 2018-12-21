@@ -7,7 +7,7 @@ import Colors from '../../../../res/Colors'
 
 import Item from '../../../../components/Item_time'
 
-class Books extends React.Component {
+class Service extends React.Component {
   render() {
     return (
       <ScrollView
@@ -23,6 +23,6 @@ class Books extends React.Component {
   }
 }
 
-export default connect(({ book_books }) => ({
-  ...book_books,
-}))(Books);
+export default connect(({ book_service }) => ({
+  ...book_service,
+}))(Service);

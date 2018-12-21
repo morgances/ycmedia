@@ -12,7 +12,9 @@ import Size from '../../../res/Fonts/size';
 import Colors from '../../../res/Colors'
 import Display from './components/Display'
 
-// import News from  './components/New'
+import News from  './components/News'
+import Artists from './components/Artists'
+import Venues from './components/Venues'
 
 export default class Main extends Component<{}> {
   static navigationOptions = {
@@ -57,16 +59,16 @@ export default class Main extends Component<{}> {
           tabBarInactiveTextColor={Colors.black}
           tabBarUnderlineStyle={{backgroundColor: Colors.white}}>
           <View>
-            <Text>Content of First Tab</Text>
+            <News></News>
           </View>
           <View>
-            <Text>Content of First Tab</Text>
+            <Artists></Artists>
           </View>
           <View>
             <Display></Display>
           </View>
           <View>
-            <Text>Content of First Tab</Text>
+            <Venues></Venues>
           </View>
         </Tabs>
       </View>
