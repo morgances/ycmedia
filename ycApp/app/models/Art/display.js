@@ -72,11 +72,41 @@ export default {
     ]
   },
   reducers: {
-    change(state, { payload: index }) {
-      state.focus = index
-      state.show = [...state[state.title[index].listName]]
+    Change(state, action) {
       return {
-        ...state
+        ...state,
+        focus: action.payload,
+        show: [...state[state.title[index].listName]]
+      }
+    },
+    Refresh(state, action) {
+      return {
+        ...state,
+        culture: action.payload.concat(state.culture)
+      }
+    }
+  },
+  effects: {
+    *refresh({ payload }, { call, put }) {
+      const response = yield call()
+      if (true) {
+        yield put({
+          type: 'Refresh',
+          payload: [{
+            title: '最新消息',
+            time: '2017-01-02',
+            image: require('../../assets/images/Main/news_one.png')
+          }]
+        })
+      }
+    },
+    *change({ payload }, { call, put }) {
+      // const response = yield call()
+      if (true) {
+        yield put({
+          type: 'Change',
+          payload
+        })
       }
     }
   }

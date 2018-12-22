@@ -5,7 +5,7 @@
  */
 
 import React, { Component } from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import { Tabs } from 'antd-mobile-rn';
 
 import Colors from '../../../res/Colors';

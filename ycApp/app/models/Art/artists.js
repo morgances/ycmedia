@@ -28,5 +28,27 @@ export default {
         image: require('../../assets/images/Main/news_one.png'),
       }
     ]
+  },
+  effects: {
+    *refresh({ payload }, { call, put }) {
+      const response = yield call()
+      if (response.state)
+      yield put({
+        type: 'Refresh',
+        payload: [{
+          title: '最新消息',
+          time: '2017-01-02',
+          image: require('../../assets/images/Main/news_one.png')
+        }]
+      })
+    }
+  },
+  reducers: {
+    Refresh(state, action) {
+      return {
+        ...state,
+        culture: action.payload.concat(state.culture)
+      }
+    }
   }
 }
