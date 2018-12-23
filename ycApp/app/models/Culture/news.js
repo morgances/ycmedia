@@ -72,6 +72,15 @@ export default {
           }]
         })
       }
+    },
+    *get({ payload }, { call, put }) {
+      // const response = yield call()
+      // if (true) {
+      //   yield put({
+      //     type: 'Get',
+      //     payload: Response.data
+      //   })
+      // }
     }
   },
   reducers: {
@@ -85,6 +94,12 @@ export default {
       return {
         ...state,
         culture: state.culture.concat(action.payload)
+      }
+    },
+    Get(state, action) {
+      return {
+        ...state,
+        culture: action.payload
       }
     }
   }

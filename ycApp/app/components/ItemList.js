@@ -12,7 +12,7 @@ export default class Lists extends React.Component {
     function change(value) {
       const { dispatch } = data
       dispatch({
-        type: `${name}/change`,
+        type: `${name}/Change`,
         payload: value,
       })
     }

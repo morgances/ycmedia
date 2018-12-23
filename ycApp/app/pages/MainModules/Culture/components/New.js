@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, ScrollView, RefreshControl } from 'react-native';
-import { WingBlank, Toast } from 'antd-mobile-rn';
+import { WingBlank } from 'antd-mobile-rn';
 import { connect } from 'react-redux';
 
 import Colors from '../../../../res/Colors'
@@ -17,6 +17,13 @@ class News extends React.Component {
       loadMore: 0
     }
   }
+
+  // componentDidMount() {
+  //   const { dispatch } = this.props
+  //   dispatch({
+  //     type: `culture_news/get`,
+  //   })
+  // }
 
   _onRefreshing(data) {
     this.setState(() => {
