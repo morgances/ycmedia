@@ -52,5 +52,5 @@ func NewUserToken(userID uint) (string, error) {
 		"exp": time.Now().Add(time.Hour * 480).Unix(), // 可以添加过期时间
 	})
 
-	return token.SignedString([]byte("UserTokenKey")) //对应的字符串请自行生成，最后足够使用加密后的字符串
+	return token.SignedString([]byte("UserTokenKey")) //签名
 }

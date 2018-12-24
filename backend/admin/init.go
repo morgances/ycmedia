@@ -51,6 +51,8 @@ func InitAdminRouter(r *server.Router, db *sql.DB, tokenKey string) {
 	r.Post("/api/v1/admin/email", c.Email, jwt.Check, active.Isactive)
 	r.Post("/api/v1/admin/mobile", c.Mobile, jwt.Check, active.Isactive)
 	r.Post("/api/v1/admin/newpwd", c.ModifyPwd, jwt.Check, active.Isactive)
+	r.Post("/api/v1/admin/active", c.ModifyActive, jwt.Check, active.Isactive)
+	r.Post("/api/v1/admin/getadmin", c.Isactive, jwt.Check, active.Isactive)
 
 	r.Post("/api/v1/permission/addrole", p.CreateRole, jwt.Check, active.Isactive)
 	r.Post("/api/v1/permission/modifyrole", p.ModifyRole, jwt.Check, active.Isactive)

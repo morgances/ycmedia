@@ -22,7 +22,7 @@ var (
 	ErrNoRows        = errors.New("there is no such data in database")
 
 	sqlString = []string{
-		`CREATE TABLE IF NOT EXISTS files (
+		`CREATE TABLE IF NOT EXISTS upload.files (
 			user_id 	INTEGER UNSIGNED NOT NULL,
 			md5 		VARCHAR(512) NOT NULL DEFAULT ' ',
 			path 		VARCHAR(512) NOT NULL DEFAULT ' ',
@@ -33,6 +33,11 @@ var (
 		`SELECT path FROM upload.files WHERE md5 = ? LOCK IN SHARE MODE`,
 	}
 )
+
+func CreateDatabase(db *sql.DB) error {
+	_, err := db.Exec("CREATE DATABASE IF NOT EXISTS upload")
+	return err
+}
 
 // Create create files table.
 func CreateTable(db *sql.DB) error {

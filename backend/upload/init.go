@@ -22,11 +22,16 @@ func InitRouter(r *server.Router, db *sql.DB, baseUrl, tokenKey string) {
 	if r == nil {
 		log.Fatal("[InitRouter]: server is nil")
 	}
-
-	err := mysql.CreateTable(db)
+	err := mysql.CreateDatabase(db)
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	err = mysql.CreateTable(db)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	err = checkDir(constants.PictureDir, constants.VideoDir, constants.OtherDir)
 	if err != nil {
 		log.Fatal(err)
