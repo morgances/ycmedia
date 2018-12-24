@@ -39,15 +39,4 @@ const (
 	ErrOprationInMysql        = 234
 	ErrInvalidParam           = 421
 	ErrListChirdrenByParentID = 777
-
-	//Status belong to Order
-	OrderUnfinished = 0
-	OrderFinished   = 1
-	OrderPaid       = 2
-	OrderConsign    = 3
-	OrderCanceled   = 4
-
-	//PayWay belong to Order
-	Alipay = 0
-	Wechat = 1
 )

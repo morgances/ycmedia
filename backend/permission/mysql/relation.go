@@ -46,7 +46,7 @@ var (
 
 // CreateRoleTable create role table.
 func CreateRelationTable(db *sql.DB) error {
-	_, err := db.Exec(roleSqlString[mysqlRelationCreateTable])
+	_, err := db.Exec(relationSqlString[mysqlRelationCreateTable])
 	return err
 }
 
@@ -70,7 +70,7 @@ func (sp *ServiceProvider) AddRelation(db *sql.DB, aid, rid uint32) error {
 		return errRoleInactive
 	}
 
-	result, err := db.Exec(roleSqlString[mysqlRelationInsert], aid, rid, time.Now())
+	result, err := db.Exec(relationSqlString[mysqlRelationInsert], aid, rid, time.Now())
 	if err != nil {
 		return err
 	}
@@ -92,7 +92,7 @@ func (*ServiceProvider) RemoveRelation(db *sql.DB, aid, rid uint32) error {
 	if !adminIsActive {
 		return errAdminInactive
 	}
-	_, err = db.Exec(roleSqlString[mysqlRelationDelete], aid, rid)
+	_, err = db.Exec(relationSqlString[mysqlRelationDelete], aid, rid)
 
 	return err
 }
@@ -112,7 +112,7 @@ func (*ServiceProvider) AssociatedRoleMap(db *sql.DB, aid uint32) (*map[uint32]b
 		return nil, errAdminInactive
 	}
 
-	rows, err := db.Query(roleSqlString[mysqlRelationRoleMap], aid)
+	rows, err := db.Query(relationSqlString[mysqlRelationRoleMap], aid)
 
 	if err != nil {
 		return nil, err
@@ -144,7 +144,7 @@ func (*ServiceProvider) AssociatedRoleList(db *sql.DB, aid uint32) ([]*relationD
 		return nil, errAdminInactive
 	}
 
-	rows, err := db.Query(roleSqlString[mysqlRelationRoleMap], aid)
+	rows, err := db.Query(relationSqlString[mysqlRelationRoleMap], aid)
 
 	if err != nil {
 		return nil, err

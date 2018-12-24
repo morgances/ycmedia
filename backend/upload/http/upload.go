@@ -41,6 +41,7 @@ func (u *UploadController) Upload(c *server.Context) error {
 		file.Close()
 		ctx.Request().MultipartForm.RemoveAll()
 	}()
+
 	if err != nil {
 		log.Error(err)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, nil))

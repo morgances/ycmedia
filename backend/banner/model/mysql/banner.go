@@ -30,6 +30,7 @@ func CreateTable(db *sql.DB, createTable string) error {
 }
 
 //return  id
+//have default value like nowtime and deadline
 func InsertBanner(db *sql.DB, insert string, name string, imagepath string, event string, StartDate time.Time, EndDate time.Time) (int, error) {
 	result, err := db.Exec(insert, name, imagepath, event, StartDate, EndDate)
 	if err != nil {

@@ -37,11 +37,20 @@ func main() {
 	ep.Wait()
 }
 
-func NewUserToken(userID uint) (string, error) {
-	claims := make(jwtgo.MapClaims)
-	claims["uid"] = userID
-	claims["exp"] = time.Now().Add(time.Hour * 480).Unix()
-	token := jwtgo.NewWithClaims(jwtgo.SigningMethodHS256, claims)
+// func NewUserToken(userID uint) (string, error) {
+// 	claims := make(jwtgo.MapClaims)
+// 	claims["uid"] = userID
+// 	claims["exp"] = time.Now().Add(time.Hour * 480).Unix()
+// 	token := jwtgo.NewWithClaims(jwtgo.SigningMethodHS256, claims)
+// 	return token.SignedString([]byte("UserTokenKey"))
+// }
 
-	return token.SignedString([]byte("UserTokenKey"))
+//fixed to simple
+func NewUserToken(userID uint) (string, error) {
+	token := jwtgo.NewWithClaims(jwtgo.SigningMethodHS256, jwtgo.MapClaims{
+		"uid": userID,
+		"exp": time.Now().Add(time.Hour * 480).Unix(), // 可以添加过期时间
+	})
+
+	return token.SignedString([]byte("UserTokenKey")) //对应的字符串请自行生成，最后足够使用加密后的字符串
 }

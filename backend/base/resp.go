@@ -17,20 +17,6 @@ func RespStatusAndData(statusCode int, data interface{}) map[string]interface{} 
 	return map[string]interface{}{constants.RespKeyStatus: statusCode, constants.RespKeyData: data}
 }
 
-func RespStatusAndTwoData(statusCode int, data1 interface{}, data2 interface{}) map[string]interface{} {
-	if data1 == nil {
-		return map[string]interface{}{constants.RespKeyStatus: statusCode}
-	}
-	return map[string]interface{}{constants.RespKeyStatus: statusCode, "order": data1, "items": data2}
-}
-
-func RespStatusAndIDCODEData(statusCode int, data1 interface{}, data2 interface{}) map[string]interface{} {
-	if data1 == nil {
-		return map[string]interface{}{constants.RespKeyStatus: statusCode}
-	}
-	return map[string]interface{}{constants.RespKeyStatus: statusCode, "id": data1, "code": data2}
-}
-
 func WriteStatusAndIDJSON(ctx *server.Context, status int, id interface{}) error {
 	return ctx.ServeJSON(map[string]interface{}{
 		constants.RespKeyStatus: status,

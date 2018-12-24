@@ -36,7 +36,7 @@ func init() {
 	}
 	admin.InitAdminRouter(router, adminDB, "AdminTokenKey")
 
-	BannerDB, err := sql.Open("mysql", "root:yhyddr119216@tcp(10.0.0.7:8806)/?parseTime=true")
+	BannerDB, err := sql.Open("mysql", "root:123456@tcp(10.0.0.7:8806)/?parseTime=true")
 	if err != nil {
 		logrus.Fatal(err)
 	}
