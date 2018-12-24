@@ -10,13 +10,13 @@ import (
 
 	"github.com/TechCatsLab/apix/http/server"
 	log "github.com/TechCatsLab/logging/logrus"
-	httpAdmin "github.com/TechCatsLab/ycmedia/backend/admin/http"
-	isactive "github.com/TechCatsLab/ycmedia/backend/admin/http/filter"
-	admin "github.com/TechCatsLab/ycmedia/backend/admin/mysql"
-	"github.com/TechCatsLab/ycmedia/backend/base"
-	"github.com/TechCatsLab/ycmedia/backend/base/filter"
-	httpPer "github.com/TechCatsLab/ycmedia/backend/permission/http"
-	permission "github.com/TechCatsLab/ycmedia/backend/permission/mysql"
+	httpAdmin "github.com/morgances/ycmedia/backend/admin/http"
+	isactive "github.com/morgances/ycmedia/backend/admin/http/filter"
+	admin "github.com/morgances/ycmedia/backend/admin/mysql"
+	"github.com/morgances/ycmedia/backend/base"
+	"github.com/morgances/ycmedia/backend/base/filter"
+	httpPer "github.com/morgances/ycmedia/backend/permission/http"
+	permission "github.com/morgances/ycmedia/backend/permission/mysql"
 )
 
 func InitAdminRouter(r *server.Router, db *sql.DB, tokenKey string) {

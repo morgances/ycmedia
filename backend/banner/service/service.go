@@ -4,9 +4,9 @@ import (
 	"database/sql"
 	"time"
 
-	"github.com/TechCatsLab/ycmedia/backend/banner/config"
+	"github.com/morgances/ycmedia/backend/banner/config"
 
-	"github.com/TechCatsLab/ycmedia/backend/banner/model/mysql"
+	"github.com/morgances/ycmedia/backend/banner/model/mysql"
 )
 
 type BannerService struct {

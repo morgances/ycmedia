@@ -11,7 +11,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/TechCatsLab/ycmedia/backend/base/constants"
+	"github.com/morgances/ycmedia/backend/base/constants"
 )
 
 var (

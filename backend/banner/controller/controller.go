@@ -5,13 +5,13 @@ import (
 	"time"
 
 	"github.com/TechCatsLab/logging/logrus"
-	"github.com/TechCatsLab/ycmedia/backend/base"
-	"github.com/TechCatsLab/ycmedia/backend/base/constants"
+	"github.com/morgances/ycmedia/backend/base"
+	"github.com/morgances/ycmedia/backend/base/constants"
 
 	"github.com/TechCatsLab/apix/http/server"
 
-	"github.com/TechCatsLab/ycmedia/backend/banner/config"
-	"github.com/TechCatsLab/ycmedia/backend/banner/service"
+	"github.com/morgances/ycmedia/backend/banner/config"
+	"github.com/morgances/ycmedia/backend/banner/service"
 )
 
 type Controller struct {

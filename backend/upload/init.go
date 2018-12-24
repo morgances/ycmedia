@@ -11,11 +11,11 @@ import (
 
 	"github.com/TechCatsLab/apix/http/server"
 	log "github.com/TechCatsLab/logging/logrus"
-	"github.com/TechCatsLab/ycmedia/backend/base"
-	"github.com/TechCatsLab/ycmedia/backend/base/constants"
-	"github.com/TechCatsLab/ycmedia/backend/base/filter"
-	"github.com/TechCatsLab/ycmedia/backend/upload/http"
-	"github.com/TechCatsLab/ycmedia/backend/upload/mysql"
+	"github.com/morgances/ycmedia/backend/base"
+	"github.com/morgances/ycmedia/backend/base/constants"
+	"github.com/morgances/ycmedia/backend/base/filter"
+	"github.com/morgances/ycmedia/backend/upload/http"
+	"github.com/morgances/ycmedia/backend/upload/mysql"
 )
 
 func InitRouter(r *server.Router, db *sql.DB, baseUrl, tokenKey string) {

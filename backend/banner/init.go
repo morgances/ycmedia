@@ -5,8 +5,8 @@ import (
 
 	"github.com/TechCatsLab/apix/http/server"
 	"github.com/TechCatsLab/logging/logrus"
-	"github.com/TechCatsLab/ycmedia/backend/banner/config"
-	"github.com/TechCatsLab/ycmedia/backend/banner/controller"
+	"github.com/morgances/ycmedia/backend/banner/config"
+	"github.com/morgances/ycmedia/backend/banner/controller"
 )
 
 func Register(r *server.Router, db *sql.DB, cnf *config.Config) error {

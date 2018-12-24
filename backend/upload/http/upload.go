@@ -11,9 +11,9 @@ import (
 
 	"github.com/TechCatsLab/apix/http/server"
 	log "github.com/TechCatsLab/logging/logrus"
-	"github.com/TechCatsLab/ycmedia/backend/base"
-	"github.com/TechCatsLab/ycmedia/backend/base/constants"
-	"github.com/TechCatsLab/ycmedia/backend/upload/mysql"
+	"github.com/morgances/ycmedia/backend/base"
+	"github.com/morgances/ycmedia/backend/base/constants"
+	"github.com/morgances/ycmedia/backend/upload/mysql"
 )
 
 type UploadController struct {

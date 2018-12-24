@@ -11,8 +11,8 @@ import (
 	"database/sql"
 	"errors"
 
-	"github.com/TechCatsLab/ycmedia/backend/base"
-	"github.com/TechCatsLab/ycmedia/backend/base/constants"
+	"github.com/morgances/ycmedia/backend/base"
+	"github.com/morgances/ycmedia/backend/base/constants"
 )
 
 type (

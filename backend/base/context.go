@@ -7,7 +7,7 @@ package base
 
 import (
 	"github.com/TechCatsLab/apix/http/server"
-	"github.com/TechCatsLab/ycmedia/backend/base/constants"
+	"github.com/morgances/ycmedia/backend/base/constants"
 )
 
 const (

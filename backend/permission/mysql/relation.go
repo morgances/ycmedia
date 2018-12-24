@@ -10,7 +10,7 @@ import (
 	"errors"
 	"time"
 
-	"github.com/TechCatsLab/ycmedia/backend/admin/mysql"
+	"github.com/morgances/ycmedia/backend/admin/mysql"
 )
 
 type (

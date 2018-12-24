@@ -12,10 +12,10 @@ import (
 
 	"github.com/TechCatsLab/apix/http/server"
 	"github.com/TechCatsLab/logging/logrus"
-	"github.com/TechCatsLab/ycmedia/backend/admin"
-	"github.com/TechCatsLab/ycmedia/backend/banner"
-	"github.com/TechCatsLab/ycmedia/backend/banner/config"
-	"github.com/TechCatsLab/ycmedia/backend/upload"
+	"github.com/morgances/ycmedia/backend/admin"
+	"github.com/morgances/ycmedia/backend/banner"
+	"github.com/morgances/ycmedia/backend/banner/config"
+	"github.com/morgances/ycmedia/backend/upload"
 )
 
 var (
