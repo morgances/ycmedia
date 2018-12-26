@@ -38,7 +38,7 @@ var (
 			created_at 	DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 			PRIMARY KEY (admin_id,role_id)
 		) ENGINE=InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;`,
-		`INSERT INTO admin.relation(admin_id,role_id,created_at) VALUES (?,?,?,?)`,
+		`INSERT INTO admin.relation(admin_id,role_id,created_at) VALUES (?,?,?)`,
 		`DELETE FROM admin.relation WHERE admin_id = ? AND role_id = ? LIMIT 1`,
 		`SELECT relation.role_id FROM admin.relation, admin.role WHERE relation.admin_id = ? AND role.active = true AND relation.role_id = role.id LOCK IN SHARE MODE`,
 	}

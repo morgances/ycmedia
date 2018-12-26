@@ -89,7 +89,7 @@ func (ah *AdminHandler) Login(c *server.Context) error {
 	return ctx.ServeJSON(base.RespStatusAndData(http.StatusOK, token))
 }
 
-// Email modify email
+// Email modify email and DIY
 func (ah *AdminHandler) Email(c *server.Context) error {
 	var (
 		admin struct {
@@ -186,6 +186,7 @@ func (ah *AdminHandler) ModifyPwd(c *server.Context) error {
 		log.Error(err)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, nil))
 	}
+
 	return ctx.ServeJSON(base.RespStatusAndData(http.StatusOK, nil))
 }
 
@@ -202,16 +203,17 @@ func (ah *AdminHandler) ModifyActive(c *server.Context) error {
 		log.Error("Error in JSONBody:", err)
 		return c.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
 	}
-
 	if err = c.Validate(&admin); err != nil {
 		log.Error("Error in Validate:", err)
 		return c.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, nil))
 	}
+
 	err = mysql.AdminServer.ModifyActive(ah.SQLStore(), admin.Id, admin.Active)
 	if err != nil {
 		log.Error(err)
 		return c.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, nil))
 	}
+
 	return c.ServeJSON(base.RespStatusAndData(http.StatusOK, nil))
 }
 

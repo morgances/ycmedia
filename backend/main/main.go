@@ -24,15 +24,15 @@ func main() {
 
 	ep := server.NewEntrypoint(serverConfig, nil)
 	ep.AttachMiddleware(middleware.NegroniRecoverHandler())
-	ep.AttachMiddleware(middleware.NegroniJwtHandler("UserTokenKey", nil, nil, nil))
+	// ep.AttachMiddleware(middleware.NegroniJwtHandler("UserTokenKey", nil, nil, nil))
 	ep.AttachMiddleware(middleware.NegroniJwtHandler("AdminTokenKey", filter.Skipper, nil, nil))
 
 	if err := ep.Start(router.Handler()); err != nil {
 		logrus.Fatal(err)
 	}
 
-	user, err := NewUserToken(1)
-	fmt.Println("user: ", user, err)
+	admin, err := NewAdminToken(1)
+	fmt.Println("admin: ", admin, err)
 
 	ep.Wait()
 }
@@ -46,11 +46,12 @@ func main() {
 // }
 
 //fixed to simple
-func NewUserToken(userID uint) (string, error) {
+
+func NewAdminToken(userID uint) (string, error) {
 	token := jwtgo.NewWithClaims(jwtgo.SigningMethodHS256, jwtgo.MapClaims{
 		"uid": userID,
 		"exp": time.Now().Add(time.Hour * 480).Unix(), // 可以添加过期时间
 	})
 
-	return token.SignedString([]byte("UserTokenKey")) //签名
+	return token.SignedString([]byte("AdminTokenKey")) //签名
 }

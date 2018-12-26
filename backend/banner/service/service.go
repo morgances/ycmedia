@@ -4,8 +4,6 @@ import (
 	"database/sql"
 	"time"
 
-	"github.com/morgances/ycmedia/backend/banner/config"
-
 	"github.com/morgances/ycmedia/backend/banner/model/mysql"
 )
 
@@ -14,12 +12,12 @@ type BannerService struct {
 	SQLS []string
 }
 
-func NewBannerService(cnf *config.Config, db *sql.DB) *BannerService {
-	database := cnf.BannerDB + "." + cnf.BannerTable
+func NewBannerService(db *sql.DB) *BannerService {
+	database := "banner.banner"
 	bs := &BannerService{
 		db: db,
 		SQLS: []string{
-			`CREATE DATABASE IF NOT EXISTS ` + cnf.BannerDB,
+			`CREATE DATABASE IF NOT EXISTS banner`,
 			`CREATE TABLE IF NOT EXISTS ` + database + `(
 				bannerId INT(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
 				name VARCHAR(512) UNIQUE DEFAULT NULL COMMENT 'sign',

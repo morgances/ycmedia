@@ -60,16 +60,20 @@ func CreateRoleTable(db *sql.DB) error {
 }
 
 // CreateRole create a new role information.
-func (*ServiceProvider) CreateRole(db *sql.DB, name, intro string) error {
+func (*ServiceProvider) CreateRole(db *sql.DB, name, intro string) (uint32, error) {
 	result, err := db.Exec(roleSqlString[mysqlRoleInsert], name, intro, true)
 	if err != nil {
-		return err
+		return 0, err
 	}
 	if rows, _ := result.RowsAffected(); rows == 0 {
-		return errInvalidMysql
+		return 0, errInvalidMysql
+	}
+	id, err := result.LastInsertId()
+	if err != nil {
+		return 0, err
 	}
 
-	return nil
+	return uint32(id), nil
 }
 
 // ModifyRole modify role information.

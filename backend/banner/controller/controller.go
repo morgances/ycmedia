@@ -10,7 +10,6 @@ import (
 
 	"github.com/TechCatsLab/apix/http/server"
 
-	"github.com/morgances/ycmedia/backend/banner/config"
 	"github.com/morgances/ycmedia/backend/banner/service"
 )
 
@@ -18,9 +17,9 @@ type Controller struct {
 	service *service.BannerService
 }
 
-func New(db *sql.DB, c *config.Config) *Controller {
+func New(db *sql.DB) *Controller {
 	return &Controller{
-		service: service.NewBannerService(c, db),
+		service: service.NewBannerService(db),
 	}
 }
 
@@ -36,10 +35,10 @@ func (con *Controller) Insert(c *server.Context) error {
 	var (
 		req struct {
 			Name      string    `json:"name"`
-			ImagePath string    `json:"imageurl"`
-			Event     string    `json:"eventurl"`
-			StartDate time.Time `json:"sdate"`
-			EndDate   time.Time `json:"edate"`
+			ImagePath string    `json:"path"`
+			Event     string    `json:"event"`
+			StartDate time.Time `json:"start"`
+			EndDate   time.Time `json:"end"`
 		}
 	)
 

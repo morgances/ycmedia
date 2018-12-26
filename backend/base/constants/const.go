@@ -26,6 +26,8 @@ const (
 	//FileUploadDir - the root directory of the upload files
 	FileUploadDir = "files"
 
+	//ArticleDir - save article file
+	ArticleDir = "article"
 	// PictureDir - save pictures file
 	PictureDir = "picture"
 	// VideoDir - save videos file

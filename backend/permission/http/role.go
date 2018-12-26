@@ -39,12 +39,12 @@ func (ph *PermissionHandler) CreateRole(c *server.Context) error {
 		return c.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, nil))
 	}
 
-	err = mysql.Service.CreateRole(ph.SQLStore(), role.Name, role.Intro)
+	id, err := mysql.Service.CreateRole(ph.SQLStore(), role.Name, role.Intro)
 	if err != nil {
 		log.Error(err)
 		return c.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, nil))
 	}
-	return c.ServeJSON(base.RespStatusAndData(http.StatusOK, nil))
+	return c.ServeJSON(base.RespStatusAndData(http.StatusOK, id))
 }
 
 func (ph *PermissionHandler) ModifyRole(c *server.Context) error {

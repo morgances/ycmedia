@@ -18,7 +18,7 @@ func (ph *PermissionHandler) AddURLPermission(c *server.Context) error {
 	var (
 		url struct {
 			URL    string `json:"url"     validate:"required"`
-			RoleId uint32 `json:"role_id" validate:"required"`
+			RoleId uint32 `json:"roleId" validate:"required"`
 		}
 	)
 

@@ -53,6 +53,7 @@ func (u *UploadController) Upload(c *server.Context) error {
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, nil))
 	}
 
+	//file existed and return
 	filePath, err := mysql.QueryByMD5(u.SQLStore(), MD5Str)
 	if err == nil {
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusOK, u.BaseURL+filePath))

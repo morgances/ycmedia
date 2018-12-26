@@ -43,28 +43,34 @@ func InitAdminRouter(r *server.Router, db *sql.DB, tokenKey string) {
 
 	jwt := filter.New(tokenKey)
 
-	filter.URLMap["/api/v1/admin/create"] = struct{}{}
 	filter.URLMap["/api/v1/admin/login"] = struct{}{}
 
-	r.Post("/api/v1/admin/create", c.Create)
 	r.Post("/api/v1/admin/login", c.Login)
+	r.Post("/api/v1/admin/create", c.Create, jwt.Check, active.Isactive)
+	//these are only modify by self
 	r.Post("/api/v1/admin/email", c.Email, jwt.Check, active.Isactive)
 	r.Post("/api/v1/admin/mobile", c.Mobile, jwt.Check, active.Isactive)
 	r.Post("/api/v1/admin/newpwd", c.ModifyPwd, jwt.Check, active.Isactive)
+	r.Post("/api/v1/admin/check", c.Isactive, jwt.Check, active.Isactive)
 	r.Post("/api/v1/admin/active", c.ModifyActive, jwt.Check, active.Isactive)
-	r.Post("/api/v1/admin/getadmin", c.Isactive, jwt.Check, active.Isactive)
 
+	//to fixed let active can only modify by origin admin
+	//r.Post("/api/v1/admin/active", c.ModifyActive, jwt.Check, active.Isactive)
+
+	//record roles
 	r.Post("/api/v1/permission/addrole", p.CreateRole, jwt.Check, active.Isactive)
-	r.Post("/api/v1/permission/modifyrole", p.ModifyRole, jwt.Check, active.Isactive)
-	r.Post("/api/v1/permission/activerole", p.ModifyRoleActive, jwt.Check, active.Isactive)
-	r.Post("/api/v1/permission/getrole", p.RoleList, jwt.Check, active.Isactive)
-	r.Post("/api/v1/permission/getidrole", p.GetRoleByID, jwt.Check, active.Isactive)
+	r.Post("/api/v1/permission/modify", p.ModifyRole, jwt.Check, active.Isactive)
+	r.Post("/api/v1/permission/active", p.ModifyRoleActive, jwt.Check, active.Isactive)
+	r.Post("/api/v1/permission/rolelist", p.RoleList, jwt.Check, active.Isactive)
+	r.Post("/api/v1/permission/roleid", p.GetRoleByID, jwt.Check, active.Isactive)
 
+	//record url which role can use
 	r.Post("/api/v1/permission/addurl", p.AddURLPermission, jwt.Check, active.Isactive)
 	r.Post("/api/v1/permission/removeurl", p.RemoveURLPermission, jwt.Check, active.Isactive)
-	r.Post("/api/v1/permission/urlgetrole", p.URLPermissions, jwt.Check, active.Isactive)
-	r.Post("/api/v1/permission/getpermission", p.Permissions, jwt.Check, active.Isactive)
+	r.Post("/api/v1/permission/check", p.URLPermissions, jwt.Check, active.Isactive)
+	r.Post("/api/v1/permission/permissionlist", p.Permissions, jwt.Check, active.Isactive)
 
+	//record role-admin
 	r.Post("/api/v1/permission/addrelation", p.AddRelation, jwt.Check, active.Isactive)
 	r.Post("/api/v1/permission/removerelation", p.RemoveRelation, jwt.Check, active.Isactive)
 }
