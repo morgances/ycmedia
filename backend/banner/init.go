@@ -31,7 +31,7 @@ func Register(r *server.Router, db *sql.DB, tokenKey string) error {
 		Controller: base.New(db),
 	}
 
-	jwt := filter.New(tokenKey)
+	jwt := filter.NewWithDB(tokenKey, db)
 
 	filter.URLMap["/api/v1/banner/detail"] = struct{}{}
 	filter.URLMap["/api/v1/banner/list"] = struct{}{}
