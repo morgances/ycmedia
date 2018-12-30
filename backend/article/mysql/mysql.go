@@ -2,6 +2,7 @@ package mysql
 
 import (
 	"database/sql"
+	"errors"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/morgances/ycmedia/backend/article/mysql/config"
@@ -33,6 +34,22 @@ func DIYDial(dataSourceName string) (Database, error) {
 	}
 	err = db.CreateArticleTable()
 	return db, err
+}
+
+func rowsToArticles(rs *sql.Rows) ([]*Article, error) {
+	list := make([]*Article, 0, 1)
+	for rs.Next() {
+		var x = &Article{}
+		err := rs.Scan(&x.Aid, &x.Uid, &x.Category, &x.Tag, &x.Title, &x.Author, &x.Date, &x.Image, &x.Text)
+		if err != nil {
+			return nil, err
+		}
+		list = append(list, x)
+	}
+	if len(list) == 0 {
+		return nil, errors.New("No Articles !")
+	}
+	return list, nil
 }
 
 func (d Database) GetDB() *sql.DB {

@@ -12,10 +12,10 @@ const (
         user_id  int          not null,
         category int          not null,
         tag      int          not null,
-        title    varchar(50)  not null,
-        author   varchar(50)  not null,
+        title    varchar(128)  not null,
+        author   varchar(128)  not null,
         date     datetime     not null,
-        image    varchar(50)  not null,
+        image    varchar(256)  not null,
         text     TEXT         not null,
         primary key(aid))
         engine=InnoDB default charset=utf8`

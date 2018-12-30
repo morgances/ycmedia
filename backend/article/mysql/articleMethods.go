@@ -1,7 +1,6 @@
 package mysql
 
 import (
-	"errors"
 	"fmt"
 	"time"
 )
@@ -9,12 +8,13 @@ import (
 /*
 article:
   aid        int unsigned  auto_increment,
+  user_id    int           not null,
   category   int           not null,
   tag        int           not null,
-  title      varchar(50)   not null,
-  author     varchar(50)   not null,
+  title      varchar(128)  not null,
+  author     varchar(128)  not null,
   date       datetime      not null,
-  image      varchar(255)  not null,
+  image      varchar(256)  not null,
   text       TEXT          not null,
 */
 
@@ -44,19 +44,7 @@ func (d Database) AddArticle(cat, tag, uid int, title, author, image, text strin
 
 // Get Article
 func (d Database) GetArticleById(aid int) ([]*Article, error) {
-	return d.getArticle(fmt.Sprintf("where aid=%d", aid))
-}
-
-func (d Database) GetArticleByCategory(category int) ([]*Article, error) {
-	return d.getArticle(fmt.Sprintf("where category=%d", category))
-}
-
-func (d Database) GetArticleByTag(tag int) ([]*Article, error) {
-	return d.getArticle(fmt.Sprintf("where tag=%d", tag))
-}
-
-func (d Database) GetArticleByCategoryAndTag(category, tag int) ([]*Article, error) {
-	return d.getArticle(fmt.Sprintf("where category=%d and tag=%d", category, tag))
+	return d.DIYGetArticle(fmt.Sprintf("where aid=%d", aid))
 }
 
 func (d Database) GetArticleList(category, tag, start, nums int, order string) ([]*Article, error) {
@@ -67,12 +55,12 @@ func (d Database) GetArticleListDesc(category, tag, start, nums int, order strin
 	return d.DIYGetArticle(fmt.Sprintf("where category=%d and tag=%d order by %s desc limit %d, %d", category, tag, order, start, nums))
 }
 
-func (d Database) GetArticleByAuthor(author string) ([]*Article, error) {
-	return d.getArticle("where author='" + author + "'")
-}
-
-func (d Database) GetArticleLimits(start, nums int) ([]*Article, error) {
-	return d.getArticle(fmt.Sprintf("limit %d, %d", start, nums))
+func (d Database) GetArticleByDate(category, tag int, date time.Time) ([]*Article, error) {
+	rows, err := d.db.Query(SelectArticle+"where category=? and tag=? and date > ? order by date desc", category, tag, date)
+	if err != nil {
+		return nil, err
+	}
+	return rowsToArticles(rows)
 }
 
 func (d Database) GetArticleOrderLimits(order string, desc bool, start, nums int) ([]*Article, error) {
@@ -80,31 +68,15 @@ func (d Database) GetArticleOrderLimits(order string, desc bool, start, nums int
 	if desc {
 		str = "desc"
 	}
-	return d.getArticle(fmt.Sprintf("order by %s %s limit %d, %d", order, str, start, nums))
+	return d.DIYGetArticle(fmt.Sprintf("order by %s %s limit %d, %d", order, str, start, nums))
 }
 
 func (d Database) DIYGetArticle(opt string) ([]*Article, error) {
-	return d.getArticle(opt)
-}
-
-func (d Database) getArticle(opt string) ([]*Article, error) {
-	list := make([]*Article, 0, 1)
 	rows, err := d.db.Query(SelectArticle + opt)
 	if err != nil {
 		return nil, err
 	}
-	for rows.Next() {
-		var x = &Article{}
-		err = rows.Scan(&x.Aid, &x.Uid, &x.Category, &x.Tag, &x.Title, &x.Author, &x.Date, &x.Image, &x.Text)
-		if err != nil {
-			return nil, err
-		}
-		list = append(list, x)
-	}
-	if len(list) == 0 {
-		return nil, errors.New("No Articles !")
-	}
-	return list, nil
+	return rowsToArticles(rows)
 }
 
 // Delete Article
