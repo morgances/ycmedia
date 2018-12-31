@@ -2,7 +2,6 @@ package mysql
 
 import (
 	"database/sql"
-	"errors"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/morgances/ycmedia/backend/article/mysql/config"
@@ -45,9 +44,6 @@ func rowsToArticles(rs *sql.Rows) ([]*Article, error) {
 			return nil, err
 		}
 		list = append(list, x)
-	}
-	if len(list) == 0 {
-		return nil, errors.New("No Articles !")
 	}
 	return list, nil
 }

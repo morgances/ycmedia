@@ -47,11 +47,6 @@ func GetArticleList(ctx *server.Context) error {
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
 	}
 
-	if len(articles) <= 0 {
-		log.Error("Error In Data:", BadData)
-		return ctx.ServeJSON(base.RespStatusAndData(http.StatusOK, nil))
-	}
-
 	for _, e := range articles {
 		e.Text = ""
 	}
@@ -110,10 +105,6 @@ func GetNews(ctx *server.Context) error {
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
 	}
 
-	if len(articles) <= 0 {
-		return ctx.ServeJSON(base.RespStatusAndData(http.StatusOK, nil))
-	}
-
 	for _, e := range articles {
 		e.Text = ""
 	}
@@ -146,16 +137,12 @@ func GetMore(ctx *server.Context) error {
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
 	}
 
-	log.Fatalf("In GetMore: Category=%d, Tag=%d, Date=%v\n", x.Category, x.Tag, x.Date)
+	log.Infof("In GetMore: Category=%d, Tag=%d, Date=%v\n", x.Category, x.Tag, x.Date)
 
 	articles, err := conn.GetArticleByDate(x.Category, x.Tag, x.Date)
 	if err != nil {
 		log.Error("Error In Mysql.GetArticlesByDate:", err)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
-	}
-
-	if len(articles) <= 0 {
-		return ctx.ServeJSON(base.RespStatusAndData(http.StatusOK, nil))
 	}
 
 	for _, e := range articles {
