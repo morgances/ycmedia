@@ -18,12 +18,17 @@ class Policies extends React.Component {
     }
   }
 
-  // componentDidMount() {
-  //   const { dispatch } = this.props
-  //   dispatch({
-  //     type: `culture_policies/get`,
-  //   })
-  // }
+  componentDidMount() {
+    const { dispatch } = this.props
+    dispatch({
+      type: `culture_policies/get`,
+      payload: {
+        category: 0,
+        tag: 0,
+        page: 0
+      }
+    })
+  }
 
   _onRefreshing(data) {
     this.setState(() => {

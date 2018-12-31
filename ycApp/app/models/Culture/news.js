@@ -1,63 +1,39 @@
+import { getList, getText, getMore } from '../../services/api'
+
 export default {
   namespace: 'culture_news',
   state: {
-    culture: [
-      {
-        title: '银川市举办欢聚一堂美术展览少儿活动',
-        time: '2017-01-02',
-        image: require('../../assets/images/Main/news_one.png'),
-      },
-      {
-        title: '银川市举办欢聚一堂美术展览少儿活动',
-        time: '2017-01-02',
-        image: require('../../assets/images/Main/news_one.png'),
-      },
-      {
-        title: '银川市举办欢聚一堂美术展览少儿活动',
-        time: '2017-01-02',
-        image: require('../../assets/images/Main/news_one.png'),
-      },
-      {
-        title: '银川市举办欢聚一堂美术展览少儿活动',
-        time: '2017-01-02',
-        image: require('../../assets/images/Main/news_one.png'),
-      },
-      {
-        title: '银川市举办欢聚一堂美术展览少儿活动',
-        time: '2017-01-02',
-        image: require('../../assets/images/Main/news_one.png'),
-      },
-      {
-        title: '银川市举办欢聚一堂美术展览少儿活动',
-        time: '2017-01-02',
-        image: require('../../assets/images/Main/news_one.png'),
-      }
-    ],
+    culture: [],
   },
   effects: {
-    *refresh({ payload }, { call, put }) {
-      // const response = yield call()
-      if (true) {
-        yield put({
-          type: 'Refresh',
-          payload: [{
-            title: '最新消息',
-            time: '2017-01-02',
-            image: require('../../assets/images/Main/news_one.png')
-          }]
-        })
-        return {
-          state: 2
-        }
-      } else {
-        return {
-          state: 1
-        }
-      }
+    *refresh({ payload }, { put }) {
+      const response = yield getMore({
+        category: 2,
+        tag: 3,
+        date: '2018-12-01T15:43:46+08:00'
+      })
+      console.log(response, '======')
+      // if (true) {
+      //   yield put({
+      //     type: 'Refresh',
+      //     payload: [{
+      //       title: '最新消息',
+      //       time: '2017-01-02',
+      //       image: require('../../assets/images/Main/news_one.png')
+      //     }]
+      //   })
+      //   return {
+      //     state: 2
+      //   }
+      // } else {
+      //   return {
+      //     state: 1
+      //   }
+      // }
     },
     *loadMore({ payload }, { call, put }) {
-      // const response = yield call()
-      if (true) {
+      // const response = yield call(getList({ payload }))
+      if (response) {
         yield put({
           type: 'LoadMore',
           payload: [{
@@ -73,14 +49,16 @@ export default {
         })
       }
     },
-    *get({ payload }, { call, put }) {
-      // const response = yield call()
-      // if (true) {
-      //   yield put({
-      //     type: 'Get',
-      //     payload: Response.data
-      //   })
-      // }
+    *get({ payload }, { put }) {
+      const { data } = yield getList(payload)
+      const res = yield getText({aid: 7})
+      console.log(data, '===')
+      if (true) {
+        yield put({
+          type: 'Get',
+          payload: data.data
+        })
+      }
     }
   },
   reducers: {

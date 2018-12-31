@@ -12,12 +12,12 @@ export default (props) => {
     const listItems = list.map((item, index) => 
       <Flex style={styles.news_content} key={index} wrap='wrap' justify="center">
         <Flex.Item style={[{ flex: 2 }]}>
-          <Image style={styles.news_content_image} source={item.image}></Image>
+          <Image style={styles.news_content_image} source={{ uri: `${item.image}`, cache: 'force-cache' }}></Image>
         </Flex.Item>
         <Flex.Item style={{ flex: 3.5, paddingLeft: 10 }}>
           <Text style={{ fontSize: FontSize.medium, color: Colors.black }}>{item.title}</Text>
           <View style={ styles.news_content_time_view}>
-            <Text style={ styles.news_content_time }>{item.time}</Text>
+            <Text style={ styles.news_content_time }>{item.date}</Text>
           </View>
         </Flex.Item>
       </Flex>
