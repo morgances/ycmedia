@@ -18,12 +18,17 @@ class Free extends React.Component {
     }
   }
 
-  // componentDidMount() {
-  //   const { dispatch } = this.props
-  //   dispatch({
-  //     type: `culture_inform/get`,
-  //   })
-  // }
+  componentDidMount() {
+    const { dispatch } = this.props
+    dispatch({
+      type: `culture_free/get`,
+      payload: {
+        category: 0,
+        tag: 0,
+        page: 0
+      }
+    })
+  }
 
   _onRefreshing(data) {
     this.setState(() => {

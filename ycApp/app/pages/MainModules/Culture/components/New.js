@@ -18,12 +18,17 @@ class News extends React.Component {
     }
   }
 
-  // componentDidMount() {
-  //   const { dispatch } = this.props
-  //   dispatch({
-  //     type: `culture_news/get`,
-  //   })
-  // }
+  componentDidMount() {
+    const { dispatch } = this.props
+    dispatch({
+      type: `culture_news/get`,
+      payload: {
+        category: 0,
+        tag: 0,
+        page: 0
+      }
+    })
+  }
 
   _onRefreshing(data) {
     this.setState(() => {
@@ -91,7 +96,7 @@ class News extends React.Component {
       >
         <View>
           <WingBlank size="lg">
-            <Item data={this.props.culture}></Item>
+            <Item data={this.props.articleList}></Item>
           </WingBlank>
         </View>
         {this.state.loadMore > 0 ? <Loadmore isLoadAll={ this.state.loadMore }></Loadmore> : null }
