@@ -41,7 +41,7 @@ func InitAdminRouter(r *server.Router, db *sql.DB, tokenKey string) {
 		Controller: base.New(db),
 	}
 
-	jwt := filter.New(tokenKey)
+	jwt := filter.NewWithDB(tokenKey, db)
 
 	filter.URLMap["/api/v1/admin/login"] = struct{}{}
 
@@ -53,9 +53,6 @@ func InitAdminRouter(r *server.Router, db *sql.DB, tokenKey string) {
 	r.Post("/api/v1/admin/newpwd", c.ModifyPwd, jwt.Check, active.Isactive)
 	r.Post("/api/v1/admin/check", c.Isactive, jwt.Check, active.Isactive)
 	r.Post("/api/v1/admin/active", c.ModifyActive, jwt.Check, active.Isactive)
-
-	//to fixed let active can only modify by origin admin
-	//r.Post("/api/v1/admin/active", c.ModifyActive, jwt.Check, active.Isactive)
 
 	//record roles
 	r.Post("/api/v1/permission/addrole", p.CreateRole, jwt.Check, active.Isactive)

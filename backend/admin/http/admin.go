@@ -1,8 +1,3 @@
-/*
- * Revision History:
- *     Initial: 2018/08/28        Shi Ruitao
- */
-
 package http
 
 import (

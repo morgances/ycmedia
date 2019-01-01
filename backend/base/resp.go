@@ -1,8 +1,3 @@
-/*
- * Revision History:
- *     Initial: 2018/09/02        Shi Ruitao
- */
-
 package base
 
 import (
