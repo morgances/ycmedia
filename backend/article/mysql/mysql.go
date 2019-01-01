@@ -55,3 +55,8 @@ func (d Database) GetDB() *sql.DB {
 func (d Database) Close() error {
 	return d.db.Close()
 }
+
+func (d Database) CreateArticleTable() error {
+	_, err := d.db.Exec(CreateArticleTableCommand)
+	return err
+}
