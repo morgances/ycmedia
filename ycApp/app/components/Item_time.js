@@ -17,7 +17,7 @@ export default (props) => {
         <Flex.Item style={{ flex: 3.5, paddingLeft: 10 }}>
           <Text style={{ fontSize: FontSize.medium, color: Colors.black }}>{item.title}</Text>
           <View style={ styles.news_content_time_view}>
-            <Text style={ styles.news_content_time }>{item.date}</Text>
+            <Text style={ styles.news_content_time }>{item.time}</Text>
           </View>
         </Flex.Item>
       </Flex>
