@@ -3,6 +3,7 @@ package controller
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -33,7 +34,6 @@ func (con *Controller) CreateTable() error {
 	return con.service.CreateTable()
 }
 
-//to do fixed for upload
 func (con *Controller) Insert(c *server.Context) error {
 	var (
 		req struct {
@@ -44,18 +44,19 @@ func (con *Controller) Insert(c *server.Context) error {
 			EndDate   time.Time `json:"end"`
 		}
 	)
+	fmt.Println(1)
 
 	if err := c.JSONBody(&req); err != nil {
 		logrus.Error(err)
 		return c.ServeJSON(base.RespStatusAndData(constants.ErrInvalidParam, nil))
 	}
-
 	status, path := base.Transport(c.Request())
 	if status != 200 {
 		logrus.Error(errors.New("upload failed"))
 		return c.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, nil))
 	}
-	_, err := con.service.Insert(req.Name, req.ImagePath, req.Event, req.StartDate, req.EndDate)
+
+	_, err := con.service.Insert(req.Name, path, req.Event, req.StartDate, req.EndDate)
 	if err != nil {
 		logrus.Error(err)
 		return c.ServeJSON(base.RespStatusAndData(constants.ErrCreateInMysql, nil))

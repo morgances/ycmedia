@@ -1,7 +1,6 @@
 import request from '../utils/request'
 
 export function getList({ category, tag, page }) {
-  console.log(category, tag, page, '+++++++++')
   return request({
     url: '/getlist',
     method: 'POST',

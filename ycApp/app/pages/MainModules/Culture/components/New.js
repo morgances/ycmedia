@@ -96,7 +96,7 @@ class News extends React.Component {
       >
         <View>
           <WingBlank size="lg">
-            <Item data={this.props.culture}></Item>
+            <Item data={this.props.articleList}></Item>
           </WingBlank>
         </View>
         {this.state.loadMore > 0 ? <Loadmore isLoadAll={ this.state.loadMore }></Loadmore> : null }

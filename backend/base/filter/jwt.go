@@ -1,8 +1,3 @@
-/*
- * Revision History:
- *     Initial: 2018/08/15        Shi Ruitao
- */
-
 package filter
 
 import (
@@ -16,7 +11,6 @@ import (
 	log "github.com/TechCatsLab/logging/logrus"
 	jwtgo "github.com/dgrijalva/jwt-go"
 	"github.com/morgances/ycmedia/backend/base"
-	"github.com/morgances/ycmedia/backend/permission/mysql"
 )
 
 var (
@@ -57,7 +51,6 @@ func NewAdminToken(userID uint32, tokenKey string) (string, error) {
 func (f *JWTFilter) Check(ctx *server.Context) bool {
 	c := &base.Context{Context: ctx}
 
-	url := c.Request().URL.Path
 	claims, err := f.checkJWT(c)
 	if err != nil {
 		log.Error(err)
@@ -67,16 +60,18 @@ func (f *JWTFilter) Check(ctx *server.Context) bool {
 	rawUID := uint32(claims[base.CtxKeyUID].(float64))
 	c.SetUID(rawUID)
 
-	result, err := mysql.Service.URLPermissions(f.db, url)
-	if err != nil {
-		log.Error(err)
-		return false
-	}
+	//url := c.Request().URL.Path
+	// result, err := mysql.Service.URLPermissions(f.db, url)
+	// if err != nil {
+	// 	log.Error(err)
+	// 	return false
+	// }
 
-	if result[rawUID] != true {
-		log.Error(errors.New("Without Permission to use"))
-		return false
-	}
+	// if result[rawUID] != true {
+	// 	log.Error(errors.New("Without Permission to Use"))
+	// 	c.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, nil))
+	// 	return false
+	// }
 
 	return true
 }

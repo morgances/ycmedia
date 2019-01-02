@@ -1,35 +1,25 @@
 import { getList, getText, getMore } from '../../services/api'
+import { refresh_result } from '../../components/Refresh_result'
 
 export default {
   namespace: 'culture_news',
   state: {
-    culture: [],
+    articleList: [],
   },
   effects: {
     *refresh({ payload }, { put }) {
-      const response = yield getMore({
-        category: 2,
-        tag: 3,
+      const { data, status } = yield getMore({
+        category: 0,
+        tag: 0,
         date: '2018-12-01T15:43:46+08:00'
       })
-      console.log(response, '======')
-      // if (true) {
-      //   yield put({
-      //     type: 'Refresh',
-      //     payload: [{
-      //       title: '最新消息',
-      //       time: '2017-01-02',
-      //       image: require('../../assets/images/Main/news_one.png')
-      //     }]
-      //   })
-      //   return {
-      //     state: 2
-      //   }
-      // } else {
-      //   return {
-      //     state: 1
-      //   }
-      // }
+      if (status == 200 && data.data.length > 0) {
+        yield put({
+          type: 'Refresh',
+          payload: data.data
+        })
+      }
+      return data.data
     },
     *loadMore({ payload }, { call, put }) {
       // const response = yield call(getList({ payload }))
@@ -50,10 +40,11 @@ export default {
       }
     },
     *get({ payload }, { put }) {
-      const { data } = yield getList(payload)
-      const res = yield getText({aid: 7})
-      console.log(data, '===')
-      if (true) {
+      const { data, status } = yield getList(payload)
+      data.data.map((item) => {
+        item.time = item.date.slice(0, 10)
+      })
+      if (status == 200) {
         yield put({
           type: 'Get',
           payload: data.data
@@ -65,19 +56,19 @@ export default {
     Refresh(state, action) {
       return {
         ...state,
-        culture: action.payload.concat(state.culture)
+        articleList: action.payload.concat(state.articleList)
       }
     },
     LoadMore(state, action) {
       return {
         ...state,
-        culture: state.culture.concat(action.payload)
+        articleList: state.articleList.concat(action.payload)
       }
     },
     Get(state, action) {
       return {
         ...state,
-        culture: action.payload
+        articleList: action.payload
       }
     }
   }

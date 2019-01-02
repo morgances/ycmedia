@@ -1,8 +1,3 @@
-/*
- * Revision History:
- *     Initial: 2018/09/04        Shi Ruitao
- */
-
 package filter
 
 import (
@@ -24,7 +19,6 @@ type (
 func (a *Active) Isactive(c *server.Context) bool {
 	ctx := &base.Context{Context: c}
 	id := ctx.UID()
-	//url := c.Request().URL
 
 	isactive, err := mysql.AdminServer.IsActive(a.SQLStore(), id)
 	if err != nil {
@@ -32,6 +26,5 @@ func (a *Active) Isactive(c *server.Context) bool {
 		return false
 	}
 
-	//验证permission
 	return isactive
 }
