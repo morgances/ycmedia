@@ -1,83 +1,21 @@
 package controller
 
 import (
-	"errors"
 	"net/http"
-
-	"github.com/morgances/ycmedia/backend/base"
+	"time"
 
 	"github.com/TechCatsLab/apix/http/server"
 	log "github.com/TechCatsLab/logging/logrus"
-	"github.com/morgances/ycmedia/backend/article/mysql"
+	"github.com/morgances/ycmedia/backend/base"
 )
 
-var conn mysql.Database
-
-var (
-	NotPost error = errors.New("Only Receive Post !")
-	NotGet  error = errors.New("Only Receive Get !")
-	BadData error = errors.New("Bad Error !")
-)
-
-func init() {
-	con, err := mysql.Dial()
-	if err != nil {
-		panic(err)
-	}
-	conn = con
+/*
+{
+	"category": 2,
+	"tag": 3,
+	"page": 0
 }
-
-// Add
-func Add(ctx *server.Context) error {
-	var x mysql.Article
-	if ctx.Request().Method != "POST" {
-		log.Error("Error In Request:", NotPost)
-		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, NotPost))
-	}
-
-	err := ctx.JSONBody(&x)
-	if err != nil {
-		log.Error("Error In JSONBody:", err)
-		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
-	}
-
-	err = conn.AddArticle(x.Category, x.Tag, x.Uid, x.Title, x.Author, x.Image, x.Text, x.Date)
-	if err != nil {
-		log.Error("Error In Mysql.AddArticle:", err)
-		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
-	}
-	return ctx.ServeJSON(base.RespStatusAndData(http.StatusOK, nil))
-}
-
-// Delete
-func Delete(ctx *server.Context) error {
-	if ctx.Request().Method != "POST" {
-		log.Error("Error In Request:", NotPost)
-		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, NotPost))
-	}
-
-	var x interface{}
-	err := ctx.JSONBody(x)
-	if err != nil {
-		log.Error("Error In JSONBody:", err)
-		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
-	}
-
-	aid := x.(map[string]interface{})["aid"].(int)
-	if aid <= 0 {
-		log.Error("Error In JSONBody:", BadData)
-		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, BadData))
-	}
-	err = conn.DeleteArticle(x.(map[string]interface{})["aid"].(int))
-	if err != nil {
-		log.Error("Error In Mysql DeleteArticle:", err)
-		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
-	}
-
-	return ctx.ServeJSON(base.RespStatusAndData(http.StatusOK, nil))
-}
-
-// Get
+*/
 func GetArticleList(ctx *server.Context) error {
 	if ctx.Request().Method != "POST" {
 		log.Error("Error In Request:", NotPost)
@@ -89,11 +27,14 @@ func GetArticleList(ctx *server.Context) error {
 		Tag      int `json:"tag"`
 		Page     int `json:"page"`
 	}
+
 	err := ctx.JSONBody(&x)
 	if err != nil {
 		log.Error("Error In JSONBody:", err)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
 	}
+
+	log.Infof("In GetArticleList: Category=%d, Tag=%d, Page=%d\n", x.Category, x.Tag, x.Page)
 
 	if x.Category < 0 || x.Tag < 0 || x.Page < 0 {
 		log.Error("Error In Data:", BadData)
@@ -106,11 +47,6 @@ func GetArticleList(ctx *server.Context) error {
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
 	}
 
-	if len(articles) <= 0 {
-		log.Error("Error In Data:", BadData)
-		return ctx.ServeJSON(base.RespStatusAndData(http.StatusOK, nil))
-	}
-
 	for _, e := range articles {
 		e.Text = ""
 	}
@@ -118,6 +54,11 @@ func GetArticleList(ctx *server.Context) error {
 	return ctx.ServeJSON(base.RespStatusAndData(http.StatusOK, articles))
 }
 
+/*
+{
+	"aid": 10
+}
+*/
 func GetTextById(ctx *server.Context) error {
 	if ctx.Request().Method != "POST" {
 		log.Error("Error In Request:", NotGet)
@@ -127,11 +68,14 @@ func GetTextById(ctx *server.Context) error {
 	var x struct {
 		Aid int `json:"aid"`
 	}
+
 	err := ctx.JSONBody(&x)
 	if err != nil {
 		log.Error("Error In JSONBody:", err)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
 	}
+
+	log.Infof("In GetTextById: aid=%d\n", x.Aid)
 
 	if x.Aid <= 0 {
 		log.Error("Error In Data:", BadData)
@@ -153,14 +97,12 @@ func GetNews(ctx *server.Context) error {
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, NotGet))
 	}
 
+	log.Infof("Get A Request For News\n")
+
 	articles, err := conn.GetArticleOrderLimits("date", true, 0, 10)
 	if err != nil {
 		log.Error("Error In Mysql.GetArticleOrderLimuts:", err)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
-	}
-
-	if len(articles) <= 0 {
-		return ctx.ServeJSON(base.RespStatusAndData(http.StatusOK, nil))
 	}
 
 	for _, e := range articles {
@@ -170,7 +112,42 @@ func GetNews(ctx *server.Context) error {
 	return ctx.ServeJSON(base.RespStatusAndData(http.StatusOK, articles))
 }
 
-// Update
-func Update(ctx *server.Context) error {
-	return nil
+/*
+{
+	"category": 0,
+	"tag": 0,
+	"date": "2018-12-30"
+}
+*/
+func GetMore(ctx *server.Context) error {
+	if ctx.Request().Method != "POST" {
+		log.Error("Error In Request:", NotPost)
+		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, NotPost))
+	}
+
+	var x struct {
+		Category int       `json:"category"`
+		Tag      int       `json:"tag"`
+		Date     time.Time `json:"date"`
+	}
+
+	err := ctx.JSONBody(&x)
+	if err != nil {
+		log.Error("Error In JSONBody:", err)
+		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
+	}
+
+	log.Infof("In GetMore: Category=%d, Tag=%d, Date=%v\n", x.Category, x.Tag, x.Date)
+
+	articles, err := conn.GetArticleByDate(x.Category, x.Tag, x.Date)
+	if err != nil {
+		log.Error("Error In Mysql.GetArticlesByDate:", err)
+		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
+	}
+
+	for _, e := range articles {
+		e.Text = ""
+	}
+
+	return ctx.ServeJSON(base.RespStatusAndData(http.StatusOK, articles))
 }
