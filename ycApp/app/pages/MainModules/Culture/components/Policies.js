@@ -9,7 +9,7 @@ import Item from '../../../../components/Item_time'
 import Loadmore from '../../../../components/LoadMore'
 import refresh_result from '../../../../components/Refresh_result'
 
-class News extends React.Component {
+class Policies extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -21,7 +21,7 @@ class News extends React.Component {
   // componentDidMount() {
   //   const { dispatch } = this.props
   //   dispatch({
-  //     type: `culture_news/get`,
+  //     type: `culture_policies/get`,
   //   })
   // }
 
@@ -54,7 +54,7 @@ class News extends React.Component {
       });
       const { dispatch } = this.props
       dispatch({
-        type: `culture_news/loadMore`,
+        type: `culture_policies/loadMore`,
       })
       if (Response.state) {
         this.setState({
@@ -80,7 +80,7 @@ class News extends React.Component {
         refreshControl={
           <RefreshControl
             refreshing={this.state.isRefreshing}
-            onRefresh={this._onRefreshing.bind(this, [this.props, 'culture_news'])}
+            onRefresh={this._onRefreshing.bind(this, [this.props, 'culture_policies'])}
             titleColor="#00ff00"
             colors={[Colors.primary]}
             progressBackgroundColor="#ffffff"
@@ -100,6 +100,6 @@ class News extends React.Component {
   }
 }
 
-export default connect(({ culture_news }) => ({
-  ...culture_news,
-}))(News);
+export default connect(({ culture_policies }) => ({
+  ...culture_policies,
+}))(Policies);
