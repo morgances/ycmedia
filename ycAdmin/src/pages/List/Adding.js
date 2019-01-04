@@ -139,13 +139,13 @@ export default class Adding extends React.Component {
           <FormItem label="文章标题" {...this.formLayout}>
             {getFieldDecorator("title", {
               rules: [{ required: true, message: "请输入文章标题" }],
-              initialValue: current.title
+              //initialValue: current.title
             })(<Input placeholder="请输入" />)}
           </FormItem>
           <FormItem label="文章作者" {...this.formLayout}>
             {getFieldDecorator("name", {
               rules: [{ required: true, message: "请输入文章作者" }],
-              initialValue: current.name
+              //initialValue: current.name
             })(<Input placeholder="请输入" />)}
           </FormItem>
           <FormItem label="文章标签" {...this.formLayout}>

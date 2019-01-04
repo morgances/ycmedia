@@ -1,103 +1,82 @@
 import React, { PureComponent } from "react";
+import moment from 'moment';
 import { connect } from "dva";
 import Link from "umi/link";
 import router from "umi/router";
-import { Card, Row, Col, Icon, Avatar, Tag, Divider, Spin, Input } from "antd";
+import { Card, Row, Col, Icon, Avatar, Tag, Divider, Spin, Input, List } from "antd";
 import PageHeaderWrapper from "@/components/PageHeaderWrapper";
 import styles from "./Center.less";
 
-@connect(({ loading, user, project }) => ({
-  listLoading: loading.effects["list/fetch"],
-  currentUser: user.currentUser,
-  currentUserLoading: loading.effects["user/fetchCurrent"],
-  project,
-  projectLoading: loading.effects["project/fetchNotice"]
+@connect(({ activities, loading }) => ({
+  activities,
+  activitiesLoading: loading.effects['activities/fetchList'],
 }))
-class Center extends PureComponent {
+export default class Center extends PureComponent {
+    componentDidMount() {
+      const { dispatch } = this.props;
+      dispatch({
+        type: 'project/fetchNotice',
+      });
+      dispatch({
+        type: 'activities/fetchList',
+      });
+    }
+
   state = {
-    newTags: [],
-    inputVisible: false,
-    inputValue: "",
-  };
-  
-  componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch({
-      type: "user/fetchCurrent"
-    });
-    dispatch({
-      type: "list/fetch",
-      payload: {
-        count: 8
-      }
-    });
-    dispatch({
-      type: "project/fetchNotice"
+    currentUser: 
+      {
+      name: 'Oiar',
+      avatar: 'http://pic1.win4000.com/wallpaper/3/55b1f8304d0c7.jpg',
+      userid: '00000001',
+    }
+  }
+
+  renderActivities() {
+    const {
+      activities: { list },
+    } = this.props;
+    return list.map(item => {
+      const events = item.template.split(/@\{([^{}]*)\}/gi).map(key => {
+        if (item[key]) {
+          return (
+            <a href={item[key].link} key={item[key].name}>
+              {item[key].name}
+            </a>
+          );
+        }
+        return key;
+      });
+      return (
+        <List.Item key={item.id}>
+          <List.Item.Meta
+            avatar={<Avatar src={item.user.avatar} />}
+            title={
+              <span>
+                <a className={styles.username}>{item.user.name}</a>
+                &nbsp;
+                <span className={styles.event}>{events}</span>
+              </span>
+            }
+            description={
+              <span className={styles.datetime} title={item.updatedAt}>
+                {moment(item.updatedAt).fromNow()}
+              </span>
+            }
+          />
+        </List.Item>
+      );
     });
   }
 
-  onTabChange = key => {
-    const { match } = this.props;
-    switch (key) {
-      case "articles":
-        router.push(`${match.url}/articles`);
-        break;
-      case "applications":
-        router.push(`${match.url}/applications`);
-        break;
-      case "projects":
-        router.push(`${match.url}/projects`);
-        break;
-      default:
-        break;
-    }
-  };
-
-  showInput = () => {
-    this.setState({ inputVisible: true }, () => this.input.focus());
-  };
-
-  saveInputRef = input => {
-    this.input = input;
-  };
-
-  handleInputChange = e => {
-    this.setState({ inputValue: e.target.value });
-  };
-
-  handleInputConfirm = () => {
-    const { state } = this;
-    const { inputValue } = state;
-    let { newTags } = state;
-    if (
-      inputValue &&
-      newTags.filter(tag => tag.label === inputValue).length === 0
-    ) {
-      newTags = [
-        ...newTags,
-        { key: `new-${newTags.length}`, label: inputValue }
-      ];
-    }
-    this.setState({
-      newTags,
-      inputVisible: false,
-      inputValue: ""
-    });
-  };
-
   render() {
-    const { newTags, inputVisible, inputValue } = this.state;
+    const {
+      activitiesLoading,
+    } = this.props;
     const {
       listLoading,
       currentUser,
-      currentUserLoading,
-      project: { notice },
-      projectLoading,
-      match,
-      location,
-      children
-    } = this.props;
-
+      currentUserLoading
+    } = this.state;
     return (
       <PageHeaderWrapper className={styles.userCenter}>
             <Card
@@ -117,9 +96,18 @@ class Center extends PureComponent {
                 "loading..."
               )}
             </Card>
+            <Card
+              bodyStyle={{ padding: 0 }}
+              bordered={false}
+              className={styles.activeCard}
+              title="动态"
+              loading={activitiesLoading}
+            >
+              <List loading={activitiesLoading} size="large">
+                <div className={styles.activitiesList}>{this.renderActivities()}</div>
+              </List>
+            </Card>
       </PageHeaderWrapper>
     );
   }
 }
-
-export default Center;

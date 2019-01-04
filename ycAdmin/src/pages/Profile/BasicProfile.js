@@ -51,9 +51,22 @@ class BasicProfile extends PureComponent {
     } = this.props;
     const { width } = this.state;
 
+    const mainSearch = (
+      <div style={{ textAlign: 'center' }}>
+        <Input.Search
+          placeholder="请输入用户ID"
+          enterButton="搜索"
+          size="large"
+          onSearch={this.handleFormSubmit}
+          style={{ width: 522 }}
+        />
+      </div>
+    );
+
     return (
       <PageHeaderWrapper
         title="用户管理"
+        content={mainSearch}
         wrapperClassName={styles.advancedForm}
       >
         <Card bordered={false}>

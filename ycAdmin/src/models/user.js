@@ -5,7 +5,11 @@ export default {
 
   state: {
     list: [],
-    currentUser: {}
+    currentUser: {
+      name: 'Oiar',
+      avatar: 'http://pic1.win4000.com/wallpaper/3/55b1f8304d0c7.jpg',
+      userid: '00000001',
+    }
   },
 
   effects: {

@@ -124,3 +124,7 @@ export async function queryNotices() {
 export async function getFakeCaptcha(mobile) {
   return request(`/api/captcha?mobile=${mobile}`);
 }
+
+export async function queryCurrent() {
+  return request('/api/currentUser');
+}

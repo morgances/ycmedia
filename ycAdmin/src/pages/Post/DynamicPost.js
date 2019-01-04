@@ -33,16 +33,6 @@ class DynamicPost extends Component {
 
   handleChange = ({ fileList }) => this.setState({ fileList });
 
-  getData = async () => {
-    const { dispatch } = this.props;
-    await dispatch({
-      type: "post/fetchPost"
-    });
-  };
-
-  componentDidMount() {
-    this.getData();
-  }
 
   render() {
     const dispatch = this.props.dispatch;

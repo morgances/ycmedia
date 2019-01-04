@@ -30,24 +30,24 @@ export default [
             name: "center",
             component: "./Account/Center/Center",
             //hideInMenu: true,
-            routes: [
-              {
-                path: "/account/center",
-                redirect: "/account/center/articles"
-              },
-              {
-                path: "/account/center/articles",
-                component: "./Account/Center/Articles"
-              },
-              {
-                path: "/account/center/applications",
-                component: "./Account/Center/Applications"
-              },
-              {
-                path: "/account/center/projects",
-                component: "./Account/Center/Projects"
-              }
-            ]
+            // routes: [
+            //   {
+            //     path: "/account/center",
+            //     redirect: "/account/center/articles"
+            //   },
+            //   {
+            //     path: "/account/center/articles",
+            //     component: "./Account/Center/Articles"
+            //   },
+            //   {
+            //     path: "/account/center/applications",
+            //     component: "./Account/Center/Applications"
+            //   },
+            //   {
+            //     path: "/account/center/projects",
+            //     component: "./Account/Center/Projects"
+            //   }
+            // ]
           },
           {
             path: "/account/settings",

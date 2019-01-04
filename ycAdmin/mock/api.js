@@ -226,13 +226,11 @@ const getActivities = [
     },
     group: {
       name: '高逼格设计天团',
-      link: 'http://github.com/',
     },
     project: {
       name: '六月迭代',
-      link: 'http://github.com/',
     },
-    template: '在 @{group} 新建项目 @{project}',
+    template: '在 @{group} 发布文章 @{project}',
   },
   {
     id: 'trend-2',
@@ -243,13 +241,11 @@ const getActivities = [
     },
     group: {
       name: '高逼格设计天团',
-      link: 'http://github.com/',
     },
     project: {
       name: '六月迭代',
-      link: 'http://github.com/',
     },
-    template: '在 @{group} 新建项目 @{project}',
+    template: '在 @{group} 发布文章 @{project}',
   },
   {
     id: 'trend-3',
@@ -260,13 +256,11 @@ const getActivities = [
     },
     group: {
       name: '中二少女团',
-      link: 'http://github.com/',
     },
     project: {
       name: '六月迭代',
-      link: 'http://github.com/',
     },
-    template: '在 @{group} 新建项目 @{project}',
+    template: '在 @{group} 发布文章 @{project}',
   },
   {
     id: 'trend-4',
@@ -277,7 +271,6 @@ const getActivities = [
     },
     project: {
       name: '5 月日常迭代',
-      link: 'http://github.com/',
     },
     template: '将 @{project} 更新至已发布状态',
   },
@@ -290,11 +283,9 @@ const getActivities = [
     },
     project: {
       name: '工程效能',
-      link: 'http://github.com/',
     },
     comment: {
       name: '留言',
-      link: 'http://github.com/',
     },
     template: '在 @{project} 发布了 @{comment}',
   },
@@ -307,13 +298,11 @@ const getActivities = [
     },
     group: {
       name: '程序员日常',
-      link: 'http://github.com/',
     },
     project: {
       name: '品牌迭代',
-      link: 'http://github.com/',
     },
-    template: '在 @{group} 新建项目 @{project}',
+    template: '在 @{group} 发布文章 @{project}',
   },
 ];
 
