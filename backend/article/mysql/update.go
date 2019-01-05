@@ -22,7 +22,7 @@ func (d Database) UpdateArticleAuthor(aid int, newAuthor string) error {
 }
 
 func (d Database) UpdateArticleDate(aid int, newTime time.Time) error {
-	stmt, err := d.db.Prepare("update article set date=? where id=?")
+	stmt, err := d.DB.Prepare("update article set date=? where id=?")
 	if err != nil {
 		return err
 	}
@@ -39,11 +39,11 @@ func (d Database) UpdateArticleText(aid int, newText string) error {
 }
 
 func (d Database) DIYUpdateArticle(opt string) error {
-	_, err := d.db.Exec(UpdateArticle + opt)
+	_, err := d.DB.Exec(UpdateArticle + opt)
 	return err
 }
 
 func (d Database) updateArticle(aid int, opt string) error {
-	_, err := d.db.Exec(UpdateArticle + opt + fmt.Sprintf(" where aid=%d", aid))
+	_, err := d.DB.Exec(UpdateArticle + opt + fmt.Sprintf(" where aid=%d", aid))
 	return err
 }

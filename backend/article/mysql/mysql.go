@@ -8,7 +8,7 @@ import (
 )
 
 type Database struct {
-	db *sql.DB
+	DB *sql.DB
 }
 
 func Dial() (Database, error) {
@@ -17,7 +17,7 @@ func Dial() (Database, error) {
 		return Database{}, err
 	}
 	db := Database{
-		db: d,
+		DB: d,
 	}
 	err = db.CreateArticleTable()
 	return db, err
@@ -29,7 +29,7 @@ func DIYDial(dataSourceName string) (Database, error) {
 		return Database{}, err
 	}
 	db := Database{
-		db: d,
+		DB: d,
 	}
 	err = db.CreateArticleTable()
 	return db, err
@@ -49,14 +49,14 @@ func rowsToArticles(rs *sql.Rows) ([]*Article, error) {
 }
 
 func (d Database) GetDB() *sql.DB {
-	return d.db
+	return d.DB
 }
 
 func (d Database) Close() error {
-	return d.db.Close()
+	return d.DB.Close()
 }
 
 func (d Database) CreateArticleTable() error {
-	_, err := d.db.Exec(CreateArticleTableCommand)
+	_, err := d.DB.Exec(CreateArticleTableCommand)
 	return err
 }

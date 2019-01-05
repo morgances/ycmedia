@@ -21,7 +21,7 @@ import (
 	"text": "asd"
 }
 */
-func Add(ctx *server.Context) error {
+func (con Controller) Add(ctx *server.Context) error {
 	var x mysql.Article
 	if ctx.Request().Method != "POST" {
 		log.Error("Error In Request:", NotPost)
@@ -34,7 +34,7 @@ func Add(ctx *server.Context) error {
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
 	}
 
-	err = conn.AddArticle(x.Category, x.Tag, x.Uid, x.Title, x.Author, x.Image, x.Text, x.Date)
+	err = con.db.AddArticle(x.Category, x.Tag, x.Uid, x.Title, x.Author, x.Image, x.Text, x.Date)
 	if err != nil {
 		log.Error("Error In Mysql.AddArticle:", err)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))

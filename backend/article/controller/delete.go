@@ -13,7 +13,7 @@ import (
 	"aid": 10
 }
 */
-func Delete(ctx *server.Context) error {
+func (con Controller) Delete(ctx *server.Context) error {
 	if ctx.Request().Method != "POST" {
 		log.Error("Error In Request:", NotPost)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, NotPost))
@@ -36,7 +36,7 @@ func Delete(ctx *server.Context) error {
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, BadData))
 	}
 
-	err = conn.DeleteArticle(x.Aid)
+	err = con.db.DeleteArticle(x.Aid)
 	if err != nil {
 		log.Error("Error In Mysql DeleteArticle:", err)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))

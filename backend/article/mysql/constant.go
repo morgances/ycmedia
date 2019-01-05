@@ -3,13 +3,13 @@ package mysql
 import "time"
 
 const (
-	ArticleTable              string = "article"
-	InsertArticle             string = "insert into article(user_id, category, tag, title, author, date, image, text)values(?, ?, ?, ?, ?, ?, ?, ?)"
-	SelectArticle             string = "select * from article "
-	DeleteArticle             string = "delete from article "
-	UpdateArticle             string = "update article set "
+	ArticleTableName          string = "article"
+	InsertArticle             string = "insert into " + ArticleTableName + "(user_id, category, tag, title, author, date, image, text)values(?, ?, ?, ?, ?, ?, ?, ?)"
+	SelectArticle             string = "select * from " + ArticleTableName + " "
+	DeleteArticle             string = "delete from " + ArticleTableName + " "
+	UpdateArticle             string = "update " + ArticleTableName + " set "
 	CreateArticleTableCommand string = `
-        create table if not exists article(
+        create table if not exists ` + ArticleTableName + `(
         aid      int unsigned  auto_increment,
         user_id  int           not null,
         category int           not null,

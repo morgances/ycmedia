@@ -1,12 +1,15 @@
 package controller
 
 import (
+	"database/sql"
 	"errors"
 
 	"github.com/morgances/ycmedia/backend/article/mysql"
 )
 
-var conn mysql.Database
+type Controller struct {
+	db mysql.Database
+}
 
 var (
 	NotPost error = errors.New("Only Receive Post !")
@@ -14,10 +17,14 @@ var (
 	BadData error = errors.New("Bad Error !")
 )
 
-func init() {
-	con, err := mysql.Dial()
-	if err != nil {
-		panic(err)
+func New(d *sql.DB) Controller {
+	return Controller{
+		db: mysql.Database{
+			DB: d,
+		},
 	}
-	conn = con
+}
+
+func (con Controller) GetDB() mysql.Database {
+	return con.db
 }

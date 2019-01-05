@@ -18,7 +18,7 @@ func (d Database) GetArticleListDesc(category, tag, start, nums int, order strin
 }
 
 func (d Database) GetArticleByDate(category, tag int, date time.Time) ([]*Article, error) {
-	rows, err := d.db.Query(SelectArticle+"where category=? and tag=? and date > ? order by date desc", category, tag, date)
+	rows, err := d.DB.Query(SelectArticle+"where category=? and tag=? and date > ? order by date desc", category, tag, date)
 	if err != nil {
 		return nil, err
 	}
@@ -34,7 +34,7 @@ func (d Database) GetArticleOrderLimits(order string, desc bool, start, nums int
 }
 
 func (d Database) DIYGetArticle(opt string) ([]*Article, error) {
-	rows, err := d.db.Query(SelectArticle + opt)
+	rows, err := d.DB.Query(SelectArticle + opt)
 	if err != nil {
 		return nil, err
 	}
