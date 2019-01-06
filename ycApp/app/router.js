@@ -91,8 +91,7 @@ class Router extends React.PureComponent {
 
   backHandle = () => {
     const currentScreen = getCurrentScreen(this.props.router);
-
-    if (currentScreen !== 'Home') {
+    if (currentScreen !== 'Basic') {
       this.props.dispatch(NavigationActions.back());
       return true;
     }

@@ -46,7 +46,7 @@ export default class Main extends Component<{}> {
         <View style={{backgroundColor: '#f2f3f5'}}>
           <Carousel></Carousel>
           <Modules navigation={this.props.navigation}></Modules>
-          <News></News>
+          <News navigation={this.props.navigation}></News>
         </View> 
       </ScrollView>
     )

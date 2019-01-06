@@ -41,7 +41,6 @@ const Navigator = {
     });
   },
   navigate: (route, params) => {
-    console.log('===')
     return NavigationActions.navigate({ routeName: route, params });
   },
   back: () => {

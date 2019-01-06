@@ -1,17 +1,18 @@
-import { getList, getText, getMore } from '../../services/api'
-import { refresh_result } from '../../components/Refresh_result'
+import { getList, getMore } from '../../services/api'
 
 export default {
   namespace: 'culture_news',
   state: {
     articleList: [],
+    page: 0
   },
   effects: {
-    *refresh({ payload }, { put }) {
+    *refresh({ payload }, { put, select }) {
+      const { articleList } = yield select(state => state[`${payload.nameSpace}`])
       const { data, status } = yield getMore({
         category: 0,
         tag: 0,
-        date: '2018-12-01T15:43:46+08:00'
+        date: articleList[0].date
       })
       if (status == 200 && data.data.length > 0) {
         yield put({
@@ -21,25 +22,10 @@ export default {
       }
       return data.data
     },
-    *loadMore({ payload }, { call, put }) {
-      // const response = yield call(getList({ payload }))
-      if (response) {
-        yield put({
-          type: 'LoadMore',
-          payload: [{
-            title: '过去的消息',
-            time: '2017-01-02',
-            image: require('../../assets/images/Main/news_one.png')
-          },
-          {
-            title: '过去的消息',
-            time: '2017-01-02',
-            image: require('../../assets/images/Main/news_one.png')
-          }]
-        })
-      }
-    },
-    *get({ payload }, { put }) {
+    *get({ payload }, { put, select }) {
+      const { page } = yield select(state => state[`${payload.nameSpace}`])
+      payload.page = page
+      console.log(payload, 'payload')
       const { data, status } = yield getList(payload)
       data.data.map((item) => {
         item.time = item.date.slice(0, 10)
@@ -50,6 +36,7 @@ export default {
           payload: data.data
         })
       }
+      return data
     }
   },
   reducers: {
@@ -59,16 +46,11 @@ export default {
         articleList: action.payload.concat(state.articleList)
       }
     },
-    LoadMore(state, action) {
-      return {
-        ...state,
-        articleList: state.articleList.concat(action.payload)
-      }
-    },
     Get(state, action) {
       return {
         ...state,
-        articleList: action.payload
+        articleList: state.articleList.concat(action.payload),
+        page: state.page + 1
       }
     }
   }

@@ -48,6 +48,7 @@ import spending_theatre from './Spending/theatre'
 import brand from './Brand/index'
 import city_culture from './City/culture'
 import city_memory from './City/memory'
+import detail from './Detail'
 
 export const Models = [
   init,
@@ -70,5 +71,6 @@ export const Models = [
   spending_theatre,
   brand,
   city_culture,
-  city_memory
+  city_memory,
+  detail
 ];
