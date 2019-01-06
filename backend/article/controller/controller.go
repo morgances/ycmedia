@@ -28,3 +28,8 @@ func New(d *sql.DB) Controller {
 func (con Controller) GetDB() mysql.Database {
 	return con.db
 }
+
+func (con Controller) CreateDatabase() error {
+	_, err := con.db.DB.Exec(mysql.CreateArticleDatabase)
+	return err
+}

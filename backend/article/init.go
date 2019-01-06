@@ -19,6 +19,10 @@ func Register(r *server.Router, db *sql.DB, tokenKey string) error {
 
 	c := controller.New(db)
 
+	if err := c.CreateDatabase(); err != nil {
+		return err
+	}
+
 	if err := c.GetDB().CreateArticleTable(); err != nil {
 		return err
 	}
