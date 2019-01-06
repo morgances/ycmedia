@@ -17,10 +17,20 @@ export default {
       if (status == 200 && data.data.length > 0) {
         yield put({
           type: 'Refresh',
-          payload: data.data
+          payload: [{
+            title: '最新消息',
+            time: '2017-01-02',
+            image: require('../../assets/images/Main/news_one.png')
+          }]
         })
+        return {
+          state: 2
+        }
+      } else {
+        return {
+          state: 1
+        }
       }
-      return data.data
     },
     *get({ payload }, { put, select }) {
       const { page } = yield select(state => state[`${payload.nameSpace}`])
@@ -43,7 +53,7 @@ export default {
     Refresh(state, action) {
       return {
         ...state,
-        articleList: action.payload.concat(state.articleList)
+        culture: action.payload.concat(state.culture)
       }
     },
     Get(state, action) {

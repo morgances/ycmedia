@@ -12,7 +12,7 @@ export default (props) => {
     const listItems = list.map((item, index) => 
       <Flex style={styles.news_content} key={index} wrap='wrap' justify="center">
         <Flex.Item style={[{ flex: 2 }]}>
-          <Image style={styles.news_content_image} source={{ uri: `${item.image}`, cache: 'force-cache' }}></Image>
+          <Image style={styles.news_content_image} source={item.image}></Image>
         </Flex.Item>
         <Flex.Item style={{ flex: 3.5, paddingLeft: 10 }}>
           <Text style={{ fontSize: FontSize.medium, color: Colors.black }}>{item.title}</Text>

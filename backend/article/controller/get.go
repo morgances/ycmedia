@@ -16,7 +16,7 @@ import (
 	"page": 0
 }
 */
-func GetArticleList(ctx *server.Context) error {
+func (con Controller) GetArticleList(ctx *server.Context) error {
 	if ctx.Request().Method != "POST" {
 		log.Error("Error In Request:", NotPost)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, NotPost))
@@ -41,7 +41,7 @@ func GetArticleList(ctx *server.Context) error {
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, BadData))
 	}
 
-	articles, err := conn.GetArticleListDesc(x.Category, x.Tag, x.Page*10, 10, "date")
+	articles, err := con.db.GetArticleListDesc(x.Category, x.Tag, x.Page*10, 10, "date")
 	if err != nil {
 		log.Error("Error In Mysql.GetArticleList:", err)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
@@ -59,7 +59,7 @@ func GetArticleList(ctx *server.Context) error {
 	"aid": 10
 }
 */
-func GetTextById(ctx *server.Context) error {
+func (con Controller) GetTextById(ctx *server.Context) error {
 	if ctx.Request().Method != "POST" {
 		log.Error("Error In Request:", NotGet)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, NotPost))
@@ -82,7 +82,7 @@ func GetTextById(ctx *server.Context) error {
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, BadData))
 	}
 
-	article, err := conn.GetArticleById(x.Aid)
+	article, err := con.db.GetArticleById(x.Aid)
 	if err != nil {
 		log.Error("Error In Mysql.GetArticleById:", err)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
@@ -91,7 +91,7 @@ func GetTextById(ctx *server.Context) error {
 	return ctx.ServeJSON(base.RespStatusAndData(http.StatusOK, article))
 }
 
-func GetNews(ctx *server.Context) error {
+func (con Controller) GetNews(ctx *server.Context) error {
 	if ctx.Request().Method != "GET" {
 		log.Error("Error In Request:", NotGet)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, NotGet))
@@ -99,7 +99,7 @@ func GetNews(ctx *server.Context) error {
 
 	log.Infof("Get A Request For News\n")
 
-	articles, err := conn.GetArticleOrderLimits("date", true, 0, 10)
+	articles, err := con.db.GetArticleOrderLimits("date", true, 0, 10)
 	if err != nil {
 		log.Error("Error In Mysql.GetArticleOrderLimuts:", err)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
@@ -119,7 +119,7 @@ func GetNews(ctx *server.Context) error {
 	"date": "2018-12-30"
 }
 */
-func GetMore(ctx *server.Context) error {
+func (con Controller) GetMore(ctx *server.Context) error {
 	if ctx.Request().Method != "POST" {
 		log.Error("Error In Request:", NotPost)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, NotPost))
@@ -139,7 +139,7 @@ func GetMore(ctx *server.Context) error {
 
 	log.Infof("In GetMore: Category=%d, Tag=%d, Date=%v\n", x.Category, x.Tag, x.Date)
 
-	articles, err := conn.GetArticleByDate(x.Category, x.Tag, x.Date)
+	articles, err := con.db.GetArticleByDate(x.Category, x.Tag, x.Date)
 	if err != nil {
 		log.Error("Error In Mysql.GetArticlesByDate:", err)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
