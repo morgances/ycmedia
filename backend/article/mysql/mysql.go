@@ -4,23 +4,10 @@ import (
 	"database/sql"
 
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/morgances/ycmedia/backend/article/mysql/config"
 )
 
 type Database struct {
 	DB *sql.DB
-}
-
-func Dial() (Database, error) {
-	d, err := sql.Open("mysql", config.MysqlDefaultConfig.String())
-	if err != nil {
-		return Database{}, err
-	}
-	db := Database{
-		DB: d,
-	}
-	err = db.CreateArticleTable()
-	return db, err
 }
 
 func DIYDial(dataSourceName string) (Database, error) {
