@@ -59,7 +59,7 @@ export default class Main extends Component<{}> {
           tabBarInactiveTextColor={Colors.black}
           tabBarUnderlineStyle={{backgroundColor: Colors.white}}>
           <View>
-            <News></News>
+            <News navigation={this.props.navigation}></News>
           </View>
           <View>
             <Inform></Inform>

@@ -3,22 +3,18 @@ import { getText } from '../../services/api'
 export default {
   namespace: 'detail',
   state: {
-    article: {
-      title: '银川市图书馆举办“庆元旦”少儿活动',
-      time: '2018-12-31',
-      author: '技术猫',
-      content: '这个是很正经的内容的内容的内容的内容'
-    }
+    article: {}
   },
   effects: {
     *getText({ payload }, { put }) {
-      const { data, status } = yield getText({
-        aid: 1
+      const { data } = yield getText({
+        aid: payload.aid
       })
-      if (status == 200 && data.data.length > 0) {
+      data.data[0].time = data.data[0].date.slice(0, 10)
+      if (data.status == 200 && data.data.length > 0) {
         yield put({
           type: 'Get',
-          payload: data.data
+          payload: data.data[0]
         })
       }
       return data.data
@@ -28,8 +24,7 @@ export default {
     Get(state, action) {
       return {
         ...state,
-        articleList: state.articleList.concat(action.payload),
-        page: state.page + 1
+        article: { ...action.payload }
       }
     }
   }

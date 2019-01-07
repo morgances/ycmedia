@@ -106,7 +106,7 @@ class News extends React.Component {
           this.props.articleList.length > 0 ? 
             <View>
               <WingBlank size="lg">
-                <Item data={this.props.articleList}></Item>
+                <Item data={this.props.articleList} navigation={this.props.navigation}></Item>
               </WingBlank>
             </View>
             : 
