@@ -26,9 +26,6 @@
  * Revision History:
  *     Initial: 2018/01/16        Feng Yifei
  */
-import {
-  TabNavigator,
-} from 'react-navigation';
 
 import MainScreen from './pages/Main';
 import CultureScreen from './pages/MainModules/Culture'
@@ -39,6 +36,8 @@ import BookScreen from './pages/MainModules/Book'
 import SpendingScreen from './pages/MainModules/Spending'
 import BrandScreen from './pages/MainModules/Brand'
 import CityScreen from './pages/MainModules/City'
+import DetailScreen from './pages/Detail'
+import MapScreen from './pages/MainModules/Map'
 
 const Navigations = {
   Basic: { 
@@ -68,6 +67,12 @@ const Navigations = {
   City: {
     screen: CityScreen
   },
+  Detail: {
+    screen: DetailScreen
+  },
+  Map: {
+    screen: MapScreen
+  }
 };
 
 export default Navigations;

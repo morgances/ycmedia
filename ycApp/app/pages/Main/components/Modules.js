@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, ImageBackground, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { Flex, WingBlank } from 'antd-mobile-rn';
 
 import Navigator, { dispatcher } from '../../../helper/navigator';
@@ -82,7 +82,7 @@ export default class Modules extends React.Component {
             </TouchableOpacity>
           </Flex.Item>
           <Flex.Item style={styles.module}>
-            <TouchableOpacity onPress={() => dispatch(Navigator.navigate('Movie'))}>
+            <TouchableOpacity onPress={() => dispatch(Navigator.navigate('Map'))}>
               <View style={styles.viewFlex}>
                 <Image style={styles.image} source={require('../../../assets/images/Main/module_nine.png')}></Image>
                 <Text style={styles.text}>文化地图</Text>

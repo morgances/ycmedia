@@ -7,7 +7,7 @@ class LoadMoreFooter extends Component {
   render() {
     return (
       <View style={styles.footer}>
-        <Text style={styles.footerTitle}>{this.props.isLoadAll == 2 ? '已加载全部' : '正在加载更多……'}</Text>
+        <Text style={styles.footerTitle}>{this.props.isLoadAll == 2 ? '已经滑到底啦' : '正在加载更多……'}</Text>
       </View>
     )
   }

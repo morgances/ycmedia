@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ScrollView, RefreshControl } from 'react-native';
+import { View, ScrollView, RefreshControl, Image } from 'react-native';
 import { WingBlank } from 'antd-mobile-rn';
 import { connect } from 'react-redux';
 
@@ -18,12 +18,16 @@ class Books extends React.Component {
     }
   }
 
-  // componentDidMount() {
-  //   const { dispatch } = this.props
-  //   dispatch({
-  //     type: `book_books/get`,
-  //   })
-  // }
+  componentDidMount() {
+    const { dispatch } = this.props
+    dispatch({
+      type: `book_books/get`,
+      payload: {
+        category: 0,
+        tag: 0
+      }
+    })
+  }
 
   _onRefreshing(data) {
     this.setState(() => {
@@ -54,7 +58,11 @@ class Books extends React.Component {
       });
       const { dispatch } = this.props
       dispatch({
-        type: `book_books/loadMore`,
+        type: `book_books/get`,
+        payload: {
+          category: 0,
+          tag: 0
+        }
       })
       if (Response.state) {
         this.setState({
@@ -89,11 +97,16 @@ class Books extends React.Component {
         onScroll={this._onLoadingMore.bind(this)}
         scrollEventThrottle={100}
       >
-        <View>
-          <WingBlank size="lg">
-            <Item data={this.props.culture}></Item>
-          </WingBlank>
-        </View>
+       {
+          this.props.articleList.length > 0 ? 
+            <View>
+              <WingBlank size="lg">
+                <Item data={this.props.articleList}></Item>
+              </WingBlank>
+            </View>
+            : 
+            <Image></Image>
+        }
         {this.state.loadMore > 0 ? <Loadmore isLoadAll={ this.state.loadMore }></Loadmore> : null }
       </ScrollView>
     )
