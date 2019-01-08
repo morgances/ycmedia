@@ -14,7 +14,7 @@ import (
 
 func main() {
 	serverConfig := &server.Configuration{
-		Address: "127.0.0.1:9573",
+		Address: "0.0.0.0:9573",
 	}
 
 	ep := server.NewEntrypoint(serverConfig, nil)

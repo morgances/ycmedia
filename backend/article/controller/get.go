@@ -47,10 +47,6 @@ func (con Controller) GetArticleList(ctx *server.Context) error {
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
 	}
 
-	for _, e := range articles {
-		e.Text = ""
-	}
-
 	return ctx.ServeJSON(base.RespStatusAndData(http.StatusOK, articles))
 }
 
