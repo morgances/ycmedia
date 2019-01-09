@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ScrollView, RefreshControl } from 'react-native';
+import { View, ScrollView, RefreshControl, Image } from 'react-native';
 import { WingBlank, Flex } from 'antd-mobile-rn';
 import { connect } from 'react-redux';
 
@@ -20,22 +20,30 @@ class Smriti extends React.Component {
     }
   }
 
-  // componentDidMount() {
-  //   const { dispatch } = this.props
-  //   dispatch({
-  //     type: `intangible_smriti/get`,
-  //   })
-  // }
+  componentDidMount() {
+    const { dispatch } = this.props
+    dispatch({
+      type: `intangible_smriti/get`,
+      payload: {
+        category: 0,
+        index: 0,
+        nameSpace: 'intangible_smriti'
+      }
+    })
+  }
 
-  _onRefreshing(data) {
+  async _onRefreshing(data) {
     this.setState(() => {
       return {
         isRefreshing: true
       }
     })
     const { dispatch } = data[0]
-    const result = dispatch({
+    const result = await dispatch({
       type: `${data[1]}/refresh`,
+      payload: {
+        nameSpace: `${data[1]}`
+      }
     })
     refresh_result(result)
     this.setState(() => {
@@ -45,7 +53,7 @@ class Smriti extends React.Component {
     })
   }
 
-  _onLoadingMore(event) {
+  async _onLoadingMore(event) {
     if (this.state.loadMore == 1 || this.state.loadMore == 2) return
     let y = event.nativeEvent.contentOffset.y;
     let height = event.nativeEvent.layoutMeasurement.height;
@@ -55,10 +63,15 @@ class Smriti extends React.Component {
         loadMore: 1
       });
       const { dispatch } = this.props
-      dispatch({
-        type: `intangible_smriti/loadMore`,
-      })
-      if (Response.state) {
+      const { data } = await dispatch({
+        type: `intangible_smriti/get`,
+        payload: {
+          category: 0,
+          tag: 0,
+          nameSpace: 'intangible_smriti',
+        }
+      }) 
+      if (data.length == 0) {
         this.setState({
           loadMore: 2
         })
@@ -89,16 +102,19 @@ class Smriti extends React.Component {
           />
         }
         onScroll={this._onLoadingMore.bind(this)}
-        scrollEventThrottle={100}
+        scrollEventThrottle={200}
       >
         <View>
           <WingBlank size="lg">
             <Flex style={{marginTop: Styles.Height(20)}} wrap="wrap" justify="around">
               <Lists data={this.props} name={'intangible_smriti'}></Lists>
             </Flex>
-            <Flex style={{marginTop: Styles.Height(5)}} justify="between" wrap="wrap">
-              <Item data={this.props.show}></Item>
-            </Flex>
+            {
+              this.props.articleList.length > 0 ? 
+                <Item data={this.props.articleList} navigation={this.props.navigation}></Item>
+                : 
+                <Image></Image>
+            }
           </WingBlank>
         </View>
         {this.state.loadMore > 0 ? <Loadmore isLoadAll={ this.state.loadMore }></Loadmore> : null }

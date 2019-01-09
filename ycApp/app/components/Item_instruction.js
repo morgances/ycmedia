@@ -1,24 +1,29 @@
 import React from 'react';
-import { Text, StyleSheet, Image, View } from 'react-native';
+import { Text, StyleSheet, Image, View, TouchableOpacity } from 'react-native';
 import { Flex } from 'antd-mobile-rn';
+import Navigator, { dispatcher } from '../helper/navigator';
 
 import Colors from '../res/Colors'
 import Styles from '../res/Styles'
 import FontSize from '../res/Fonts/size'
 
 export default (props) => {
+  const dispatch = dispatcher(props);
+
   function List() {
     const list = props.data
     const listItems = list.map((item, index) => 
-      <Flex style={styles.news_content} key={index} wrap='wrap' justify="center">
-        <Flex.Item style={[{ flex: 2 }]}>
-          <Image style={styles.news_content_image} source={item.image}></Image>
-        </Flex.Item>
-        <Flex.Item style={{ flex: 3.5, paddingLeft: 10 }}>
-          <Text style={{ fontSize: FontSize.medium, color: Colors.black }}>{item.title}</Text>
-          <Text numberOfLines={2} style={styles.news_content_instruction} >{item.instruction}</Text>
-        </Flex.Item>
-      </Flex>
+      <TouchableOpacity onPress={() => dispatch(Navigator.navigate('Detail', { aid: item.aid }))}>
+        <Flex style={styles.news_content} key={index} wrap='wrap' justify="center">
+          <Flex.Item style={[{ flex: 2 }]}>
+            <Image style={styles.news_content_image} source={item.image}></Image>
+          </Flex.Item>
+          <Flex.Item style={{ flex: 3.5, paddingLeft: 10 }}>
+            <Text style={{ fontSize: FontSize.medium, color: Colors.black }}>{item.title}</Text>
+            <Text numberOfLines={2} style={styles.news_content_instruction} >{item.instruction}</Text>
+          </Flex.Item>
+        </Flex>
+      </TouchableOpacity>
     )
     return listItems
   }

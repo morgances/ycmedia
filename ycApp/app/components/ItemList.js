@@ -9,11 +9,15 @@ export default class Lists extends React.Component {
   render() {
     const data = this.props.data
     const name = this.props.name
-    function change(value) {
+    console.log(data.focus, 'focus')
+    function change(index) {
       const { dispatch } = data
       dispatch({
-        type: `${name}/Change`,
-        payload: value,
+        type: `${name}/change`,
+        payload: {
+          index,
+          name
+        },
       })
     }
     function List() {

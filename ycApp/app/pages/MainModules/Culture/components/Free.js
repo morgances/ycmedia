@@ -18,26 +18,31 @@ class Free extends React.Component {
     }
   }
 
-  // componentDidMount() {
-  //   const { dispatch } = this.props
-  //   dispatch({
-  //     type: `culture_free/get`,
-  //     payload: {
-  //       category: 0,
-  //       tag: 0
-  //     }
-  //   })
-  // }
+  componentDidMount() {
+    const { dispatch } = this.props
+    dispatch({
+      type: `culture_free/get`,
+      payload: {
+        category: 0,
+        tag: 0,
+        page: 0,
+        nameSpace: 'culture_free'
+      }
+    })
+  }
 
-  _onRefreshing(data) {
+  async _onRefreshing(data) {
     this.setState(() => {
       return {
         isRefreshing: true
       }
     })
     const { dispatch } = data[0]
-    const result = dispatch({
+    const result = await dispatch({
       type: `${data[1]}/refresh`,
+      payload: {
+        nameSpace: `${data[1]}`
+      }
     })
     refresh_result(result)
     this.setState(() => {
@@ -47,7 +52,7 @@ class Free extends React.Component {
     })
   }
 
-  _onLoadingMore(event) {
+  async _onLoadingMore(event) {
     if (this.state.loadMore == 1 || this.state.loadMore == 2) return
     let y = event.nativeEvent.contentOffset.y;
     let height = event.nativeEvent.layoutMeasurement.height;
@@ -57,10 +62,15 @@ class Free extends React.Component {
         loadMore: 1
       });
       const { dispatch } = this.props
-      dispatch({
+      const { data } = await dispatch({
         type: `culture_free/get`,
+        payload: {
+          category: 0,
+          tag: 0,
+          nameSpace: 'culture_free'
+        }
       })
-      if (Response.state) {
+      if (data.length == 0) {
         this.setState({
           loadMore: 2
         })
@@ -91,13 +101,13 @@ class Free extends React.Component {
           />
         }
         onScroll={this._onLoadingMore.bind(this)}
-        scrollEventThrottle={100}
+        scrollEventThrottle={200}
       >
         {
           this.props.articleList.length > 0 ? 
             <View>
               <WingBlank size="lg">
-                <Item data={this.props.articleList}></Item>
+                <Item data={this.props.articleList} navigation={this.props.navigation}></Item>
               </WingBlank>
             </View>
             : 

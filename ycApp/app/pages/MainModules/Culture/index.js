@@ -62,13 +62,13 @@ export default class Main extends Component<{}> {
             <News navigation={this.props.navigation}></News>
           </View>
           <View>
-            <Inform></Inform>
+            <Inform navigation={this.props.navigation}></Inform>
           </View>
           <View>
-            <Policies></Policies>
+            <Policies navigation={this.props.navigation}></Policies>
           </View>
           <View>
-            <Free></Free>
+            <Free navigation={this.props.navigation}></Free>
           </View>
         </Tabs>
       </View>

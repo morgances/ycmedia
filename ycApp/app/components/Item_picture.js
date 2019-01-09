@@ -1,22 +1,27 @@
 import React from 'react';
-import { Text, StyleSheet, Image, View } from 'react-native';
+import { Text, StyleSheet, Image, View, TouchableOpacity } from 'react-native';
 import { Flex } from 'antd-mobile-rn';
+import Navigator, { dispatcher } from '../helper/navigator';
 
 import Colors from '../res/Colors'
 import Styles from '../res/Styles'
 import FontSize from '../res/Fonts/size'
 
 export default (props) => {
+  const dispatch = dispatcher(props);
+
   function List() {
     const list = props.data
     const listItems = list.map((item, index) => 
-      <View style={styles.content}>
-        <Image style={styles.content_image} source={item.image}></Image>
-        <Text style={{ fontSize: FontSize.medium, color: Colors.black, marginLeft: Styles.Width(2) }}>{item.title}</Text>
-        <View style={ styles.content_time_view}>
-          <Text style={ styles.content_time }>{item.time}</Text>
+      <TouchableOpacity onPress={() => dispatch(Navigator.navigate('Detail', { aid: item.aid }))}>
+        <View style={styles.content}>
+          <Image style={styles.content_image} source={item.image}></Image>
+          <Text style={{ fontSize: FontSize.medium, color: Colors.black, marginLeft: Styles.Width(2) }}>{item.title}</Text>
+          <View style={ styles.content_time_view}>
+            <Text style={ styles.content_time }>{item.time}</Text>
+          </View>
         </View>
-      </View>
+      </TouchableOpacity>
     )
     return listItems
   }

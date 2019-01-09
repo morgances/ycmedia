@@ -62,13 +62,13 @@ export default class Main extends Component<{}> {
             <Web></Web>
           </View>
           <View>
-            <Service></Service>
+            <Service navigation={this.props.navigation}></Service>
           </View>
           <View>
-            <Resources></Resources>
+            <Resources navigation={this.props.navigation}></Resources>
           </View>
           <View>
-            <Books></Books>
+            <Books navigation={this.props.navigation}></Books>
           </View>
         </Tabs>
       </View>

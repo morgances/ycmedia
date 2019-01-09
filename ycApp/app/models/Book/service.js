@@ -7,11 +7,12 @@ export default {
     page: 0
   },
   effects: {
-    *refresh({ payload }, { put }) {
+    *refresh({ payload }, { put, select }) {
+      const { articleList } = yield select(state => state[`${payload.nameSpace}`])
       const { data, status } = yield getMore({
         category: 0,
         tag: 0,
-        date: state.articleList[0].date
+        date: articleList[0].date
       })
       if (status == 200 && data.data.length > 0) {
         yield put({
@@ -21,8 +22,9 @@ export default {
       }
       return data.data
     },
-    *get({ payload }, { put }) {
-      payload.page = state.page
+    *get({ payload }, { put, select }) {
+      const { page } = yield select(state => state[`${payload.nameSpace}`])
+      payload.page = page
       const { data, status } = yield getList(payload)
       data.data.map((item) => {
         item.time = item.date.slice(0, 10)
@@ -33,6 +35,7 @@ export default {
           payload: data.data
         })
       }
+      return data
     }
   },
   reducers: {

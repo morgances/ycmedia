@@ -1,176 +1,114 @@
+import { getList, getMore } from '../../services/api'
+
 export default {
   namespace: 'intangible_smriti',
   state: {
     title: [
       {
         title: '项目名录',
-        listName: 'directorise'
+        listName: 'directorise',
+        tag: 0,
+        page: 0,
+        category: 0
       },
       {
         title: '传承保护',
-        listName: 'protect'
+        listName: 'protect',
+        tag: 1,
+        page: 0,
+        category: 0
       },
       {
         title: '非遗展馆',
-        listName: 'hall'
+        listName: 'hall',
+        tag: 0,
+        page: 0,
+        category: 0
       },
       {
         title: '民俗活动',
-        listName: 'activity'
+        listName: 'activity',
+        tag: 1,
+        page: 0,
+        category: 0
       },
       {
         title: '传承基地',
-        listName: 'base'
+        listName: 'base',
+        tag: 0,
+        page: 0,
+        category: 0
       },
       {
         title: '传承人',
-        listName: 'person'
+        listName: 'person',
+        tag: 1,
+        page: 0,
+        category: 0
       }
     ],
     focus: 0,
-    directorise: [
-      {
-        title: '青山拦不住、岩画书千秋',
-        time: '2017-01-02',
-        image: require('../../assets/images/Main/news_one.png'),
-      },
-      {
-        title: '在银川南城墙远眺西塔',
-        time: '2017-01-02',
-        image: require('../../assets/images/Main/news_one.png'),
-      },
-      {
-        title: '二十世纪五十年代，工人们在银川西门东侧修筑',
-        time: '2017-01-02',
-        image: require('../../assets/images/Main/news_one.png'),
-      },
-      {
-        title: '1959 年宁夏回族自治区人民委员会大门',
-        time: '2017-01-02',
-        image: require('../../assets/images/Main/news_one.png'),
-      },
-      {
-        title: '1985 自治区成立之时的银川市貌',
-        time: '2017-01-02',
-        image: require('../../assets/images/Main/news_one.png'),
-      }
-    ],
-    protect: [
-      {
-        title: '传承保护',
-        time: '2017-01-02',
-        image: require('../../assets/images/Main/news_one.png'),
-      }
-    ],
-    hall: [
-      {
-        title: '非遗展馆',
-        time: '2017-01-02',
-        image: require('../../assets/images/Main/news_one.png'),
-      }
-    ],
-    activity: [
-      {
-        title: '民俗活动',
-        time: '2017-01-02',
-        image: require('../../assets/images/Main/news_one.png'),
-      }
-    ],
-    base: [
-      {
-        title: '传承基地',
-        time: '2017-01-02',
-        image: require('../../assets/images/Main/news_one.png'),
-      }
-    ],
-    person: [
-      {
-        title: '传承人',
-        time: '2017-01-02',
-        image: require('../../assets/images/Main/news_one.png'),
-      }
-    ],
-    show: [
-      {
-        title: '青山拦不住、岩画书千秋',
-        time: '2017-01-02',
-        image: require('../../assets/images/Main/news_one.png'),
-      },
-      {
-        title: '在银川南城墙远眺西塔',
-        time: '2017-01-02',
-        image: require('../../assets/images/Main/news_one.png'),
-      },
-      {
-        title: '二十世纪五十年代，工人们在银川西门东侧修筑',
-        time: '2017-01-02',
-        image: require('../../assets/images/Main/news_one.png'),
-      },
-      {
-        title: '1959 年宁夏回族自治区人民委员会大门',
-        time: '2017-01-02',
-        image: require('../../assets/images/Main/news_one.png'),
-      },
-      {
-        title: '1985 自治区成立之时的银川市貌',
-        time: '2017-01-02',
-        image: require('../../assets/images/Main/news_one.png'),
-      }
-    ]
+    page: 0,
+    directorise: [],
+    protect: [],
+    hall: [],
+    activity: [],
+    base: [],
+    person: [],
+    articleList: []
   },
   effects: {
-    *refresh({ payload }, { call, put }) {
-      // const response = yield call()
-      if (true) {
+    *refresh({ payload }, { put, select }) {
+      const { articleList } = yield select(state => state[`${payload.nameSpace}`])
+      const { data, status } = yield getMore({
+        category: articleList[0].category,
+        tag: articleList[0].tag,
+        date: articleList[0].date
+      })
+      if (status == 200 && data.data.length > 0) {
         yield put({
           type: 'Refresh',
-          payload: [{
-            title: '最新消息',
-            time: '2017-01-02',
-            image: require('../../assets/images/Main/news_one.png')
-          }]
+          payload: data.data
         })
-        return {
-          state: 2
-        }
-      } else {
-        return {
-          state: 1
-        }
       }
+      return data.data
     },
-    *loadMore({ payload }, { call, put }) {
-      // const response = yield call()
-      if (true) {
+    *get({ payload }, { put, select }) {
+      const { title, focus } = yield select(state => state[`${payload.nameSpace}`])
+      const requestPayload = title[focus]
+      const { data, status } = yield getList(requestPayload)
+      data.data.map((item) => {
+        item.time = item.date.slice(0, 10)
+      })
+      if (status == 200 && data.data.length != 0) {
         yield put({
-          type: 'LoadMore',
-          payload: [{
-            title: '过去的消息',
-            time: '2017-01-02',
-            image: require('../../assets/images/Main/news_one.png')
-          },
-          {
-            title: '过去的消息',
-            time: '2017-01-02',
-            image: require('../../assets/images/Main/news_one.png')
-          }]
+          type: 'Get',
+          payload: [data.data, payload.index]
         })
       }
+      return data
     },
-    *get({ payload }, { call, put }) {
-      // const response = yield call()
-      // if (true) {
-      //   yield put({
-      //     type: 'Get',
-      //     payload: Response.data
-      //   })
-      // }
+    *change({ payload }, { put, select }) {
+      const { title } = yield select(state => state[`${payload.name}`])
+      const focus = title[payload.index]
+      console.log(focus, 'change_focus')
+      const  { data, status } = yield getList({
+        category: focus.category,
+        tag: focus.tag,
+        page: focus.page
+      })
+      if (status == 200) {
+        yield put({
+          type: 'Change',
+          payload: payload.index
+        })
+      }
     }
   },
   reducers: {
     Change(state, { payload: index }) {
       state.focus = index
-      state.show = [...state[state.title[index].listName]]
+      state.articleList = [...state[state.title[index].listName]]
       return {
         ...state
       }
@@ -178,19 +116,15 @@ export default {
     Refresh(state, action) {
       return {
         ...state,
-        show: action.payload.concat(state.show)
-      }
-    },
-    LoadMore(state, action) {
-      return {
-        ...state,
-        show: state.show.concat(action.payload)
+        articleList: action.payload.concat(state.articleList)
       }
     },
     Get(state, action) {
+      state.title[action.payload[1]].page += 1,
+      state.focus = action.payload[1]
       return {
         ...state,
-        show: action.payload
+        articleList: state.articleList.concat(action.payload[0]),
       }
     }
   }

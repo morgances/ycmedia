@@ -25,7 +25,6 @@ export default {
     *get({ payload }, { put, select }) {
       const { page } = yield select(state => state[`${payload.nameSpace}`])
       payload.page = page
-      console.log(payload, 'payload')
       const { data, status } = yield getList(payload)
       data.data.map((item) => {
         item.time = item.date.slice(0, 10)

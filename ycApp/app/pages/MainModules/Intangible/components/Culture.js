@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ScrollView, RefreshControl } from 'react-native';
+import { View, ScrollView, RefreshControl, Image } from 'react-native';
 import { WingBlank, Flex } from 'antd-mobile-rn';
 import { connect } from 'react-redux';
 
@@ -20,14 +20,19 @@ class Culture extends React.Component {
     }
   }
 
-  // componentDidMount() {
-  //   const { dispatch } = this.props
-  //   dispatch({
-  //     type: `intangible_culture/get`,
-  //   })
-  // }
+  componentDidMount() {
+    const { dispatch } = this.props
+    dispatch({
+      type: `intangible_culture/get`,
+      payload: {
+        category: 0,
+        index: 0,
+        nameSpace: 'intangible_culture'
+      }
+    })
+  }
 
-  _onRefreshing(data) {
+  async _onRefreshing(data) {
     this.setState(() => {
       return {
         isRefreshing: true
@@ -36,6 +41,9 @@ class Culture extends React.Component {
     const { dispatch } = data[0]
     const result = dispatch({
       type: `${data[1]}/refresh`,
+      payload: {
+        nameSpace: `${data[1]}`
+      }
     })
     refresh_result(result)
     this.setState(() => {
@@ -45,7 +53,7 @@ class Culture extends React.Component {
     })
   }
 
-  _onLoadingMore(event) {
+  async _onLoadingMore(event) {
     if (this.state.loadMore == 1 || this.state.loadMore == 2) return
     let y = event.nativeEvent.contentOffset.y;
     let height = event.nativeEvent.layoutMeasurement.height;
@@ -55,10 +63,15 @@ class Culture extends React.Component {
         loadMore: 1
       });
       const { dispatch } = this.props
-      dispatch({
-        type: `intangible_culture/loadMore`,
+      const { data } = await dispatch({
+        type: `intangible_culture/get`,
+        payload: {
+          category: 0,
+          tag: 0,
+          nameSpace: 'intangible_culture',
+        }
       })
-      if (Response.state) {
+      if (data.length == 0) {
         this.setState({
           loadMore: 2
         })
@@ -89,7 +102,7 @@ class Culture extends React.Component {
           />
         }
         onScroll={this._onLoadingMore.bind(this)}
-        scrollEventThrottle={100}
+        scrollEventThrottle={200}
       >
         <View>
           <WingBlank size="lg">
@@ -97,7 +110,12 @@ class Culture extends React.Component {
               <Lists data={this.props} name={'intangible_culture'}></Lists>
             </Flex>
             <Flex style={{marginTop: Styles.Height(5)}} justify="between" wrap="wrap">
-              <Item data={this.props.show}></Item>
+              {
+                this.props.articleList.length > 0 ? 
+                  <Item data={this.props.articleList} navigation={this.props.navigation}></Item>
+                  : 
+                  <Image></Image>
+              }
             </Flex>
           </WingBlank>
         </View>
