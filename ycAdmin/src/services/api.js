@@ -67,12 +67,17 @@ export async function queryAdvancedProfile() {
 }
 
 export async function queryFakeList(params) {
-  return request(`/api/fake_list?${stringify(params)}`);
+  return request("/api/v1/article/getlist", {
+    method: "POST",
+    body: {
+      ...params,
+    }
+  });
 }
 
 export async function removeFakeList(params) {
   const { count = 5, ...restParams } = params;
-  return request(`/api/fake_list?count=${count}`, {
+  return request("/api/v1/article/del", {
     method: "POST",
     body: {
       ...restParams,
@@ -83,7 +88,7 @@ export async function removeFakeList(params) {
 
 export async function addFakeList(params) {
   const { count = 5, ...restParams } = params;
-  return request(`/api/fake_list?count=${count}`, {
+  return request("/api/v1/article/add", {
     method: "POST",
     body: {
       ...restParams,

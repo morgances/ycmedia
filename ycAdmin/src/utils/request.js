@@ -56,6 +56,7 @@ const cachedSave = (response, hashcode) => {
   return response;
 };
 
+const baseURL = 'http://10.0.0.29:9573'
 /**
  * Requests a URL, returning a promise.
  *
@@ -72,7 +73,7 @@ export default function request(url, option) {
    * Produce fingerprints based on url and parameters
    * Maybe url has the same parameters
    */
-  const fingerprint = url + (options.body ? JSON.stringify(options.body) : "");
+  const fingerprint = baseURL + url + (options.body ? JSON.stringify(options.body) : "");
   const hashcode = hash
     .sha256()
     .update(fingerprint)
@@ -118,7 +119,7 @@ export default function request(url, option) {
       sessionStorage.removeItem(`${hashcode}:timestamp`);
     }
   }
-  return fetch(url, newOptions)
+  return fetch(baseURL + url, newOptions)
     .then(checkStatus)
     .then(response => cachedSave(response, hashcode))
     .then(response => {
@@ -127,6 +128,7 @@ export default function request(url, option) {
       if (newOptions.method === "DELETE" || response.status === 204) {
         return response.text();
       }
+      console.log(response, 'response')
       return response.json();
     })
     .catch(e => {

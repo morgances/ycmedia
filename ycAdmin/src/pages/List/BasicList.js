@@ -43,7 +43,9 @@ class BasicList extends PureComponent {
     dispatch({
       type: "list/fetch",
       payload: {
-        count: 5
+        category: 5,
+        page: 5,
+        tag: 12,
       }
     });
   };
@@ -244,7 +246,7 @@ class BasicList extends PureComponent {
                 >
                   <List.Item.Meta
                     title={
-                      <a className={styles.listItemMetaTitle}>{item.title}</a>
+                      <div className={styles.listItemMetaTitle}>{item.title}</div>
                     }
                     description={
                       <span>
