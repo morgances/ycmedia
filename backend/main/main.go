@@ -19,6 +19,7 @@ func main() {
 
 	ep := server.NewEntrypoint(serverConfig, nil)
 	ep.AttachMiddleware(middleware.NegroniRecoverHandler())
+	ep.AttachMiddleware(middleware.NegroniCorsAllowAll())
 	// ep.AttachMiddleware(middleware.NegroniJwtHandler("UserTokenKey", nil, nil, nil))
 	ep.AttachMiddleware(middleware.NegroniJwtHandler("AdminTokenKey", filter.Skipper, nil, nil))
 
