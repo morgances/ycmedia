@@ -23,7 +23,7 @@ export default class Lists extends React.Component {
     }
     function List() {
       const TitleList = data.title.map((item, index) =>
-        <TouchableOpacity key={index} onPress={() => change(index)}>
+        <TouchableOpacity key={`${item.title}${index}`} onPress={() => change(index)}>
           <View style={[
             styles.nav,
             data.focus == index ? styles.navActive : styles.navUnactive,

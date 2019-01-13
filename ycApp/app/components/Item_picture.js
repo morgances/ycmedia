@@ -11,8 +11,8 @@ export default (props) => {
   function List() {
     const list = props.data.articleList || props.data
     const listItems = list.map((item, index) => 
-      <TouchableOpacity onPress={() => dispatch(Navigator.navigate('Detail', { aid: item.aid }))}>
-        <View style={styles.content} key={index}>
+      <TouchableOpacity key={`${item.title}${index}`} onPress={() => dispatch(Navigator.navigate('Detail', { aid: item.aid }))}>
+        <View style={styles.content}>
           <Image style={styles.content_image} source={{ uri: `${item.image}`, cache: 'force-cache' }}></Image>
           <Text style={{ fontSize: FontSize.medium, color: Colors.black, marginLeft: Styles.Width(2) }}>{item.title}</Text>
           <View style={ styles.content_time_view}>
