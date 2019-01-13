@@ -9,9 +9,8 @@ import FontSize from '../res/Fonts/size'
 
 export default (props) => {
   const dispatch = dispatcher(props);
-  
   function List() {
-    const list = props.data
+    const list = props.data.articleList || props.data
     const listItems = list.map((item, index) => 
       <TouchableOpacity onPress={() => dispatch(Navigator.navigate('Detail', { aid: item.aid }))}>
         <Flex style={styles.news_content} key={index} wrap='wrap' justify="center">
@@ -30,7 +29,9 @@ export default (props) => {
     return listItems
   }
   return (
-    <List></List>
+    <View>
+      <List></List>
+    </View>
   )
 }
 

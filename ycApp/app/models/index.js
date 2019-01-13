@@ -29,6 +29,7 @@
 
 import init from './init';
 import router from './router';
+import home from './Home/index'
 import culture_news from './Culture/news'
 import culture_policies from './Culture/policies'
 import culture_inform from './Culture/inform'
@@ -53,6 +54,7 @@ import detail from './Detail'
 export const Models = [
   init,
   router,
+  home,
   culture_news,
   culture_policies,
   culture_inform,

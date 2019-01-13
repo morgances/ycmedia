@@ -4,6 +4,7 @@ import { WingBlank } from 'antd-mobile-rn';
 import { connect } from 'react-redux';
 
 import Colors from '../../../../res/Colors'
+import Styles from '../../../../res/Styles'
 import Item from '../../../../components/Item_time'
 import Loadmore from '../../../../components/LoadMore'
 import refresh_result from '../../../../components/Refresh_result'
@@ -62,7 +63,7 @@ class Inform extends React.Component {
       });
       const { dispatch } = this.props
       const { data } = await dispatch({
-        type: `culture_inform/get`,
+        type: `culture_inform/loadMore`,
         payload: {
           category: 1,
           tag: 1,
@@ -106,13 +107,13 @@ class Inform extends React.Component {
           this.props.articleList.length > 0 ? 
             <View>
               <WingBlank size="lg">
-                <Item data={this.props.articleList} navigation={this.props.navigation}></Item>
+                <Item data={this.props} navigation={this.props.navigation}></Item>
               </WingBlank>
             </View>
             : 
-            <Image></Image>
+            <Image source= { require('../../../../assets/images/th.gif') } style={{ height: Styles.Height(400), width: Styles.Width() }}></Image>
         }
-        {this.state.loadMore > 0 ? <Loadmore isLoadAll={ this.state.loadMore }></Loadmore> : null }
+        {this.state.loadMore > 0 ? <Loadmore data={ this.state.loadMore }></Loadmore> : null }
       </ScrollView>
     )
   }
