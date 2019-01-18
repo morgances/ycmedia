@@ -32,12 +32,12 @@ func (con Controller) Update(ctx *server.Context) error {
 
 	v, ok := mp["aid"]
 
-	if !ok || v.(int) < 0 {
+	if !ok || int(v.(float64)) < 0 {
 		log.Error("Error In JSONBody:", BadData)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, BadData))
 	}
 
-	err = con.db.UpdateArticle(v.(int), toKeyValStr(mp))
+	err = con.db.UpdateArticle(int(v.(float64)), toKeyValStr(mp))
 	if err != nil {
 		log.Error("Error In Mysql UpdateArticle:", err)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))

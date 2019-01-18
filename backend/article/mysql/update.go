@@ -6,7 +6,7 @@ import (
 )
 
 func (d Database) UpdateArticle(aid int, keyValStr string) error {
-	res, err := d.DB.Exec(UpdateArticle + keyValStr + fmt.Sprintf(" where id=%d", aid))
+	res, err := d.DB.Exec(UpdateArticle + keyValStr + fmt.Sprintf(" where aid=%d", aid))
 	if err != nil {
 		return err
 	}
