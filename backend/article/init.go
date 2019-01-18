@@ -3,13 +3,12 @@ package article
 import (
 	"database/sql"
 
-	"github.com/morgances/ycmedia/backend/base"
-	"github.com/morgances/ycmedia/backend/base/filter"
-
 	"github.com/TechCatsLab/apix/http/server"
 	"github.com/TechCatsLab/logging/logrus"
 	isactive "github.com/morgances/ycmedia/backend/admin/http/filter"
 	"github.com/morgances/ycmedia/backend/article/controller"
+	"github.com/morgances/ycmedia/backend/base"
+	"github.com/morgances/ycmedia/backend/base/filter"
 )
 
 func Register(r *server.Router, db *sql.DB, tokenKey string) error {
@@ -34,7 +33,8 @@ func Register(r *server.Router, db *sql.DB, tokenKey string) error {
 	jwt := filter.NewWithDB(tokenKey, db)
 
 	filter.URLMap["/api/v1/article/add"] = struct{}{}
-	filter.URLMap["/api/v1/article/del"] = struct{}{}
+	filter.URLMap["/api/v1/article/delete"] = struct{}{}
+	filter.URLMap["/api/v1/article/update"] = struct{}{}
 
 	filter.URLMap["/api/v1/article/news"] = struct{}{}
 	filter.URLMap["/api/v1/article/getlist"] = struct{}{}
@@ -42,7 +42,12 @@ func Register(r *server.Router, db *sql.DB, tokenKey string) error {
 	filter.URLMap["/api/v1/article/getmore"] = struct{}{}
 
 	r.Post("/api/v1/article/add", c.Add, jwt.Check, active.Isactive)
-	r.Post("/api/v1/article/del", c.Delete, jwt.Check, active.Isactive)
+	r.Post("/api/v1/article/delete", c.Delete, jwt.Check, active.Isactive)
+	r.Post("/api/v1/article/update", c.Update, jwt.Check, active.Isactive)
+
+	// r.Post("/api/v1/article/add", c.Add)
+	// r.Post("/api/v1/article/delete", c.Delete)
+	// r.Post("/api/v1/article/update", c.Update)
 
 	r.Get("/api/v1/article/news", c.GetNews)
 	r.Post("/api/v1/article/getlist", c.GetArticleList)
