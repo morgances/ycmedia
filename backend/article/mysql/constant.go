@@ -3,7 +3,7 @@ package mysql
 import "time"
 
 const (
-	ArticleTableName          string = "ycmedia.article"
+	ArticleTableName          string = "article.article"
 	InsertArticle             string = "insert into " + ArticleTableName + "(user_id, category, tag, title, author, date, image, text)values(?, ?, ?, ?, ?, ?, ?, ?)"
 	SelectArticle             string = "select * from " + ArticleTableName + " "
 	DeleteArticle             string = "delete from " + ArticleTableName + " "

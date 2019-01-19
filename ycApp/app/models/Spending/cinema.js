@@ -1,32 +1,77 @@
+import { getList, getMore } from '../../services/api'
+
 export default {
   namespace: 'spending_cinema',
   state: {
-    show: [
-      {
-        title: '银川奥斯卡影城',
-        instruction: '宁夏贺兰山苏峪口国家森林公园位于贺兰山国家级自然保护区内，阿啦啦啦',
-        image: require('../../assets/images/Main/news_one.png'),
-      },
-      {
-        title: '天一国际影城',
-        instruction: '水沟洞是中国最早发掘的旧石器时代文化遗址',
-        image: require('../../assets/images/Main/news_one.png'),
-      },
-      {
-        title: '宁夏人民会堂国际影城',
-        instruction: '隶属于宁夏人民会堂管理中心，于 2011 年 5 月 1 日正式营业，是“第十”',
-        image: require('../../assets/images/Main/news_one.png'),
-      },
-      {
-        title: '东城影院',
-        instruction: '是国内西北地区首创同步影厅和视听馆相结合的特色影院',
-        image: require('../../assets/images/Main/news_one.png'),
-      },
-      {
-        title: '黄沙古渡游玩指南',
-        instruction: '黄沙古渡原生态旅游景区是...',
-        image: require('../../assets/images/Main/news_one.png'),
+    articleList: [],
+    page: 0
+  },
+  effects: {
+    *refresh({ payload }, { put, select }) {
+      const { articleList } = yield select(state => state[`${payload.nameSpace}`])
+      const { data, status } = yield getMore({
+        category: 0,
+        tag: 0,
+        date: articleList[0].date
+      })
+      if (status == 200 && data.data.length > 0) {
+        yield put({
+          type: 'Refresh',
+          payload: data.data
+        })
       }
-    ]
+      return data.data
+    },
+    *get({ payload }, { put }) {
+      const { data, status } = yield getList(payload)
+      data.data.map((item) => {
+        item.time = item.date.slice(0, 10)
+      })
+      if (status == 200) {
+        yield put({
+          type: 'Get',
+          payload: data.data
+        })
+      }
+      return data.data
+    },
+    *loadMore({ payload }, { put, select }) {
+      const { page } = yield select(state => state[`${payload.nameSpace}`])
+      const { data, status } = yield getList({
+        category: payload.category,
+        tag: payload.category,
+        page: page + 1
+      })
+      if (status == 200 && data.data.length != 0) {
+        yield put({
+          type: 'LoadMore',
+          payload: {
+            data: data.data
+          }
+        })
+      }
+      return data
+    }
+  },
+  reducers: {
+    Refresh(state, action) {
+      return {
+        ...state,
+        articleList: action.payload.concat(state.articleList)
+      }
+    },
+    Get(state, action) {
+      return {
+        ...state,
+        articleList: [...action.payload],
+      }
+    },
+    LoadMore(state, action) {
+      return {
+        ...state,
+        page: state.page + 1,
+        articleList: state.articleList.concat(action.payload)
+      }
+    }
   }
 }

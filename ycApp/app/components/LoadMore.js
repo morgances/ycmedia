@@ -5,11 +5,16 @@ class LoadMoreFooter extends Component {
     super(props);
   }
   render() {
-    return (
-      <View style={styles.footer}>
-        <Text style={styles.footerTitle}>{this.props.isLoadAll == 2 ? '已经滑到底啦' : '正在加载更多……'}</Text>
-      </View>
-    )
+    const { data } = this.props
+    if (data.isLoad != undefined || data != undefined) {
+      return (
+        <View style={styles.footer}>
+          <Text style={styles.footerTitle}>{data.isLoad == 2 || data == 2 ? '已经滑到底啦' : '正在加载更多……'}</Text>
+        </View>
+      )
+    } else {
+      return ( null )
+    }
   }
 }
 const styles = StyleSheet.create({

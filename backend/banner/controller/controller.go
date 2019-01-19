@@ -4,13 +4,11 @@ import (
 	"database/sql"
 	"time"
 
+	"github.com/TechCatsLab/apix/http/server"
 	"github.com/TechCatsLab/logging/logrus"
+	"github.com/morgances/ycmedia/backend/banner/service"
 	"github.com/morgances/ycmedia/backend/base"
 	"github.com/morgances/ycmedia/backend/base/constants"
-
-	"github.com/TechCatsLab/apix/http/server"
-
-	"github.com/morgances/ycmedia/backend/banner/service"
 )
 
 type Controller struct {

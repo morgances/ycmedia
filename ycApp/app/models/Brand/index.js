@@ -1,74 +1,186 @@
+import { getList, getMore } from '../../services/api'
+
 export default {
   namespace: 'brand',
   state: {
     title: [
       {
         title: '公益性文化产品',
-        listName: 'product'
+        listName: 'product',
+        tag: 0,
+        page: 0,
+        category: 0,
+        isLoad: 0
       },
       {
         title: '公益性文化活动',
-        listName: 'activity'
+        listName: 'activity',
+        tag: 0,
+        page: 0,
+        category: 0,
+        isLoad: 0
       },
       {
         title: '中华优秀传统文化与民族文化',
-        listName: 'culture'
+        listName: 'culture',
+        tag: 0,
+        page: 0,
+        category: 0,
+        isLoad: 0
       }
     ],
     focus: 0,
-    product: [
-      {
-        title: '宁夏中银视界文化艺术发展有限公司',
-        image: require('../../assets/images/Main/news_one.png'),
-      },
-      {
-        title: '宁夏艺盟礼益文化艺术品有限公司',
-        image: require('../../assets/images/Main/news_one.png'),
-      },
-      {
-        title: '银川禾浪文化创意科技有限公司',
-        image: require('../../assets/images/Main/news_one.png'),
-      },
-      {
-        title: '银川砚家班文化传媒有限公司',
-        image: require('../../assets/images/Main/news_one.png'),
+    product: [],
+    activity: [],
+    culture: [],
+    articleList: []
+  },
+  effects: {
+    *refresh({ payload }, { put, select }) { // 下拉刷新
+      const { articleList, focus } = yield select(state => state[`${payload.nameSpace}`])
+      const { data, status } = yield getMore({
+        category: articleList[0].category,
+        tag: articleList[0].tag,
+        date: articleList[0].date
+      })
+      if (status == 200 && data.data.length > 0) {
+        yield put({
+          type: 'Refresh',
+          payload: {
+            data: data.data,
+            focus
+          }
+        })
       }
-    ],
-    activity: [
-      {
-        title: '公益性文化活动',
-        image: require('../../assets/images/Main/news_one.png'),
+      return data.data
+    },
+    *get({ payload }, { put, select }) { // 获取数据
+      const { title, focus } = yield select(state => state[`${payload.nameSpace}`])
+      const requestPayload = title[focus]
+      const { data, status } = yield getList({
+        category: requestPayload.category,
+        page: 0,
+        tag: requestPayload.tag
+      })
+      data.data.map((item) => {
+        item.time = item.date.slice(0, 10)
+      })
+      if (status == 200) {
+        yield put({
+          type: 'Get',
+          payload: {
+            data: data.data,
+            focus
+          }
+        })
       }
-    ],
-    culture: [
-      {
-        title: '中华优秀传统文化与民族文化',
-        image: require('../../assets/images/Main/news_one.png'),
+      return {
+        focusModel: title[focus]
       }
-    ],
-    show: [
-      {
-        title: '宁夏中银视界文化艺术发展有限公司',
-        image: require('../../assets/images/Main/news_one.png'),
-      },
-      {
-        title: '宁夏艺盟礼益文化艺术品有限公司',
-        image: require('../../assets/images/Main/news_one.png'),
-      },
-      {
-        title: '银川禾浪文化创意科技有限公司',
-        image: require('../../assets/images/Main/news_one.png'),
-      },
-      {
-        title: '银川砚家班文化传媒有限公司',
-        image: require('../../assets/images/Main/news_one.png'),
+    },
+    *change({ payload }, { put, select }) { // 切换子版块
+      const { title } = yield select(state => state[`${payload.name}`])
+      const focus = title[payload.index]
+      const focusList = yield select(state => state[`${payload.name}`][`${focus.listName}`])
+      if (focusList.length == 0) {
+        const { data } = yield getList({
+          category: focus.category,
+          tag: focus.tag,
+          page: 0
+        })
+        data.data.map((item) => {
+          item.time = item.date.slice(0, 10)
+        })
+        if (data.status == 200) {
+          yield put({
+            type: 'Get',
+            payload: {
+              data: data.data,
+              focus: payload.index
+            }
+          })
+        }
+      } else {
+        yield put({
+          type: 'Change',
+          payload: {
+            focus: payload.index
+          }
+        })
       }
-    ]
+    },
+    *loadMore({ payload }, { put, select }) { // 上拉加载
+      const { title, focus } = yield select(state => state[`${payload.nameSpace}`])
+      yield put({
+        type: 'OnLoading',
+        payload: {
+          focus
+        }
+      })
+      const focusData = title[focus]
+      const { data, status } = yield getList({
+        category: focusData.category,
+        tag: focusData.tag,
+        page: focusData.page + 1
+      })
+      if (status == 200) {
+        yield put({
+          type: 'LoadMore',
+          payload: {
+            data: data.data,
+            focus
+          }
+        })
+      }
+      return {
+        focusModel: title[focus]
+      }
+    }
   },
   reducers: {
-    change(state, { payload: index }) {
-      state.focus = index
-      state.show = [...state[state.title[index].listName]]
+    Change(state, action) { // 切换子模块
+      const { focus } = action.payload
+      state.focus = focus
+      state.articleList = [...state[`${state.title[focus].listName}`]]
+      return {
+        ...state
+      }
+    },
+    Refresh(state, action) { // 下拉刷新
+      const { focus, data } = action.payload
+      state[`${state.title[focus].listName}`] = data.concat(state[`${state.title[focus].listName}`])
+      state.articleList = data.concat(state.articleList)
+      return {
+        ...state,
+      }
+    },
+    Get(state, action) { // 获取数据
+      const { focus, data } = action.payload
+      state.focus = focus
+      state[`${state.title[focus].listName}`] = [...data]
+      state.articleList = [...state[`${state.title[focus].listName}`]]
+      return {
+        ...state,
+      }
+    },
+    LoadMore(state, action) { // 加载更多
+      const { data, focus } = action.payload
+      state.title[focus].page += 1
+      if (data.length == 0) {
+        state.title[focus].isLoad = 2
+      } else {
+        state[`${state.title[focus].listName}`] = state[`${state.title[focus].listName}`].concat(data)
+        state.articleList = state[`${state.title[focus].listName}`]
+        state.title[focus].isLoad = 0
+      }
+      return {
+        ...state,
+      }
+    },
+    OnLoading(state, action) { // 切换加载状态
+      const { focus } = action.payload
+      console.log('change')
+      state.title[focus].isLoad = 1
       return {
         ...state
       }

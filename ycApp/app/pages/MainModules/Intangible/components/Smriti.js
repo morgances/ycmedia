@@ -16,18 +16,35 @@ class Smriti extends React.Component {
     super(props)
     this.state = {
       isRefreshing: false,
-      loadMore: 0
+      focusModel: {},
+      isLoading: false
     }
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const { dispatch } = this.props
-    dispatch({
+    const { focusModel } = await dispatch({
       type: `intangible_smriti/get`,
       payload: {
         category: 0,
         index: 0,
-        nameSpace: 'intangible_smriti'
+        nameSpace: 'intangible_smriti',
+      }
+    })
+    this.setState(() => {
+      return {
+        focusModel: {...focusModel}
+      }
+    })
+  }
+
+  _onChildChanged(index, data) {
+    const focusModel = data.title[index]
+    this.setState(() => {
+      return {
+        focusModel: {
+          ...focusModel
+        }
       }
     })
   }
@@ -54,36 +71,31 @@ class Smriti extends React.Component {
   }
 
   async _onLoadingMore(event) {
-    if (this.state.loadMore == 1 || this.state.loadMore == 2) return
+    if (this.props.title[this.props.focus].isLoad == 1 || this.props.title[this.props.focus].isLoad == 2) return
+    const focusData = this.props.title[this.props.focus]
     let y = event.nativeEvent.contentOffset.y;
     let height = event.nativeEvent.layoutMeasurement.height;
     let contentHeight = event.nativeEvent.contentSize.height;
     if (y + height >= contentHeight - 30) {
-      this.setState({
-        loadMore: 1
-      });
+      this.setState(() => {
+        return {
+          isLoading: true
+        }
+      })
       const { dispatch } = this.props
-      const { data } = await dispatch({
-        type: `intangible_smriti/get`,
+      const { focusModel } = await dispatch({
+        type: `intangible_smriti/loadMore`,
         payload: {
-          category: 0,
-          tag: 0,
+          category: focusData.category,
+          tag: focusData.tag,
           nameSpace: 'intangible_smriti',
         }
-      }) 
-      if (data.length == 0) {
-        this.setState({
-          loadMore: 2
-        })
-      } else {
-        this.setState({
-          loadMore: 0
-        })
-      }
-    } else {
-      this.setState({
-        loadMore: 0
-      });
+      })
+      this.setState(() => {
+        return {
+          focusModel: {...focusModel}
+        }
+      })
     }
   }
 
@@ -107,17 +119,17 @@ class Smriti extends React.Component {
         <View>
           <WingBlank size="lg">
             <Flex style={{marginTop: Styles.Height(20)}} wrap="wrap" justify="around">
-              <Lists data={this.props} name={'intangible_smriti'}></Lists>
+              <Lists callbackParent={this._onChildChanged.bind(this)} data={this.props} name={'intangible_smriti'}></Lists>
             </Flex>
             {
               this.props.articleList.length > 0 ? 
-                <Item data={this.props.articleList} navigation={this.props.navigation}></Item>
+                <Item data={this.props} navigation={this.props.navigation}></Item>
                 : 
-                <Image></Image>
-            }
+                <Image source= { require('../../../../assets/images/th.gif') } style={{ height: Styles.Height(400), width: Styles.Width() }}></Image>
+              }
           </WingBlank>
         </View>
-        {this.state.loadMore > 0 ? <Loadmore isLoadAll={ this.state.loadMore }></Loadmore> : null }
+        { this.state.isLoading ? <Loadmore data={ this.state.focusModel }></Loadmore> : null }
       </ScrollView>
     )
   }

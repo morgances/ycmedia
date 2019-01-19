@@ -1,6 +1,5 @@
 import React from 'react';
 import { Text, StyleSheet, Image, View, TouchableOpacity } from 'react-native';
-import { Flex } from 'antd-mobile-rn';
 import Navigator, { dispatcher } from '../helper/navigator';
 
 import Colors from '../res/Colors'
@@ -9,13 +8,12 @@ import FontSize from '../res/Fonts/size'
 
 export default (props) => {
   const dispatch = dispatcher(props);
-
   function List() {
-    const list = props.data
+    const list = props.data.articleList || props.data
     const listItems = list.map((item, index) => 
-      <TouchableOpacity onPress={() => dispatch(Navigator.navigate('Detail', { aid: item.aid }))}>
+      <TouchableOpacity key={`${item.title}${index}`} onPress={() => dispatch(Navigator.navigate('Detail', { aid: item.aid }))}>
         <View style={styles.content}>
-          <Image style={styles.content_image} source={item.image}></Image>
+          <Image style={styles.content_image} source={{ uri: `${item.image}`, cache: 'force-cache' }}></Image>
           <Text style={{ fontSize: FontSize.medium, color: Colors.black, marginLeft: Styles.Width(2) }}>{item.title}</Text>
           <View style={ styles.content_time_view}>
             <Text style={ styles.content_time }>{item.time}</Text>

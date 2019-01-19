@@ -2,6 +2,7 @@ package http
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 
 	"github.com/TechCatsLab/apix/http/server"
@@ -67,7 +68,7 @@ func (ah *AdminHandler) Login(c *server.Context) error {
 		log.Error("Error in JSONBody:", err)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
 	}
-
+	fmt.Println(admin)
 	if err = ctx.Validate(&admin); err != nil {
 		log.Error("Error in Validate:", err)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, nil))

@@ -1,49 +1,24 @@
 package mysql
 
 import (
+	"errors"
 	"fmt"
-	"time"
 )
 
-func (d Database) UpdateArticleCategory(aid, newCategory int) error {
-	return d.updateArticle(aid, fmt.Sprintf("category=%d", newCategory))
-}
-
-func (d Database) UpdateArticleTag(aid, newTag int) error {
-	return d.updateArticle(aid, fmt.Sprintf("tag=%d", newTag))
-}
-
-func (d Database) UpdateArticleTitle(aid int, newTitle string) error {
-	return d.updateArticle(aid, "title='"+newTitle+"'")
-}
-
-func (d Database) UpdateArticleAuthor(aid int, newAuthor string) error {
-	return d.updateArticle(aid, "author='"+newAuthor+"'")
-}
-
-func (d Database) UpdateArticleDate(aid int, newTime time.Time) error {
-	stmt, err := d.DB.Prepare("update article set date=? where id=?")
+func (d Database) UpdateArticle(aid int, keyValStr string) error {
+	res, err := d.DB.Exec(UpdateArticle + keyValStr + fmt.Sprintf(" where aid=%d", aid))
 	if err != nil {
 		return err
 	}
-	_, err = stmt.Exec(newTime, aid)
-	return err
-}
 
-func (d Database) UpdateArticleImage(aid int, newImage string) error {
-	return d.updateArticle(aid, "image='"+newImage+"'")
-}
+	affected, err := res.RowsAffected()
+	if err != nil {
+		return err
+	}
 
-func (d Database) UpdateArticleText(aid int, newText string) error {
-	return d.updateArticle(aid, "text='"+newText+"'")
-}
+	if affected == 0 {
+		return errors.New("No Such Article !")
+	}
 
-func (d Database) DIYUpdateArticle(opt string) error {
-	_, err := d.DB.Exec(UpdateArticle + opt)
-	return err
-}
-
-func (d Database) updateArticle(aid int, opt string) error {
-	_, err := d.DB.Exec(UpdateArticle + opt + fmt.Sprintf(" where aid=%d", aid))
-	return err
+	return nil
 }

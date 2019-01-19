@@ -9,8 +9,9 @@ export default class Lists extends React.Component {
   render() {
     const data = this.props.data
     const name = this.props.name
-    console.log(data.focus, 'focus')
+    const callbackParent = this.props.callbackParent || null
     function change(index) {
+      if (callbackParent) callbackParent(index, data)
       const { dispatch } = data
       dispatch({
         type: `${name}/change`,
@@ -22,7 +23,7 @@ export default class Lists extends React.Component {
     }
     function List() {
       const TitleList = data.title.map((item, index) =>
-        <TouchableOpacity key={index} onPress={() => change(index)}>
+        <TouchableOpacity key={`${item.title}${index}`} onPress={() => change(index)}>
           <View style={[
             styles.nav,
             data.focus == index ? styles.navActive : styles.navUnactive,

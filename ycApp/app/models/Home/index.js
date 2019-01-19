@@ -1,7 +1,7 @@
 import { getList, getMore } from '../../services/api'
 
 export default {
-  namespace: 'culture_free',
+  namespace: 'home',
   state: {
     articleList: [],
     page: 0

@@ -17,16 +17,12 @@ import (
 var (
 	fileMap = map[string]string{}
 
-	article = []string{".txt", ".md", ".rtf"}
 	picture = []string{".jpg", ".png", ".jpeg", ".gif", ".bmp"}
 	video   = []string{".avi", ".wmv", ".mpg", ".mpeg", ".mpe", ".mov", ".rm", ".ram", ".swf", ".mp4", ".rmvb", ".asf", ".divx", ".vob"}
 	fileDir = filePath()
 )
 
 func filePath() map[string]string {
-	for _, suffix := range article {
-		fileMap[suffix] = constants.ArticleDir
-	}
 	for _, suffix := range picture {
 		fileMap[suffix] = constants.PictureDir
 	}
