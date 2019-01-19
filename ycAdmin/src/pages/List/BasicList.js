@@ -1,7 +1,9 @@
-import React, { PureComponent } from "react";
+import React, { PureComponent, Fragment } from "react";
 import { connect } from "dva";
 import moment from 'moment';
 import {
+  Row,
+  Col,
   Tag,
   List,
   Card,
@@ -13,28 +15,115 @@ import {
   Menu,
   Modal,
   Form,
-  Avatar
+  Avatar,
+  Badge,
+  Divider,
+  Select,
+  Popconfirm
 } from "antd";
 
 import PageHeaderWrapper from "@/components/PageHeaderWrapper";
 import ArticleListContent from "@/components/ArticleListContent";
 import styles from "./BasicList.less";
 import StandardFormRow from "@/components/StandardFormRow";
+import StandardTable from "@/components/StandardTable";
 
 const FormItem = Form.Item;
+const { Option } = Select;
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 const { Search } = Input;
 const pageSize = 5;
+const getValue = obj =>
+  Object.keys(obj)
+    .map(key => obj[key])
+    .join(',');
+const tag = ['文化资讯', '书香银川', '遗脉相承', '银川旅游', '艺术空间', '凤城演绎', '文化消费', '文化品牌'];
 
-@connect(({ list }) => ({
+@connect(({ list, rule, loading }) => ({
   list,
+  rule,
+  loading: loading.models.rule,
 }))
 @Form.create()
 class BasicList extends PureComponent {
+  state = {
+    modalVisible: false,
+    updateModalVisible: false,
+    expandForm: false,
+    selectedRows: [],
+    formValues: {},
+    stepFormValues: {},
+  };
+
   constructor(props) {
     super(props);
-  }
+  };
+
+  columns = [
+    // {
+    //   title: '文章ID',
+    //   dataIndex: 'aid',
+    // },
+    {
+      title: '文章作者',
+      dataIndex: 'author',
+    },
+    {
+      title: '文章标题',
+      dataIndex: 'title',
+    },
+    {
+      title: '文章标签',
+      dataIndex: 'category',
+      filters: [
+        {
+          text: tag[0],
+          value: 0,
+        },
+        {
+          text: tag[1],
+          value: 1,
+        },
+        {
+          text: tag[2],
+          value: 2,
+        },
+        {
+          text: tag[3],
+          value: 3,
+        },
+        {
+          text: tag[4],
+          value: 4,
+        },
+        {
+          text: tag[5],
+          value: 5,
+        },
+        {
+          text: tag[6],
+          value: 6,
+        },
+        {
+          text: tag[7],
+          value: 7,
+        },
+      ],
+      render(val) {
+        return <Badge tag={tag[val]} />
+      },
+    },
+    {
+      title: '上次更新时间',
+      dataIndex: 'date',
+      sorter: true,
+      render: val => <sapn>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</sapn>
+    },
+    {
+      title: '操作',
+    },
+  ];
 
   formLayout = {
     labelCol: { span: 7 },
@@ -44,7 +133,7 @@ class BasicList extends PureComponent {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: "list/fetch",
+      type: "rule/fetch",
       payload: {
         category: 0,
         page: 0,
@@ -52,6 +141,17 @@ class BasicList extends PureComponent {
       }
     });
   };
+
+  handleStandardTableChange = (pagination, filtersArg, sorter) => {
+    const  { dispatch } = this.props;
+    const {formValues } = this.state;
+
+    const filters = Object.keys(filtersArg).reduce((obj, key) => {
+      const newObj = { ...obj };
+      newObj[key] = getValue(filtersArg[key]);
+      return newObj;
+    }, {});
+  }
 
   showEditModal = item => {
     this.setState({
@@ -68,7 +168,108 @@ class BasicList extends PureComponent {
     });
   };
 
+  handleSelectRows = rows => {
+    this.setState({
+      selectedRows: rows,
+    });
+  };
+
+  handleSearch = e => {
+    e.preventDefault();
+
+    const { dispatch, form } = this.props;
+
+    form.validateFields((err,fieldsValue) => {
+      if (err) return ;
+
+      const values = {
+        ...fieldsValue,
+        updateAt: fieldsValue.updateAt && fieldsValue.updateAt.valueOf(),
+      };
+
+      this.setState({
+        formValues: values,
+      });
+
+      dispatch({
+        type: 'rule/fetch',
+        payload: values,
+      });
+    });
+  };
+
+  handleMenuClick = e => {
+    const { dispatch } = this.props;
+    const { selectedRows } = this.state;
+
+    if (selectedRows.length === 0) return;
+    switch (e.key) {
+      case 'remove':
+        dispatch({
+          type: 'rule/remove',
+          payload: {
+            key: selectedRows.map(row => row.key),
+          },
+          callback: () => {
+            this.setState({
+              selectedRows: [],
+            });
+          },
+        });
+        break;
+      default:
+        break;
+    }
+  };
+
+  renderForm() {
+    const {
+      form: { getFieldDecorator },
+    } = this.props;
+    return (
+      <Form onSubmit={this.handleSearch} layout="inline">
+        <Row gutter={{ md: 8,lg: 24,xl: 48 }}>
+          <Col md={6} sm={24}>
+            <FormItem label="文章作者">
+              {getFieldDecorator('name')(<Input placeholder="请输入" />)}
+            </FormItem>
+          </Col>
+          <Col md={6} sm={24}>
+            <FormItem label="文章标题">
+              {getFieldDecorator('title')(<Input placeholder="请输入" />)}
+            </FormItem>
+          </Col>
+          <Col md={6} sm={24}>
+            <FormItem label="文章标签">
+              {getFieldDecorator('tag')(
+                <Select placeholder="请选择" style={{ width: '100%' }}>
+                  <Option value="0">文化资讯</Option>
+                  <Option value="1">书香银川</Option>
+                  <Option value="2">遗脉相承</Option>
+                  <Option value="3">银川旅游</Option>
+                  <Option value="4">艺术空间</Option>
+                  <Option value="5">凤城演绎</Option>
+                  <Option value="6">文化消费</Option>
+                  <Option value="7">文化品牌</Option>
+                </Select>
+              )}
+            </FormItem>
+          </Col>
+          <Col md={6} sm={24}>
+            <span className={styles.submitButtons}>
+              <Button type="primary" htmlType="submit">查找</Button>
+            </span>
+          </Col>
+        </Row>
+      </Form>
+    )
+  }
+
   render() {
+    // const {
+    //   rule: { data },
+    //   loading,
+    // } = this.props;
     const {
       list: { list },
       loading,
@@ -76,6 +277,12 @@ class BasicList extends PureComponent {
     const {
       form: { getFieldDecorator }
     } = this.props;
+    const { selectedRows,modalVisible,updateModalVisible, stepFormValues } = this.state;
+    const menu = (
+      <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
+        <Menu.Item key="remove">删除</Menu.Item>
+      </Menu>
+    );
 
     const editAndDelete = (key, currentItem) => {
       if (key === "edit") this.showEditModal(currentItem);
@@ -140,6 +347,30 @@ class BasicList extends PureComponent {
 
     return (
       <PageHeaderWrapper title="文章列表">
+        <Card bordered={false}>
+          <div className={styles.tableList}>
+            <div className={styles.tableListForm}>{this.renderForm()}</div>
+            <div className={styles.tableListOperator}>
+              {selectedRows.length > 0 && (
+                <span>
+                  <Dropdown overlay={menu}>
+                    <Button>
+                      更多操作 <Icon type="down" />
+                    </Button>
+                  </Dropdown>
+                </span>
+              )}
+            </div>
+            <StandardTable
+              selectedRows={selectedRows}
+              loading={loading}
+              data={list}
+              columns={this.columns}
+              onSelectRow={this.handleSelectRows}
+              onChange={this.handleStandardTableChange}
+            />
+          </div>
+        </Card>
         <div className={styles.standardList}>
           <Card
             className={styles.listCard}

@@ -15,7 +15,7 @@ export default {
       const response = yield call(queryRule, payload);
       yield put({
         type: "save",
-        payload: response
+        payload: response.data
       });
     },
     *add({ payload, callback }, { call, put }) {
@@ -46,6 +46,7 @@ export default {
 
   reducers: {
     save(state, action) {
+      console.log(action.payload)
       return {
         ...state,
         data: action.payload
