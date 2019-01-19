@@ -56,15 +56,6 @@ export default class Adding extends React.Component {
     labelCol: { span: 7 },
     wrapperCol: { span: 13 }
   };
-  componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch({
-      type: "list/fetch",
-      payload: {
-        count: 5
-      }
-    });
-  }
   handleChange(value) {
     this.setState({ text: value });
   }
@@ -101,8 +92,15 @@ export default class Adding extends React.Component {
         done: true
       });
       dispatch({
-        type: "list/submit",
-        payload: { id, ...fieldsValue }
+        type: "list/addList",
+        payload: { 
+          user_id: 123,
+          category: 2, 
+          tag: 3,
+          title: "asdasd",
+          author: "asdwe",
+          date: "this is time",
+          ...fieldsValue }
       });
     });
   };

@@ -4,13 +4,13 @@ import { Avatar } from "antd";
 import styles from "./index.less";
 
 const ArticleListContent = ({
-  data: { content, updatedAt, owner }
+  data: { text, date, author }
 }) => (
   <div className={styles.listContent}>
-    <div className={styles.description}>{content}</div>
+    <div className={styles.description}>{text}</div>
     <div className={styles.extra}>
-      <div>{owner}</div>
-      <em>{moment(updatedAt).format("YYYY-MM-DD HH:mm")}</em>
+      <a>{author}</a>
+      <em>{moment(date).format("YYYY-MM-DD HH:mm")}</em>
     </div>
   </div>
 );

@@ -5,12 +5,16 @@ export default {
 
   state: {
     list: [],
-    currentUser: {
-      name: 'Oiar',
-      avatar: 'http://pic1.win4000.com/wallpaper/3/55b1f8304d0c7.jpg',
-      userid: '00000001',
-    }
+    currentUser: {},
   },
+  // state: {
+  //   list: [],
+  //   currentUser: {
+  //     name: 'Oiar',
+  //     avatar: 'http://pic1.win4000.com/wallpaper/3/55b1f8304d0c7.jpg',
+  //     userid: '00000001',
+  //   }
+  // },
 
   effects: {
     *fetch(_, { call, put }) {

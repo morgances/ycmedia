@@ -7,7 +7,7 @@ import { Card, Row, Col, Icon, Avatar, Tag, Divider, Spin, Input, List } from "a
 import PageHeaderWrapper from "@/components/PageHeaderWrapper";
 import styles from "./Center.less";
 
-@connect(({ activities, loading }) => ({
+@connect(({ activities, loading, user }) => ({
   activities,
   activitiesLoading: loading.effects['activities/fetchList'],
 }))
@@ -15,21 +15,15 @@ export default class Center extends PureComponent {
     componentDidMount() {
       const { dispatch } = this.props;
       dispatch({
+        type: 'user/fetchCurrent'
+      })
+      dispatch({
         type: 'project/fetchNotice',
       });
       dispatch({
         type: 'activities/fetchList',
       });
     }
-
-  state = {
-    currentUser: 
-      {
-      name: 'Oiar',
-      avatar: 'http://pic1.win4000.com/wallpaper/3/55b1f8304d0c7.jpg',
-      userid: '00000001',
-    }
-  }
 
   renderActivities() {
     const {
@@ -76,7 +70,7 @@ export default class Center extends PureComponent {
       listLoading,
       currentUser,
       currentUserLoading
-    } = this.state;
+    } = this.props;
     return (
       <PageHeaderWrapper className={styles.userCenter}>
             <Card
@@ -87,7 +81,7 @@ export default class Center extends PureComponent {
               {currentUser && Object.keys(currentUser).length ? (
                 <div>
                   <div className={styles.avatarHolder}>
-                    <img alt="" src={currentUser.avatar} />
+                    {/* <img alt="" src={currentUser.avatar} /> */}
                     <div className={styles.name}>{currentUser.name}</div>
                     <div>{currentUser.signature}</div>
                   </div>

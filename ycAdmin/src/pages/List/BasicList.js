@@ -1,5 +1,6 @@
 import React, { PureComponent } from "react";
 import { connect } from "dva";
+import moment from 'moment';
 import {
   Tag,
   List,
@@ -11,7 +12,8 @@ import {
   Icon,
   Menu,
   Modal,
-  Form
+  Form,
+  Avatar
 } from "antd";
 
 import PageHeaderWrapper from "@/components/PageHeaderWrapper";
@@ -25,13 +27,14 @@ const RadioGroup = Radio.Group;
 const { Search } = Input;
 const pageSize = 5;
 
-@connect(({ list, loading }) => ({
+@connect(({ list }) => ({
   list,
-  loading: loading.models.list
 }))
 @Form.create()
 class BasicList extends PureComponent {
-  state = { visible: false, done: false };
+  constructor(props) {
+    super(props);
+  }
 
   formLayout = {
     labelCol: { span: 7 },
@@ -43,17 +46,10 @@ class BasicList extends PureComponent {
     dispatch({
       type: "list/fetch",
       payload: {
-        category: 5,
-        page: 5,
-        tag: 12,
+        category: 0,
+        page: 0,
+        tag: 0,
       }
-    });
-  };
-
-  showModal = () => {
-    this.setState({
-      visible: true,
-      current: undefined
     });
   };
 
@@ -64,64 +60,19 @@ class BasicList extends PureComponent {
     });
   };
 
-  handleDone = () => {
-    setTimeout(() => this.addBtn.blur(), 0);
-    this.setState({
-      done: false,
-      visible: false
-    });
-  };
-
-  handleCancel = () => {
-    setTimeout(() => this.addBtn.blur(), 0);
-    this.setState({
-      visible: false
-    });
-  };
-
-  handleSubmit = e => {
-    e.preventDefault();
-    const { dispatch, form } = this.props;
-    const { current } = this.state;
-    const id = current ? current.id : "";
-
-    setTimeout(() => this.addBtn.blur(), 0);
-    form.validateFields((err, fieldsValue) => {
-      if (err) return;
-      this.setState({
-        done: true
-      });
-      dispatch({
-        type: "list/submit",
-        payload: { id, ...fieldsValue }
-      });
-    });
-  };
-
   deleteItem = id => {
     const { dispatch } = this.props;
     dispatch({
-      type: "list/submit",
+      type: "list/removeList",
       payload: { id }
-    });
-  };
-
-  fetchMore = () => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'list/appendFetch',
-      payload: {
-        count: pageSize,
-      },
     });
   };
 
   render() {
     const {
       list: { list },
-      loading
+      loading,
     } = this.props;
-
     const {
       form: { getFieldDecorator }
     } = this.props;
@@ -152,6 +103,26 @@ class BasicList extends PureComponent {
       </div>
     );
 
+    const paginationProps = {
+      showSizeChanger: true,
+      showQuickJumper: true,
+      pageSize: 10,
+      total: 10,
+    }
+
+    const ListContent = ({
+       data: { author, date } 
+      }) => (
+      <div className={styles.listContent}>
+        <div className={styles.listContentItem}>
+          <p>{author}</p>
+        </div>
+        <div className={styles.listContentItem}>
+          <p>{moment(date).format('YYYY-MM-DD HH:mm')}</p>
+        </div>
+      </div>
+    );
+
     const MoreBtn = props => (
       <Dropdown
         overlay={
@@ -166,24 +137,6 @@ class BasicList extends PureComponent {
         </a>
       </Dropdown>
     );
-
-    const loadMore =
-      list.length > 0 ? (
-        <div style={{ textAlign: "center", marginTop: 16 }}>
-          <Button
-            onClick={this.fetchMore}
-            style={{ paddingLeft: 48, paddingRight: 48 }}
-          >
-            {loading ? (
-              <span>
-                <Icon type="loading" /> 加载中...
-              </span>
-            ) : (
-              "加载更多"
-            )}
-          </Button>
-        </div>
-      ) : null;
 
     return (
       <PageHeaderWrapper title="文章列表">
@@ -210,7 +163,7 @@ class BasicList extends PureComponent {
               >
                 <FormItem>
                   {getFieldDecorator("category")(
-                    <RadioGroup defaultValue="all" buttonStyle="solid">
+                    <RadioGroup buttonStyle="solid">
                       <RadioButton value="all">全部</RadioButton>
                       <RadioButton value="1">文化资讯</RadioButton>
                       <RadioButton value="2">书香银川</RadioButton>
@@ -233,28 +186,30 @@ class BasicList extends PureComponent {
           >
             <List
               size="large"
-              loading={list.length === 0 ? loading : false}
-              rowKey="id"
-              itemLayout="vertical"
-              loadMore={loadMore}
+              loading={loading}
+              rowKey="aid"
+              //itemLayout="vertical"
+              pagination={paginationProps}
+              //loadMore={loadMore}
               dataSource={list}
               renderItem={item => (
                 <List.Item
-                  key={item.id}
-                  extra={<div className={styles.listItemExtra} />}
+                  key={item.aid}
+                  //extra={<div className={styles.listItemExtra} />}
                   actions={[<MoreBtn current={item} />]}
                 >
                   <List.Item.Meta
+                    avatar={<Avatar src={item.image} shape="square" size="large" />}
                     title={
-                      <div className={styles.listItemMetaTitle}>{item.title}</div>
+                      <div>{item.title}</div>
                     }
                     description={
                       <span>
-                        <Tag>文化资讯</Tag>
+                        <Tag><div>{item.tag}</div></Tag>
                       </span>
                     }
                   />
-                  <ArticleListContent data={item} />
+                  <ListContent data={item} />
                 </List.Item>
               )}
             />

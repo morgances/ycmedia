@@ -2,10 +2,10 @@
 export default {
   // 支持值为 Object 和 Array
   'GET /api/currentUser': {
-    name: 'Oiar',
-    avatar: 'http://pic1.win4000.com/wallpaper/3/55b1f8304d0c7.jpg',
-    userid: '00000001',
-    email: 'antdesign@alipay.com',
+    // name: 'Oiar',
+    // avatar: 'http://pic1.win4000.com/wallpaper/3/55b1f8304d0c7.jpg',
+    // userid: '00000001',
+    // email: 'antdesign@alipay.com',
     //signature: '海纳百川，有容乃大',
     //title: '交互专家',
     //group: '蚂蚁金服－某某某事业群－某某平台部－某某技术部－UED',

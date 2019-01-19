@@ -47,8 +47,8 @@ class LoginPage extends Component {
         type: "login/login",
         payload: {
           ...values,
-          type
-        }
+          type,
+        },
       });
     }
   };
@@ -83,37 +83,21 @@ class LoginPage extends Component {
         >
           <Tab
             key="account"
-            tab={formatMessage({ id: "app.login.tab-login-credentials" })}
+            tab="账户密码登录"
           >
             {login.status === "error" &&
               login.type === "account" &&
               !submitting &&
               this.renderMessage(
-                formatMessage({ id: "app.login.message-invalid-credentials" })
+                '账户或密码错误'
               )}
             <UserName
-              name="userName"
-              placeholder={`${formatMessage({
-                id: "app.login.userName"
-              })}: Oiar`}
-              rules={[
-                {
-                  required: true,
-                  message: formatMessage({ id: "validation.userName.required" })
-                }
-              ]}
+              name="name"
+              placeholder="请输入账号"
             />
             <Password
-              name="password"
-              placeholder={`${formatMessage({
-                id: "app.login.password"
-              })}: 123456`}
-              rules={[
-                {
-                  required: true,
-                  message: formatMessage({ id: "validation.password.required" })
-                }
-              ]}
+              name="pwd"
+              placeholder="请输入密码"
               onPressEnter={() =>
                 this.loginForm.validateFields(this.handleSubmit)
               }
@@ -181,7 +165,7 @@ class LoginPage extends Component {
             </a>
           </div>
           <Submit loading={submitting}>
-            <FormattedMessage id="app.login.login" />
+            登录
           </Submit>
         </Login>
       </div>

@@ -1,7 +1,9 @@
 import React, { PureComponent } from "react";
+import { connect } from 'dva';
+import Link from 'umi/link';
 import { FormattedMessage } from "umi/locale";
 import { Spin, Menu, Icon, Avatar } from "antd";
-import HeaderDropdown from "../HeaderDropdown";
+//import HeaderDropdown from "../HeaderDropdown";
 import styles from "./index.less";
 
 export default class GlobalHeaderRight extends PureComponent {
