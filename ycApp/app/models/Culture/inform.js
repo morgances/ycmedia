@@ -27,6 +27,7 @@ export default {
       data.data.map((item) => {
         item.time = item.date.slice(0, 10)
       })
+      console.log(data, 'data')
       if (status == 200) {
         yield put({
           type: 'Get',

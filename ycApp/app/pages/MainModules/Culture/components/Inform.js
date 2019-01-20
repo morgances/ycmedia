@@ -8,13 +8,15 @@ import Styles from '../../../../res/Styles'
 import Item from '../../../../components/Item_time'
 import Loadmore from '../../../../components/LoadMore'
 import refresh_result from '../../../../components/Refresh_result'
+import NoData from '../../../../components/NoData'
 
 class Inform extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       isRefreshing: false,
-      loadMore: 0
+      loadMore: 0,
+      isLoading: true
     }
   }
 
@@ -27,6 +29,11 @@ class Inform extends React.Component {
         tag: 1,
         page: 0,
         nameSpace: 'culture_inform'
+      }
+    })
+    this.setState(() => {
+      return {
+        isLoading: false
       }
     })
   }
@@ -103,15 +110,21 @@ class Inform extends React.Component {
         onScroll={this._onLoadingMore.bind(this)}
         scrollEventThrottle={100}
       >
+        { 
+          this.state.isLoading == true ? 
+            <Image source= { require('../../../../assets/images/th.gif') } style={{ height: Styles.Height(400), width: Styles.Width() }}></Image>
+            :
+            null
+        }
         {
-          this.props.articleList.length > 0 ? 
+          this.props.articleList.length > 0  && this.state.isLoading == false ? 
             <View>
               <WingBlank size="lg">
                 <Item data={this.props} navigation={this.props.navigation}></Item>
               </WingBlank>
             </View>
             : 
-            <Image source= { require('../../../../assets/images/th.gif') } style={{ height: Styles.Height(400), width: Styles.Width() }}></Image>
+            <NoData></NoData>
         }
         {this.state.loadMore > 0 ? <Loadmore data={ this.state.loadMore }></Loadmore> : null }
       </ScrollView>

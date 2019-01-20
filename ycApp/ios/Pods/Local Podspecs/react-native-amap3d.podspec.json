@@ -1,0 +1,25 @@
+{
+  "name": "react-native-amap3d",
+  "version": "1.0.2",
+  "summary": "react-native 高德地图组件，支持 Android + iOS",
+  "authors": {
+    "Qiu Xiang": "i@7c00.cc"
+  },
+  "homepage": "git+https://github.com/qiuxiang/react-native-amap3d.git",
+  "license": "MIT",
+  "platforms": {
+    "ios": "8.0"
+  },
+  "source": {
+    "git": "git+https://github.com/qiuxiang/react-native-amap3d.git"
+  },
+  "source_files": "**/*.{h,m}",
+  "dependencies": {
+    "React": [
+
+    ],
+    "AMap3DMap": [
+      "~> 6.3.0"
+    ]
+  }
+}

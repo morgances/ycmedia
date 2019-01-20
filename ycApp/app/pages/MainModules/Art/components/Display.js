@@ -10,6 +10,7 @@ import Item from '../../../../components/Item_picture'
 import Lists from '../../../../components/ItemList'
 import Loadmore from '../../../../components/LoadMore'
 import refresh_result from '../../../../components/Refresh_result'
+import NoData from '../../../../components/NoData'
 
 class Display extends React.Component {
   constructor(props) {
@@ -17,7 +18,8 @@ class Display extends React.Component {
     this.state = {
       isRefreshing: false,
       focusModel: {},
-      isLoading: false
+      isLoadingMore: false,
+      isLoading: true
     }
   }
 
@@ -33,7 +35,8 @@ class Display extends React.Component {
     })
     this.setState(() => {
       return {
-        focusModel: {...focusModel}
+        focusModel: {...focusModel},
+        isLoading: false
       }
     })
   }
@@ -44,7 +47,8 @@ class Display extends React.Component {
       return {
         focusModel: {
           ...focusModel
-        }
+        },
+        isLoading: false
       }
     })
   }
@@ -79,7 +83,7 @@ class Display extends React.Component {
     if (y + height >= contentHeight - 30) {
       this.setState(() => {
         return {
-          isLoading: true
+          isLoadingMore: true
         }
       })
       const { dispatch } = this.props
@@ -122,16 +126,22 @@ class Display extends React.Component {
               <Lists callbackParent={this._onChildChanged.bind(this)} data={this.props} name={'art_display'}></Lists>
             </Flex>
             <Flex style={{marginTop: Styles.Height(5)}} justify="between" wrap="wrap">
+              { 
+                this.state.isLoading == true ? 
+                  <Image source= { require('../../../../assets/images/th.gif') } style={{ height: Styles.Height(400), width: Styles.Width() }}></Image>
+                  :
+                  null
+              }
               {
                 this.props.articleList.length > 0 ? 
                   <Item data={this.props} navigation={this.props.navigation}></Item>
                   : 
-                  <Image source= { require('../../../../assets/images/th.gif') } style={{ height: Styles.Height(400), width: Styles.Width() }}></Image>
+                  <NoData></NoData>
                 }
             </Flex>
           </WingBlank>
         </View>
-        { this.state.isLoading ? <Loadmore data={ this.state.focusModel }></Loadmore> : null }
+        { this.state.isLoadingMore ? <Loadmore data={ this.state.focusModel }></Loadmore> : null }
       </ScrollView>
     )
   }
