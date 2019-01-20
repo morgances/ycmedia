@@ -50,21 +50,16 @@ class BasicList extends PureComponent {
   state = {
     modalVisible: false,
     updateModalVisible: false,
-    expandForm: false,
     selectedRows: [],
     formValues: {},
     stepFormValues: {},
   };
 
-  constructor(props) {
-    super(props);
-  };
+  // constructor(props) {
+  //   super(props);
+  // };
 
   columns = [
-    // {
-    //   title: '文章ID',
-    //   dataIndex: 'aid',
-    // },
     {
       title: '文章作者',
       dataIndex: 'author',
@@ -74,51 +69,13 @@ class BasicList extends PureComponent {
       dataIndex: 'title',
     },
     {
-      title: '文章标签',
+      title: '文章分类',
       dataIndex: 'category',
-      filters: [
-        {
-          text: tag[0],
-          value: 0,
-        },
-        {
-          text: tag[1],
-          value: 1,
-        },
-        {
-          text: tag[2],
-          value: 2,
-        },
-        {
-          text: tag[3],
-          value: 3,
-        },
-        {
-          text: tag[4],
-          value: 4,
-        },
-        {
-          text: tag[5],
-          value: 5,
-        },
-        {
-          text: tag[6],
-          value: 6,
-        },
-        {
-          text: tag[7],
-          value: 7,
-        },
-      ],
-      render(val) {
-        return <Badge tag={tag[val]} />
-      },
     },
     {
       title: '上次更新时间',
       dataIndex: 'date',
-      sorter: true,
-      render: val => <sapn>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</sapn>
+      render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>
     },
     {
       title: '操作',
@@ -151,7 +108,26 @@ class BasicList extends PureComponent {
       newObj[key] = getValue(filtersArg[key]);
       return newObj;
     }, {});
-  }
+
+    const params = {
+      currentPage: pagination.current,
+      pageSize: pagination.pageSize,
+      ...formValues,
+      ...filters,
+    };
+    if (sorter.field) {
+      params.sorter = `${sorter.field}_${sorter.order}`
+    }
+
+    dispatch({
+      type: 'rule/fetch',
+      payload: {
+        category: 0,
+        page: 0,
+        tag: 0,
+      }
+    });
+  };
 
   showEditModal = item => {
     this.setState({
@@ -180,7 +156,7 @@ class BasicList extends PureComponent {
     const { dispatch, form } = this.props;
 
     form.validateFields((err,fieldsValue) => {
-      if (err) return ;
+      if (err) return;
 
       const values = {
         ...fieldsValue,
@@ -231,7 +207,7 @@ class BasicList extends PureComponent {
         <Row gutter={{ md: 8,lg: 24,xl: 48 }}>
           <Col md={6} sm={24}>
             <FormItem label="文章作者">
-              {getFieldDecorator('name')(<Input placeholder="请输入" />)}
+              {getFieldDecorator('author')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
@@ -240,8 +216,8 @@ class BasicList extends PureComponent {
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
-            <FormItem label="文章标签">
-              {getFieldDecorator('tag')(
+            <FormItem label="文章分类">
+              {getFieldDecorator('category')(
                 <Select placeholder="请选择" style={{ width: '100%' }}>
                   <Option value="0">文化资讯</Option>
                   <Option value="1">书香银川</Option>
@@ -266,13 +242,13 @@ class BasicList extends PureComponent {
   }
 
   render() {
-    // const {
-    //   rule: { data },
-    //   loading,
-    // } = this.props;
+    const {
+      rule: { data },
+      loading,
+    } = this.props;
     const {
       list: { list },
-      loading,
+      //loading,
     } = this.props;
     const {
       form: { getFieldDecorator }
@@ -348,6 +324,14 @@ class BasicList extends PureComponent {
     return (
       <PageHeaderWrapper title="文章列表">
         <Card bordered={false}>
+          <Button
+            type="dashed"
+            style={{ width: "100%", marginBottom: 20 }}
+            icon="plus"
+            href="adding-list"
+          >
+            添加文章
+          </Button>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderForm()}</div>
             <div className={styles.tableListOperator}>
@@ -364,7 +348,7 @@ class BasicList extends PureComponent {
             <StandardTable
               selectedRows={selectedRows}
               loading={loading}
-              data={list}
+              data={data}
               columns={this.columns}
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}
