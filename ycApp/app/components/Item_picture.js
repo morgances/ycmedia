@@ -14,7 +14,9 @@ export default (props) => {
       <TouchableOpacity key={`${item.title}${index}`} onPress={() => dispatch(Navigator.navigate('Detail', { aid: item.aid }))}>
         <View style={styles.content}>
           <Image style={styles.content_image} source={{ uri: `${item.image}`, cache: 'force-cache' }}></Image>
-          <Text style={{ fontSize: FontSize.medium, color: Colors.black, marginLeft: Styles.Width(2) }}>{item.title}</Text>
+          <Text style={{ fontSize: FontSize.medium, color: Colors.black, marginLeft: Styles.Width(2) }}>
+            { item.title.length > 8 ? `${item.title.slice(0, 7)}...` : item.title }
+          </Text>
           <View style={ styles.content_time_view}>
             <Text style={ styles.content_time }>{item.time}</Text>
           </View>
@@ -37,7 +39,8 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     width: Styles.Width(283),
     height: Styles.Height(201),
-    marginBottom: Styles.Height(17)
+    marginBottom: Styles.Height(17),
+    backgroundColor: Colors.gray
   },
   content_time_view: {
     marginTop: Styles.Height(4),

@@ -42,7 +42,8 @@ const styles = StyleSheet.create({
   news_content_image: {
     height: Styles.Height(140),
     width: Styles.Width(200),
-    borderRadius: 5
+    borderRadius: 5,
+    backgroundColor: Colors.gray
   },
   news_content_instruction: {
     marginTop: Styles.Height(15)
