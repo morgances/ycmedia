@@ -13,6 +13,7 @@ import (
 {
 	"category": 2,
 	"tag": 3,
+	"label": 0,
 	"page": 0
 }
 */
@@ -25,6 +26,7 @@ func (con Controller) GetArticleList(ctx *server.Context) error {
 	var x struct {
 		Category int `json:"category"`
 		Tag      int `json:"tag"`
+		Label    int `json:"label"`
 		Page     int `json:"page"`
 	}
 
@@ -34,14 +36,14 @@ func (con Controller) GetArticleList(ctx *server.Context) error {
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
 	}
 
-	log.Infof("In GetArticleList: Category=%d, Tag=%d, Page=%d\n", x.Category, x.Tag, x.Page)
+	log.Infof("In GetArticleList: Category=%d, Tag=%d, Label=%d, Page=%d\n", x.Category, x.Tag, x.Label, x.Page)
 
-	if x.Category < 0 || x.Tag < 0 || x.Page < 0 {
+	if x.Category < 0 || x.Tag < 0 || x.Label < 0 || x.Page < 0 {
 		log.Error("Error In Data:", BadData)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, BadData))
 	}
 
-	articles, err := con.db.GetArticleListDesc(x.Category, x.Tag, x.Page*10, 10, "date")
+	articles, err := con.db.GetArticleListDesc(x.Category, x.Tag, x.Label, x.Page*10, 10, "date")
 	if err != nil {
 		log.Error("Error In Mysql.GetArticleList:", err)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
@@ -101,7 +103,7 @@ func (con Controller) GetNews(ctx *server.Context) error {
 
 	articles, err := con.db.GetArticleOrderLimits("date", true, 0, 10)
 	if err != nil {
-		log.Error("Error In Mysql.GetArticleOrderLimuts:", err)
+		log.Error("Error In Mysql.GetArticleOrderLimits:", err)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
 	}
 
@@ -116,6 +118,7 @@ func (con Controller) GetNews(ctx *server.Context) error {
 {
 	"category": 0,
 	"tag": 0,
+	"label": 0,
 	"date": "2018-12-30"
 }
 */
@@ -128,6 +131,7 @@ func (con Controller) GetMore(ctx *server.Context) error {
 	var x struct {
 		Category int       `json:"category"`
 		Tag      int       `json:"tag"`
+		Label    int       `json:"label"`
 		Date     time.Time `json:"date"`
 	}
 
@@ -137,9 +141,9 @@ func (con Controller) GetMore(ctx *server.Context) error {
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
 	}
 
-	log.Infof("In GetMore: Category=%d, Tag=%d, Date=%v\n", x.Category, x.Tag, x.Date)
+	log.Infof("In GetMore: Category=%d, Tag=%d, Label=%d, Date=%v\n", x.Category, x.Tag, x.Label, x.Date)
 
-	articles, err := con.db.GetArticleByDate(x.Category, x.Tag, x.Date)
+	articles, err := con.db.GetArticleByDate(x.Category, x.Tag, x.Label, x.Date)
 	if err != nil {
 		log.Error("Error In Mysql.GetArticlesByDate:", err)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))

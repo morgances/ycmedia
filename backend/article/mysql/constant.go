@@ -4,7 +4,7 @@ import "time"
 
 const (
 	ArticleTableName          string = "article.article"
-	InsertArticle             string = "insert into " + ArticleTableName + "(user_id, category, tag, title, author, date, image, text)values(?, ?, ?, ?, ?, ?, ?, ?)"
+	InsertArticle             string = "insert into " + ArticleTableName + "(user_id, category, tag, label, title, author, date, image, text)values(?, ?, ?, ?, ?, ?, ?, ?, ?)"
 	SelectArticle             string = "select * from " + ArticleTableName + " "
 	DeleteArticle             string = "delete from " + ArticleTableName + " "
 	UpdateArticle             string = "update " + ArticleTableName + " set "
@@ -15,6 +15,7 @@ const (
         user_id  int           not null,
         category int           not null,
         tag      int           not null,
+        label    int           not null,
         title    varchar(128)  not null,
         author   varchar(128)  not null,
         date     datetime      not null,
@@ -30,6 +31,7 @@ article:
   user_id    int           not null,
   category   int           not null,
   tag        int           not null,
+  label      int           not null,
   title      varchar(128)  not null,
   author     varchar(128)  not null,
   date       datetime      not null,
@@ -42,6 +44,7 @@ type Article struct {
 	Uid      int       `json:"user_id"`
 	Category int       `json:"category"`
 	Tag      int       `json:"tag"`
+	Label    int       `json:"label"`
 	Title    string    `json:"title"`
 	Author   string    `json:"author"`
 	Date     time.Time `json:"date"`
