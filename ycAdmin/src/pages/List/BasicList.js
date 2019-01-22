@@ -19,7 +19,8 @@ import {
   Badge,
   Divider,
   Select,
-  Popconfirm
+  Popconfirm,
+  Cascader,
 } from "antd";
 
 import PageHeaderWrapper from "@/components/PageHeaderWrapper";
@@ -29,7 +30,6 @@ import StandardFormRow from "@/components/StandardFormRow";
 import StandardTable from "@/components/StandardTable";
 
 const FormItem = Form.Item;
-const { Option } = Select;
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 const { Search } = Input;
@@ -39,6 +39,97 @@ const getValue = obj =>
     .map(key => obj[key])
     .join(',');
 const tag = ['文化资讯', '书香银川', '遗脉相承', '银川旅游', '艺术空间', '凤城演绎', '文化消费', '文化品牌'];
+const options = [{
+  value: '文化资讯',
+  label: '文化资讯',
+  children: [{
+    value: '文化动态',
+    label: '文化动态',
+  },{
+    value: '通知公告',
+    label: '通知公告',
+  },{
+    value: '政策法规',
+    label: '政策法规',
+  },{
+    value: '免费开放',
+    label: '免费开放',
+  }],
+},{
+  value: '书香银川',
+  label: '书香银川',
+  children: [{
+    value: '图书借阅',
+    label: '图书借阅',
+  },{
+    value: '服务指南',
+    label: '服务指南',
+  },{
+    value: '数字资源',
+    label: '数字资源',
+  },{
+    value: '好书推荐',
+    label: '好书推荐',
+  }]
+},{
+  value: '遗脉相承',
+  label: '遗脉相承',
+  children: [{
+    value: '文化遗产',
+    label: '文化遗产',
+  },{
+    value: '非遗传承',
+    label: '非遗传承',
+  }]
+},{
+  value: '银川旅游',
+  label: '银川旅游',
+},{
+  value: '艺术空间',
+  label: '艺术空间',
+  children: [{
+    value: '艺术资讯',
+    label: '艺术资讯',
+  },{
+    value: '名家介绍',
+    label: '名家介绍',
+  },{
+    value: '艺术展示',
+    label: '艺术展示',
+  },{
+    value: '艺术场馆',
+    label: '艺术场馆',
+  }]
+},{
+  value: '凤城演绎',
+  label: '凤城演绎',
+  children: [{
+    value: '群众文化',
+    label: '群众文化',
+  },{
+    value: '银川记忆',
+    label: '银川记忆',
+  }]
+},{
+  value: '文化消费',
+  label: '文化消费',
+  children: [{
+    value: '银川影院',
+    label: '银川影院',
+  },{
+    value: '艺术剧院',
+    label: '艺术剧院',
+  }]
+},{
+  value: '文化品牌',
+  label: '文化品牌',
+}];
+function onChange(value, selectedOptions) {
+  console.log(value, selectedOptions);
+};
+function filter(inputValue, path) {
+  return (path.some(option => (option.label).toLowerCase().indexOf(inputValue.toLowerCase()) > -1));
+};
 
 @connect(({ list, rule, loading }) => ({
   list,
@@ -55,32 +146,9 @@ class BasicList extends PureComponent {
     stepFormValues: {},
   };
 
-  // constructor(props) {
-  //   super(props);
-  // };
-
-  columns = [
-    {
-      title: '文章作者',
-      dataIndex: 'author',
-    },
-    {
-      title: '文章标题',
-      dataIndex: 'title',
-    },
-    {
-      title: '文章分类',
-      dataIndex: 'category',
-    },
-    {
-      title: '上次更新时间',
-      dataIndex: 'date',
-      render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>
-    },
-    {
-      title: '操作',
-    },
-  ];
+  constructor(props) {
+    super(props);
+  };
 
   formLayout = {
     labelCol: { span: 7 },
@@ -129,21 +197,6 @@ class BasicList extends PureComponent {
     });
   };
 
-  showEditModal = item => {
-    this.setState({
-      visible: true,
-      current: item
-    });
-  };
-
-  deleteItem = id => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: "list/removeList",
-      payload: { id }
-    });
-  };
-
   handleSelectRows = rows => {
     this.setState({
       selectedRows: rows,
@@ -154,49 +207,37 @@ class BasicList extends PureComponent {
     e.preventDefault();
 
     const { dispatch, form } = this.props;
+    console.log(dispatch,"4")
 
     form.validateFields((err,fieldsValue) => {
       if (err) return;
-
+      this.setState({
+        formValues: fieldsValue,
+      });
       const values = {
         ...fieldsValue,
         updateAt: fieldsValue.updateAt && fieldsValue.updateAt.valueOf(),
       };
-
-      this.setState({
-        formValues: values,
-      });
-
       dispatch({
         type: 'rule/fetch',
-        payload: values,
+        payload: {
+          category: 0,
+          page: 0,
+          tag: 0,
+        },
       });
     });
   };
 
-  handleMenuClick = e => {
+  deleteConfirm = (itemId) => {
     const { dispatch } = this.props;
-    const { selectedRows } = this.state;
-
-    if (selectedRows.length === 0) return;
-    switch (e.key) {
-      case 'remove':
-        dispatch({
-          type: 'rule/remove',
-          payload: {
-            key: selectedRows.map(row => row.key),
-          },
-          callback: () => {
-            this.setState({
-              selectedRows: [],
-            });
-          },
-        });
-        break;
-      default:
-        break;
-    }
-  };
+    dispatch({
+      type: 'list/removeList',
+      payload: {
+        target_id: itemId,
+      },
+    })
+  }
 
   renderForm() {
     const {
@@ -205,33 +246,24 @@ class BasicList extends PureComponent {
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8,lg: 24,xl: 48 }}>
-          <Col md={6} sm={24}>
+          <Col md={7} sm={24}>
             <FormItem label="文章作者">
               {getFieldDecorator('author')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
-          <Col md={6} sm={24}>
+          <Col md={7} sm={24}>
             <FormItem label="文章标题">
               {getFieldDecorator('title')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
-          <Col md={6} sm={24}>
+          <Col md={7} sm={24}>
             <FormItem label="文章分类">
-              {getFieldDecorator('category')(
-                <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="0">文化资讯</Option>
-                  <Option value="1">书香银川</Option>
-                  <Option value="2">遗脉相承</Option>
-                  <Option value="3">银川旅游</Option>
-                  <Option value="4">艺术空间</Option>
-                  <Option value="5">凤城演绎</Option>
-                  <Option value="6">文化消费</Option>
-                  <Option value="7">文化品牌</Option>
-                </Select>
+              {getFieldDecorator('tag')(
+                <Cascader options={options} onChange={onChange} placeholder="请选择" showSearch={{ filter }} />
               )}
             </FormItem>
           </Col>
-          <Col md={6} sm={24}>
+          <Col md={3} sm={24}>
             <span className={styles.submitButtons}>
               <Button type="primary" htmlType="submit">查找</Button>
             </span>
@@ -242,84 +274,50 @@ class BasicList extends PureComponent {
   }
 
   render() {
+    const columns = [
+      {
+        title: '文章作者',
+        dataIndex: 'author',
+      },
+      {
+        title: '文章标题',
+        dataIndex: 'title',
+      },
+      {
+        title: '文章分类',
+        dataIndex: 'tag',
+      },
+      {
+        title: '更新时间',
+        dataIndex: 'date',
+        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>
+      },
+      {
+        title: '操作',
+        render: (text, record) => (
+          <Fragment>
+            <Popconfirm
+            title="确定删除？"
+            onConfirm={() => this.deleteConfirm(record.id)}
+            okText="确认"
+            cancelText="取消"
+            >
+              <a>删除</a>
+            </Popconfirm>
+            <Divider type="vertical" />
+            <a href="adding-list">编辑</a>
+          </Fragment>
+        ),
+      },
+    ];
     const {
       rule: { data },
       loading,
     } = this.props;
     const {
-      list: { list },
-      //loading,
-    } = this.props;
-    const {
       form: { getFieldDecorator }
     } = this.props;
     const { selectedRows,modalVisible,updateModalVisible, stepFormValues } = this.state;
-    const menu = (
-      <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
-        <Menu.Item key="remove">删除</Menu.Item>
-      </Menu>
-    );
-
-    const editAndDelete = (key, currentItem) => {
-      if (key === "edit") this.showEditModal(currentItem);
-      else if (key === "delete") {
-        Modal.confirm({
-          title: "删除文章",
-          content: "确定删除该文章吗？",
-          okText: "确认",
-          cancelText: "取消",
-          onOk: () => this.deleteItem(currentItem.id)
-        });
-      }
-    };
-
-    const extraContent = (
-      <div className={styles.extraContent}>
-        <Search
-          className={styles.extraContentSearch}
-          placeholder="请输入标题/作者"
-          enterButton="查找"
-          size="large"
-          onSearch={this.handleChange}
-          autosize="true"
-        />
-      </div>
-    );
-
-    const paginationProps = {
-      showSizeChanger: true,
-      showQuickJumper: true,
-      pageSize: 10,
-      total: 10,
-    }
-
-    const ListContent = ({
-       data: { author, date } 
-      }) => (
-      <div className={styles.listContent}>
-        <div className={styles.listContentItem}>
-          <p>{author}</p>
-        </div>
-        <div className={styles.listContentItem}>
-          <p>{moment(date).format('YYYY-MM-DD HH:mm')}</p>
-        </div>
-      </div>
-    );
-
-    const MoreBtn = props => (
-      <Dropdown
-        overlay={
-          <Menu onClick={({ key }) => editAndDelete(key, props.current)}>
-            <Menu.Item><a href="adding-list">编辑</a></Menu.Item>
-            <Menu.Item key="delete">删除</Menu.Item>
-          </Menu>
-        }
-      >
-        <a>
-          更多 <Icon type="down" />
-        </a>
-      </Dropdown>
-    );
 
     return (
       <PageHeaderWrapper title="文章列表">
@@ -334,102 +332,16 @@ class BasicList extends PureComponent {
           </Button>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderForm()}</div>
-            <div className={styles.tableListOperator}>
-              {selectedRows.length > 0 && (
-                <span>
-                  <Dropdown overlay={menu}>
-                    <Button>
-                      更多操作 <Icon type="down" />
-                    </Button>
-                  </Dropdown>
-                </span>
-              )}
-            </div>
             <StandardTable
               selectedRows={selectedRows}
               loading={loading}
               data={data}
-              columns={this.columns}
+              columns={columns}
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}
             />
           </div>
         </Card>
-        <div className={styles.standardList}>
-          <Card
-            className={styles.listCard}
-            bordered={false}
-            style={{ marginTop: 24 }}
-            bodyStyle={{ padding: "0 32px 40px 32px" }}
-            extra={extraContent}
-          >
-            <Button
-              type="dashed"
-              style={{ width: "100%", marginBottom: 8 }}
-              icon="plus"
-              href="adding-list"
-            >
-              添加文章
-            </Button>
-            <Form>
-              <StandardFormRow
-                title="所属类别"
-                style={{ paddingBottom: 11, marginTop: 20 }}
-              >
-                <FormItem>
-                  {getFieldDecorator("category")(
-                    <RadioGroup buttonStyle="solid">
-                      <RadioButton value="all">全部</RadioButton>
-                      <RadioButton value="1">文化资讯</RadioButton>
-                      <RadioButton value="2">书香银川</RadioButton>
-                      <RadioButton value="3">遗脉相承</RadioButton>
-                      <RadioButton value="4">银川旅游</RadioButton>
-                      <RadioButton value="5">艺术空间</RadioButton>
-                      <RadioButton value="6">凤城演绎</RadioButton>
-                      <RadioButton value="7">文化消费</RadioButton>
-                      <RadioButton value="8">文化品牌</RadioButton>
-                    </RadioGroup>
-                  )}
-                </FormItem>
-              </StandardFormRow>
-            </Form>
-          </Card>
-          <Card
-            style={{ marginTop: 24 }}
-            bordered={false}
-            bodyStyle={{ padding: "8px 32px 32px 32px" }}
-          >
-            <List
-              size="large"
-              loading={loading}
-              rowKey="aid"
-              //itemLayout="vertical"
-              pagination={paginationProps}
-              //loadMore={loadMore}
-              dataSource={list}
-              renderItem={item => (
-                <List.Item
-                  key={item.aid}
-                  //extra={<div className={styles.listItemExtra} />}
-                  actions={[<MoreBtn current={item} />]}
-                >
-                  <List.Item.Meta
-                    avatar={<Avatar src={item.image} shape="square" size="large" />}
-                    title={
-                      <div>{item.title}</div>
-                    }
-                    description={
-                      <span>
-                        <Tag><div>{item.tag}</div></Tag>
-                      </span>
-                    }
-                  />
-                  <ListContent data={item} />
-                </List.Item>
-              )}
-            />
-          </Card>
-        </div>
       </PageHeaderWrapper>
     );
   }

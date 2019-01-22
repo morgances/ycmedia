@@ -1,6 +1,6 @@
 import React from "react";
 import { findDOMNode } from "react-dom";
-import { Button, Card, Modal, Form, Input, Select } from "antd";
+import { Button, Card, Modal, Form, Input, Select, Cascader } from "antd";
 import Result from "@/components/Result";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
@@ -10,7 +10,94 @@ import { connect } from "dva";
 import PageHeaderWrapper from "@/components/PageHeaderWrapper";
 
 const FormItem = Form.Item;
-const { Option } = Select;
+const options = [{
+  value: '文化资讯',
+  label: '文化资讯',
+  children: [{
+    value: '文化动态',
+    label: '文化动态',
+  },{
+    value: '通知公告',
+    label: '通知公告',
+  },{
+    value: '政策法规',
+    label: '政策法规',
+  },{
+    value: '免费开放',
+    label: '免费开放',
+  }],
+},{
+  value: '书香银川',
+  label: '书香银川',
+  children: [{
+    value: '图书借阅',
+    label: '图书借阅',
+  },{
+    value: '服务指南',
+    label: '服务指南',
+  },{
+    value: '数字资源',
+    label: '数字资源',
+  },{
+    value: '好书推荐',
+    label: '好书推荐',
+  }]
+},{
+  value: '遗脉相承',
+  label: '遗脉相承',
+  children: [{
+    value: '文化遗产',
+    label: '文化遗产',
+  },{
+    value: '非遗传承',
+    label: '非遗传承',
+  }]
+},{
+  value: '银川旅游',
+  label: '银川旅游',
+},{
+  value: '艺术空间',
+  label: '艺术空间',
+  children: [{
+    value: '艺术资讯',
+    label: '艺术资讯',
+  },{
+    value: '名家介绍',
+    label: '名家介绍',
+  },{
+    value: '艺术展示',
+    label: '艺术展示',
+  },{
+    value: '艺术场馆',
+    label: '艺术场馆',
+  }]
+},{
+  value: '凤城演绎',
+  label: '凤城演绎',
+  children: [{
+    value: '群众文化',
+    label: '群众文化',
+  },{
+    value: '银川记忆',
+    label: '银川记忆',
+  }]
+},{
+  value: '文化消费',
+  label: '文化消费',
+  children: [{
+    value: '银川影院',
+    label: '银川影院',
+  },{
+    value: '艺术剧院',
+    label: '艺术剧院',
+  }]
+},{
+  value: '文化品牌',
+  label: '文化品牌',
+}];
+function onChange(value, selectedOptions) {
+  console.log(value, selectedOptions);
+};
 
 @connect(({ list, loading }) => ({
   list,
@@ -94,12 +181,12 @@ export default class Adding extends React.Component {
       dispatch({
         type: "list/addList",
         payload: { 
-          user_id: 123,
-          category: 2, 
-          tag: 3,
-          title: "asdasd",
-          author: "asdwe",
-          date: "this is time",
+          // user_id: 123,
+          // category: 2, 
+          // tag: 3,
+          // title: "asdasd",
+          //author: "",
+          // date: "this is time",
           ...fieldsValue }
       });
     });
@@ -134,6 +221,7 @@ export default class Adding extends React.Component {
       }
       return (
         <Form onSubmit={this.handleSubmit}>
+
           <FormItem label="文章标题" {...this.formLayout}>
             {getFieldDecorator("title", {
               rules: [{ required: true, message: "请输入文章标题" }],
@@ -141,25 +229,16 @@ export default class Adding extends React.Component {
             })(<Input placeholder="请输入" />)}
           </FormItem>
           <FormItem label="文章作者" {...this.formLayout}>
-            {getFieldDecorator("name", {
+            {getFieldDecorator("author", {
               rules: [{ required: true, message: "请输入文章作者" }],
               //initialValue: current.name
             })(<Input placeholder="请输入" />)}
           </FormItem>
-          <FormItem label="文章标签" {...this.formLayout}>
-            {getFieldDecorator("tag", {
+          <FormItem label="文章分类" {...this.formLayout}>
+            {getFieldDecorator("category", {
               rules: [{ required: true, message: "请选择文章标签" }]
             })(
-              <Select placeholder="请选择">
-                <Option value="0">文化资讯</Option>
-                <Option value="1">书香银川</Option>
-                <Option value="2">遗脉相承</Option>
-                <Option value="3">银川旅游</Option>
-                <Option value="4">艺术空间</Option>
-                <Option value="5">凤城演绎</Option>
-                <Option value="6">文化消费</Option>
-                <Option value="7">文化品牌</Option>
-              </Select>
+                <Cascader options={options} onChange={onChange} placeholder="请选择" />
             )}
           </FormItem>
         </Form>
