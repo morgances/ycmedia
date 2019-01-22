@@ -26,7 +26,7 @@ func rowsToArticles(rs *sql.Rows) ([]*Article, error) {
 	list := make([]*Article, 0, 1)
 	for rs.Next() {
 		var x = &Article{}
-		err := rs.Scan(&x.Aid, &x.Uid, &x.Category, &x.Tag, &x.Title, &x.Author, &x.Date, &x.Image, &x.Text)
+		err := rs.Scan(&x.Aid, &x.Uid, &x.Category, &x.Tag, &x.Label, &x.Title, &x.Author, &x.Date, &x.Image, &x.Text)
 		if err != nil {
 			return nil, err
 		}
