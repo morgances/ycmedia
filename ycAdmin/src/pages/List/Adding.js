@@ -1,100 +1,52 @@
 import React from "react";
 import { findDOMNode } from "react-dom";
-import { Button, Card, Modal, Form, Input, Select, Cascader } from "antd";
+import { Button, Card, Modal, Form, Input, Cascader, Upload, Icon, message, Select } from "antd";
 import Result from "@/components/Result";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import styles from "./Adding.less";
 import { connect } from "dva";
-
 import PageHeaderWrapper from "@/components/PageHeaderWrapper";
 
+
+const Option = Select.Option;
+const provinceData = ['文化资讯','书香银川','遗脉相承','银川旅游','艺术空间','文化消费','文化品牌','凤城演绎'];
+const cityData = {
+  文化资讯: ['文化动态','通知公告','政策法规','免费开放'],
+  书香银川: ['图书借阅','服务指南','数字资源','好书推荐'],
+  遗脉相承: ['文化遗产','非遗传承'],
+  银川旅游: [],
+  艺术空间: ['艺术资讯','名家介绍','艺术展示','艺术场馆'],
+  文化消费: ['银川影院','艺术剧院'],
+  文化品牌: ['公益性文化产品','公益性文化活动','中华优秀传统文化与民族文化'],
+  凤城演绎: ['群众文化','银川记忆']
+};
+const secondCityData = {
+  文化动态: [],
+  通知公告: [],
+  政策法规: [],
+  免费开放: [],
+  图书借阅: [],
+  服务指南: [],
+  数字资源: [],
+  好书推荐: [],
+  文化遗产: ['文化遗址','文物鉴赏','文物保护'],
+  非遗传承: ['项目名单','传承保护','非遗展馆','民俗活动','传承基地','传承人'],
+  艺术资讯: [],
+  名家介绍: [],
+  艺术展示: ['绘画','书法','音乐','展览'],
+  艺术场馆: [],
+  银川影院: [],
+  艺术剧院: ['院团介绍','剧目介绍','商业演出'],
+  公益性文化产品: [],
+  公益性文化活动: [],
+  中华优秀传统文化与民族文化: [],
+  群众文化: ['群文活动','民间团队','公益培训'],
+  银川记忆: ['西夏古都','民间传说','老银川']
+};
+console.log(secondCityData[cityData[provinceData[0]][0]],"5")
 const FormItem = Form.Item;
-const options = [{
-  value: '文化资讯',
-  label: '文化资讯',
-  children: [{
-    value: '文化动态',
-    label: '文化动态',
-  },{
-    value: '通知公告',
-    label: '通知公告',
-  },{
-    value: '政策法规',
-    label: '政策法规',
-  },{
-    value: '免费开放',
-    label: '免费开放',
-  }],
-},{
-  value: '书香银川',
-  label: '书香银川',
-  children: [{
-    value: '图书借阅',
-    label: '图书借阅',
-  },{
-    value: '服务指南',
-    label: '服务指南',
-  },{
-    value: '数字资源',
-    label: '数字资源',
-  },{
-    value: '好书推荐',
-    label: '好书推荐',
-  }]
-},{
-  value: '遗脉相承',
-  label: '遗脉相承',
-  children: [{
-    value: '文化遗产',
-    label: '文化遗产',
-  },{
-    value: '非遗传承',
-    label: '非遗传承',
-  }]
-},{
-  value: '银川旅游',
-  label: '银川旅游',
-},{
-  value: '艺术空间',
-  label: '艺术空间',
-  children: [{
-    value: '艺术资讯',
-    label: '艺术资讯',
-  },{
-    value: '名家介绍',
-    label: '名家介绍',
-  },{
-    value: '艺术展示',
-    label: '艺术展示',
-  },{
-    value: '艺术场馆',
-    label: '艺术场馆',
-  }]
-},{
-  value: '凤城演绎',
-  label: '凤城演绎',
-  children: [{
-    value: '群众文化',
-    label: '群众文化',
-  },{
-    value: '银川记忆',
-    label: '银川记忆',
-  }]
-},{
-  value: '文化消费',
-  label: '文化消费',
-  children: [{
-    value: '银川影院',
-    label: '银川影院',
-  },{
-    value: '艺术剧院',
-    label: '艺术剧院',
-  }]
-},{
-  value: '文化品牌',
-  label: '文化品牌',
-}];
+
 function onChange(value, selectedOptions) {
   console.log(value, selectedOptions);
 };
@@ -105,10 +57,55 @@ function onChange(value, selectedOptions) {
 }))
 @Form.create()
 export default class Adding extends React.Component {
+  state = {
+    cities: cityData[provinceData[0]],
+    secondCity: cityData[provinceData[0]][0],
+    cities1: secondCityData[cityData[provinceData[0]][0]],
+    thirdCity: secondCityData[cityData[provinceData[0]][0]][0],
+    fileList: [],
+  }
+
   constructor(props) {
     super(props);
-    this.state = { text: "" }; // You can also pass a Quill Delta here
+    //this.state = { text: "" }; // You can also pass a Quill Delta here
     this.handleChange = this.handleChange.bind(this);
+  }
+
+  componentDidMount() {
+    this.getData();
+  }
+
+  getData = async () => {
+    const { dispatch } = this.props;
+    await dispatch({
+      type: 'list/addList',
+    })
+  }
+
+  handleProvinceChange = (value) => {
+    this.setState({
+      cities: cityData[value],
+      secondCity: cityData[value][0],
+    });
+  }
+
+  onSecondCityChange = (value) => {
+    this.setState({
+      secondCity: value,
+      cities1: secondCityData[value],
+      thirdCity: secondCityData[value][0],
+    });
+  }
+
+  onThirdCityChange = (value) => {
+    this.setState({
+      thirdCity: value,
+    })
+  }
+
+  onChange = (value) => {
+    console.log(value);
+    this.setState({ value });
   }
 
   modules = {
@@ -143,9 +140,12 @@ export default class Adding extends React.Component {
     labelCol: { span: 7 },
     wrapperCol: { span: 13 }
   };
+
   handleChange(value) {
     this.setState({ text: value });
-  }
+  };
+
+  handleChange1 = ({ fileList }) => this.setState({ fileList })
 
   showModal = () => {
     this.setState({
@@ -160,12 +160,14 @@ export default class Adding extends React.Component {
       visible: false
     });
   };
+
   handleCancel = () => {
     setTimeout(() => this.addBtn.blur(), 0);
     this.setState({
       visible: false
     });
   };
+
   handleSubmit = e => {
     e.preventDefault();
     const { dispatch, form } = this.props;
@@ -181,17 +183,19 @@ export default class Adding extends React.Component {
       dispatch({
         type: "list/addList",
         payload: { 
-          // user_id: 123,
-          // category: 2, 
-          // tag: 3,
-          // title: "asdasd",
-          //author: "",
-          // date: "this is time",
           ...fieldsValue }
       });
     });
   };
+
   render() {
+    const { cities, cities1, fileList } = this.state;
+    const uploadButton = (
+      <div>
+        <Icon type="plus" />
+        <div className="ant-upload-text"></div>
+      </div>
+    );
     const {
       form: { getFieldDecorator }
     } = this.props;
@@ -199,7 +203,7 @@ export default class Adding extends React.Component {
     const modalFooter = done
       ? { footer: null, onCancel: this.handleDone }
       : {
-          okText: "保存",
+          okText: "发布",
           onOk: this.handleSubmit,
           onCancel: this.handleCancel
         };
@@ -209,7 +213,6 @@ export default class Adding extends React.Component {
           <Result
             type="success"
             title="发布成功"
-            //description="一系列的信息描述，很短同样也可以带标点。"
             actions={
               <Button type="primary" onClick={this.handleDone}>
                 知道了
@@ -221,25 +224,61 @@ export default class Adding extends React.Component {
       }
       return (
         <Form onSubmit={this.handleSubmit}>
-
+        <div className="clearfix">
+        <Upload
+          className="avatar-uploader"
+          listType="picture-card"
+          fileList={fileList}
+          onChange={this.handleChange1}
+        >
+          {fileList.length >= 1 ? null : uploadButton}
+        </Upload>
+      </div>
           <FormItem label="文章标题" {...this.formLayout}>
             {getFieldDecorator("title", {
               rules: [{ required: true, message: "请输入文章标题" }],
-              //initialValue: current.title
             })(<Input placeholder="请输入" />)}
           </FormItem>
           <FormItem label="文章作者" {...this.formLayout}>
             {getFieldDecorator("author", {
               rules: [{ required: true, message: "请输入文章作者" }],
-              //initialValue: current.name
             })(<Input placeholder="请输入" />)}
           </FormItem>
           <FormItem label="文章分类" {...this.formLayout}>
             {getFieldDecorator("category", {
-              rules: [{ required: true, message: "请选择文章标签" }]
+              initialValue: provinceData[0],
+              rules: [{ required: true, message: "请选择文章类别" }]
             })(
-                <Cascader options={options} onChange={onChange} placeholder="请选择" />
-            )}
+                <Select
+                  onChange={this.handleProvinceChange}
+                >
+                  {provinceData.map(province => <Option key={province}>{province}</Option>)}
+                </Select>
+              )}
+          </FormItem>
+          <FormItem label="文章标签" {...this.formLayout}>
+            {getFieldDecorator("tag", {
+              initialValue: this.state.secondCity,
+              //rules: [{ required: true, message: "请选择文章标签" }]
+            })(
+                <Select
+                  onChange={this.onSecondCityChange}
+                >
+                  {cities.map(city => <Option key={city}>{city}</Option>)}
+                </Select>
+              )}
+          </FormItem>
+          <FormItem label="文章label" {...this.formLayout}>
+            {getFieldDecorator("label", {
+              initialValue: this.state.thirdCity,
+              //rules: [{ required: true, message: "请选择文章label" }]
+            })(
+                <Select
+                  onChange={this.onThirdCityChange}
+                >
+                  {cities1.map(city1 => <Option key={city1}>{city1}</Option>)}
+                </Select>
+              )}
           </FormItem>
         </Form>
       );
@@ -249,7 +288,7 @@ export default class Adding extends React.Component {
         <Card className={styles.listCard} bordered={false}>
           <ReactQuill
             theme="snow"
-            value={this.state.text}
+            //value={this.state.text}
             onChange={this.handleChange}
             modules={this.modules}
             formats={this.formats}
