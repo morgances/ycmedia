@@ -29,10 +29,11 @@ import styles from "./BasicList.less";
 import StandardFormRow from "@/components/StandardFormRow";
 import StandardTable from "@/components/StandardTable";
 
+const Search = Input.Search;
 const FormItem = Form.Item;
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
-const { Search } = Input;
+//const { Search } = Input;
 const pageSize = 5;
 const getValue = obj =>
   Object.keys(obj)
@@ -138,16 +139,24 @@ function filter(inputValue, path) {
 }))
 @Form.create()
 class BasicList extends PureComponent {
-  state = {
-    modalVisible: false,
-    updateModalVisible: false,
-    selectedRows: [],
-    formValues: {},
-    stepFormValues: {},
-  };
+  // this.state = {
+  //   modalVisible: false,
+  //   updateModalVisible: false,
+  //   selectedRows: [],
+  //   formValues: {},
+  //   stepFormValues: {},
+  // };
 
   constructor(props) {
     super(props);
+    this.state = {
+      modalVisible: false,
+      updateModalVisible: false,
+      selectedRows: [],
+      formValues: {},
+      stepFormValues: {},
+      value: '',
+    };
   };
 
   formLayout = {
@@ -203,6 +212,38 @@ class BasicList extends PureComponent {
     });
   };
 
+  handleauthorChange = (input) => {
+    this.setState({
+      value: input
+    })
+    const data = {
+      "author": input
+    }
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'rule/fetch',
+      payload: {
+        ...data,
+      },
+    })
+  }
+
+  handletitleChange = (input) => {
+    this.setState({
+      value: input
+    })
+    const data = {
+      "title": input
+    }
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'rule/fetch',
+      payload: {
+        ...data,
+      },
+    })
+  }
+
   handleSearch = e => {
     e.preventDefault();
 
@@ -218,6 +259,7 @@ class BasicList extends PureComponent {
         ...fieldsValue,
         updateAt: fieldsValue.updateAt && fieldsValue.updateAt.valueOf(),
       };
+
       dispatch({
         type: 'rule/fetch',
         payload: {
@@ -244,16 +286,24 @@ class BasicList extends PureComponent {
       form: { getFieldDecorator },
     } = this.props;
     return (
-      <Form onSubmit={this.handleSearch} layout="inline">
+      <div>
+      <Search
+      ref="search"
+      placeholder="输入想要查询的用户ID"
+      enterButton
+      size="large"
+      onSearch={this.handletitleChange}
+    />
+      {/* <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8,lg: 24,xl: 48 }}>
           <Col md={7} sm={24}>
             <FormItem label="文章作者">
-              {getFieldDecorator('author')(<Input placeholder="请输入" />)}
+              {getFieldDecorator('author')(<Input placeholder="请输入" onSearch={this.handleauthorChange} />)}
             </FormItem>
           </Col>
           <Col md={7} sm={24}>
             <FormItem label="文章标题">
-              {getFieldDecorator('title')(<Input placeholder="请输入" />)}
+              {getFieldDecorator('title')(<Input placeholder="请输入" onSearch={this.handletitleChange} />)}
             </FormItem>
           </Col>
           <Col md={7} sm={24}>
@@ -269,7 +319,8 @@ class BasicList extends PureComponent {
             </span>
           </Col>
         </Row>
-      </Form>
+      </Form> */}
+      </div>
     )
   }
 

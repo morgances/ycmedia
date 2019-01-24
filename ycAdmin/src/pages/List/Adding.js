@@ -7,6 +7,8 @@ import "react-quill/dist/quill.snow.css";
 import styles from "./Adding.less";
 import { connect } from "dva";
 import PageHeaderWrapper from "@/components/PageHeaderWrapper";
+import Editor from 'react-quill-antd';
+import 'react-quill-antd/dist/index.css';
 
 
 const Option = Select.Option;
@@ -63,16 +65,19 @@ export default class Adding extends React.Component {
     cities1: secondCityData[cityData[provinceData[0]][0]],
     thirdCity: secondCityData[cityData[provinceData[0]][0]][0],
     fileList: [],
+    text: '',
+    content: '',
+
   }
 
   constructor(props) {
     super(props);
-    //this.state = { text: "" }; // You can also pass a Quill Delta here
     this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount() {
     this.getData();
+    this.props.form.validateFields();
   }
 
   getData = async () => {
@@ -81,6 +86,19 @@ export default class Adding extends React.Component {
       type: 'list/addList',
     })
   }
+
+  handleEditorChange = content => {
+    this.setState({ content });
+  }
+
+  handleEditorSubmit = e => {
+    e.preventDefault();
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        console.log("Received values of form: ", values);
+      }
+    });
+  };
 
   handleProvinceChange = (value) => {
     this.setState({
@@ -103,14 +121,11 @@ export default class Adding extends React.Component {
     })
   }
 
-  onChange = (value) => {
-    console.log(value);
-    this.setState({ value });
-  }
-
   modules = {
     toolbar: [
-      [{ header: [1, 2, false] }],
+      [{ 'header': '1'},{ 'header': '2'}],
+      [{ 'font': []}],
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
       ["bold", "italic", "underline", "strike", "blockquote"],
       [
         { list: "ordered" },
@@ -119,12 +134,15 @@ export default class Adding extends React.Component {
         { indent: "+1" }
       ],
       ["link", "image"],
-      ["clean"]
-    ]
+      [{ "align": [] }], 
+      [{ 'color': [] }, { 'background': [] }],
+      ["clean"],
+    ],
   };
 
   formats = [
     "header",
+    "font",
     "bold",
     "italic",
     "underline",
@@ -134,15 +152,20 @@ export default class Adding extends React.Component {
     "bullet",
     "indent",
     "link",
-    "image"
+    "align",
+    "image",
+    "background",
+    "color",
   ];
   formLayout = {
     labelCol: { span: 7 },
     wrapperCol: { span: 13 }
   };
 
-  handleChange(value) {
-    this.setState({ text: value });
+  handleChange = (value) => {
+    this.setState({ 
+      text: value
+    });
   };
 
   handleChange1 = ({ fileList }) => this.setState({ fileList })
@@ -193,7 +216,7 @@ export default class Adding extends React.Component {
     const uploadButton = (
       <div>
         <Icon type="plus" />
-        <div className="ant-upload-text"></div>
+        <div className="ant-upload-text">添加封面更有助于吸引读者</div>
       </div>
     );
     const {
@@ -224,16 +247,16 @@ export default class Adding extends React.Component {
       }
       return (
         <Form onSubmit={this.handleSubmit}>
-        <div className="clearfix">
-        <Upload
-          className="avatar-uploader"
-          listType="picture-card"
-          fileList={fileList}
-          onChange={this.handleChange1}
-        >
-          {fileList.length >= 1 ? null : uploadButton}
-        </Upload>
-      </div>
+          <FormItem label="文章封面" {...this.formLayout}>
+              <Upload
+                className="avatar-uploader"
+                listType="picture-card"
+                fileList={fileList}
+                onChange={this.handleChange1}
+              >
+                {fileList.length >= 1 ? null : uploadButton}
+              </Upload>
+          </FormItem>
           <FormItem label="文章标题" {...this.formLayout}>
             {getFieldDecorator("title", {
               rules: [{ required: true, message: "请输入文章标题" }],
@@ -259,7 +282,6 @@ export default class Adding extends React.Component {
           <FormItem label="文章标签" {...this.formLayout}>
             {getFieldDecorator("tag", {
               initialValue: this.state.secondCity,
-              //rules: [{ required: true, message: "请选择文章标签" }]
             })(
                 <Select
                   onChange={this.onSecondCityChange}
@@ -271,7 +293,6 @@ export default class Adding extends React.Component {
           <FormItem label="文章label" {...this.formLayout}>
             {getFieldDecorator("label", {
               initialValue: this.state.thirdCity,
-              //rules: [{ required: true, message: "请选择文章label" }]
             })(
                 <Select
                   onChange={this.onThirdCityChange}
@@ -285,26 +306,47 @@ export default class Adding extends React.Component {
     };
     return (
       <PageHeaderWrapper title="添加文章">
+      <Form onSubmit={this.handleEditorSubmit}>
+        <FormItem>
+          {getFieldDecorator("content", {
+            initialValue: ""
+          })(<Editor />)}
+        </FormItem>
+        <FormItem>
+          <Button type="primary" htmlType="submit">
+            Submit
+          </Button>
+        </FormItem>
+      </Form>
         <Card className={styles.listCard} bordered={false}>
-          <ReactQuill
-            theme="snow"
-            //value={this.state.text}
-            onChange={this.handleChange}
-            modules={this.modules}
-            formats={this.formats}
-            style={{ height: 550 }}
-          />
-          <Button
-            style={{ marginTop: 56 }}
+          {/* <Form onSubmit={this.handleSubmit}>
+            <FormItem>
+              {getFieldDecorator('text', {
+                          rules: [{ required: true }],
+                          mapPropsToFields: this.state.text,
+                      })( */}
+                      {/* <div className="text-editor">
+                        <ReactQuill
+                          value={this.state.text}
+                          theme="snow"
+                          onChange={this.handleChange}
+                          modules={this.modules}
+                          formats={this.formats}
+                          style={{ height: 600 }}
+                        />
+                      </div> */}
+                      {/* )}
+            </FormItem>
+          </Form> */}
+          {/* <Button
+            style={{ marginTop: 74 }}
             onClick={this.showModal}
             ref={component => {
-              /* eslint-disable */
               this.addBtn = findDOMNode(component);
-              /* eslint-enable */
             }}
           >
             发布
-          </Button>
+          </Button> */}
         </Card>
         <Modal
           title={done ? null : `文章${current ? "发布" : "添加"}`}
