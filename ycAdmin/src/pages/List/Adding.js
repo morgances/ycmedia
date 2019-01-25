@@ -1,16 +1,49 @@
 import React from "react";
 import { findDOMNode } from "react-dom";
-import { Button, Card, Modal, Form, Input, Cascader, Upload, Icon, message, Select } from "antd";
+import { DatePicker, TimePicker, Button, Card, Modal, Form, Input, Cascader, Upload, Icon, message, Select } from "antd";
 import Result from "@/components/Result";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
 import styles from "./Adding.less";
 import { connect } from "dva";
 import PageHeaderWrapper from "@/components/PageHeaderWrapper";
 import Editor from 'react-quill-antd';
 import 'react-quill-antd/dist/index.css';
+import moment from 'moment';
 
+function getRule(res) {
 
+  const params = parse(url, true).query;
+
+  let dataSource = this.props;
+  console.log(dataSource,"0")
+
+  if (params.status) {
+    const status = params.status.split(',');
+    let filterDataSource = [];
+    status.forEach(s => {
+      filterDataSource = filterDataSource.concat(
+        dataSource.filter(data => parseInt(data.status, 10) === parseInt(s[0], 10))
+      );
+    });
+    dataSource = filterDataSource;
+  }
+
+  if (params.author) {
+    dataSource = dataSource.filter(data => data.author.indexOf(params.author) > -1);
+  }
+
+  const result = {
+    list: dataSource,
+    pagination: {
+      total: dataSource.length,
+      pageSize,
+      current: parseInt(params.currentPage, 10) || 1,
+    },
+  };
+
+  return res.json(result);
+}
+
+const date = new Date();
 const Option = Select.Option;
 const provinceData = ['文化资讯','书香银川','遗脉相承','银川旅游','艺术空间','文化消费','文化品牌','凤城演绎'];
 const cityData = {
@@ -49,30 +82,24 @@ const secondCityData = {
 console.log(secondCityData[cityData[provinceData[0]][0]],"5")
 const FormItem = Form.Item;
 
-function onChange(value, selectedOptions) {
-  console.log(value, selectedOptions);
-};
-
 @connect(({ list, loading }) => ({
   list,
   loading: loading.models.list
 }))
 @Form.create()
-export default class Adding extends React.Component {
+class Adding extends React.Component {
   state = {
     cities: cityData[provinceData[0]],
     secondCity: cityData[provinceData[0]][0],
     cities1: secondCityData[cityData[provinceData[0]][0]],
     thirdCity: secondCityData[cityData[provinceData[0]][0]][0],
     fileList: [],
-    text: '',
     content: '',
 
   }
 
   constructor(props) {
     super(props);
-    this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount() {
@@ -86,19 +113,6 @@ export default class Adding extends React.Component {
       type: 'list/addList',
     })
   }
-
-  handleEditorChange = content => {
-    this.setState({ content });
-  }
-
-  handleEditorSubmit = e => {
-    e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        console.log("Received values of form: ", values);
-      }
-    });
-  };
 
   handleProvinceChange = (value) => {
     this.setState({
@@ -120,55 +134,19 @@ export default class Adding extends React.Component {
       thirdCity: value,
     })
   }
-
-  modules = {
-    toolbar: [
-      [{ 'header': '1'},{ 'header': '2'}],
-      [{ 'font': []}],
-      [{ header: [1, 2, 3, 4, 5, 6, false] }],
-      ["bold", "italic", "underline", "strike", "blockquote"],
-      [
-        { list: "ordered" },
-        { list: "bullet" },
-        { indent: "-1" },
-        { indent: "+1" }
-      ],
-      ["link", "image"],
-      [{ "align": [] }], 
-      [{ 'color': [] }, { 'background': [] }],
-      ["clean"],
-    ],
-  };
-
-  formats = [
-    "header",
-    "font",
-    "bold",
-    "italic",
-    "underline",
-    "strike",
-    "blockquote",
-    "list",
-    "bullet",
-    "indent",
-    "link",
-    "align",
-    "image",
-    "background",
-    "color",
-  ];
   formLayout = {
     labelCol: { span: 7 },
     wrapperCol: { span: 13 }
   };
 
-  handleChange = (value) => {
-    this.setState({ 
-      text: value
-    });
-  };
+  handleChange = ({ fileList }) => this.setState({ fileList })
 
-  handleChange1 = ({ fileList }) => this.setState({ fileList })
+  beforeUploadHandle=()=>{
+    this.setState(({fileData})=>({
+        fileData:[...fileData],
+    }))
+    return false;
+  }
 
   showModal = () => {
     this.setState({
@@ -248,14 +226,18 @@ export default class Adding extends React.Component {
       return (
         <Form onSubmit={this.handleSubmit}>
           <FormItem label="文章封面" {...this.formLayout}>
-              <Upload
-                className="avatar-uploader"
-                listType="picture-card"
-                fileList={fileList}
-                onChange={this.handleChange1}
-              >
-                {fileList.length >= 1 ? null : uploadButton}
-              </Upload>
+            {getFieldDecorator("image")(
+                <Upload
+                  action="路径"
+                  className="avatar-uploader"
+                  listType="picture-card"
+                  fileList={fileList}
+                  onChange={this.handleChange}
+                  beforUpload={this.beforeUploadHandle}
+                >
+                  {fileList.length >= 1 ? null : uploadButton}
+                </Upload>
+              )}
           </FormItem>
           <FormItem label="文章标题" {...this.formLayout}>
             {getFieldDecorator("title", {
@@ -274,6 +256,7 @@ export default class Adding extends React.Component {
             })(
                 <Select
                   onChange={this.handleProvinceChange}
+                  getPopupContainer={triggerNode => triggerNode.parentNode}
                 >
                   {provinceData.map(province => <Option key={province}>{province}</Option>)}
                 </Select>
@@ -285,6 +268,8 @@ export default class Adding extends React.Component {
             })(
                 <Select
                   onChange={this.onSecondCityChange}
+                  getPopupContainer={triggerNode => triggerNode.parentNode}
+                  notFoundContent
                 >
                   {cities.map(city => <Option key={city}>{city}</Option>)}
                 </Select>
@@ -296,9 +281,19 @@ export default class Adding extends React.Component {
             })(
                 <Select
                   onChange={this.onThirdCityChange}
+                  getPopupContainer={triggerNode => triggerNode.parentNode}
+                  notFoundContent
                 >
                   {cities1.map(city1 => <Option key={city1}>{city1}</Option>)}
                 </Select>
+              )}
+          </FormItem>
+          <FormItem {...this.formLayout} >
+            {getFieldDecorator("date",{
+                initialValue:moment(date)
+              })(
+                <div>
+                </div>
               )}
           </FormItem>
         </Form>
@@ -306,48 +301,23 @@ export default class Adding extends React.Component {
     };
     return (
       <PageHeaderWrapper title="添加文章">
-      <Form onSubmit={this.handleEditorSubmit}>
+      <Form onSubmit={this.handleSubmit}>
         <FormItem>
-          {getFieldDecorator("content", {
+          {getFieldDecorator("text", {
             initialValue: ""
           })(<Editor />)}
         </FormItem>
         <FormItem>
-          <Button type="primary" htmlType="submit">
-            Submit
+          <Button 
+            type="primary" 
+            htmlType="submit" 
+            onClick={this.showModal} ref={component => {
+              this.addBtn = findDOMNode(component);
+            }}>
+            发布
           </Button>
         </FormItem>
       </Form>
-        <Card className={styles.listCard} bordered={false}>
-          {/* <Form onSubmit={this.handleSubmit}>
-            <FormItem>
-              {getFieldDecorator('text', {
-                          rules: [{ required: true }],
-                          mapPropsToFields: this.state.text,
-                      })( */}
-                      {/* <div className="text-editor">
-                        <ReactQuill
-                          value={this.state.text}
-                          theme="snow"
-                          onChange={this.handleChange}
-                          modules={this.modules}
-                          formats={this.formats}
-                          style={{ height: 600 }}
-                        />
-                      </div> */}
-                      {/* )}
-            </FormItem>
-          </Form> */}
-          {/* <Button
-            style={{ marginTop: 74 }}
-            onClick={this.showModal}
-            ref={component => {
-              this.addBtn = findDOMNode(component);
-            }}
-          >
-            发布
-          </Button> */}
-        </Card>
         <Modal
           title={done ? null : `文章${current ? "发布" : "添加"}`}
           className={styles.standardListForm}
@@ -363,3 +333,5 @@ export default class Adding extends React.Component {
     );
   }
 }
+
+export default Adding;

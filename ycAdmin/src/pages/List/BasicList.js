@@ -41,93 +41,91 @@ const getValue = obj =>
     .join(',');
 const tag = ['文化资讯', '书香银川', '遗脉相承', '银川旅游', '艺术空间', '凤城演绎', '文化消费', '文化品牌'];
 const options = [{
-  value: '文化资讯',
+  value: '0',
   label: '文化资讯',
   children: [{
-    value: '文化动态',
+    value: '00',
     label: '文化动态',
   },{
-    value: '通知公告',
+    value: '01',
     label: '通知公告',
   },{
-    value: '政策法规',
+    value: '02',
     label: '政策法规',
   },{
-    value: '免费开放',
+    value: '03',
     label: '免费开放',
   }],
 },{
-  value: '书香银川',
+  value: '1',
   label: '书香银川',
   children: [{
-    value: '图书借阅',
+    value: '11',
     label: '图书借阅',
   },{
-    value: '服务指南',
+    value: '12',
     label: '服务指南',
   },{
-    value: '数字资源',
+    value: '13',
     label: '数字资源',
   },{
-    value: '好书推荐',
+    value: '14',
     label: '好书推荐',
   }]
 },{
-  value: '遗脉相承',
+  value: '2',
   label: '遗脉相承',
   children: [{
-    value: '文化遗产',
+    value: '21',
     label: '文化遗产',
   },{
-    value: '非遗传承',
+    value: '22',
     label: '非遗传承',
   }]
 },{
-  value: '银川旅游',
+  value: '3',
   label: '银川旅游',
 },{
-  value: '艺术空间',
+  value: '4',
   label: '艺术空间',
   children: [{
-    value: '艺术资讯',
+    value: '41',
     label: '艺术资讯',
   },{
-    value: '名家介绍',
+    value: '42',
     label: '名家介绍',
   },{
-    value: '艺术展示',
+    value: '43',
     label: '艺术展示',
   },{
-    value: '艺术场馆',
+    value: '44',
     label: '艺术场馆',
   }]
 },{
-  value: '凤城演绎',
+  value: '5',
   label: '凤城演绎',
   children: [{
-    value: '群众文化',
+    value: '51',
     label: '群众文化',
   },{
-    value: '银川记忆',
+    value: '52',
     label: '银川记忆',
   }]
 },{
-  value: '文化消费',
+  value: '6',
   label: '文化消费',
   children: [{
-    value: '银川影院',
+    value: '61',
     label: '银川影院',
   },{
-    value: '艺术剧院',
+    value: '62',
     label: '艺术剧院',
   }]
 },{
-  value: '文化品牌',
+  value: '7',
   label: '文化品牌',
 }];
-function onChange(value, selectedOptions) {
-  console.log(value, selectedOptions);
-};
+
 function filter(inputValue, path) {
   return (path.some(option => (option.label).toLowerCase().indexOf(inputValue.toLowerCase()) > -1));
 };
@@ -139,13 +137,6 @@ function filter(inputValue, path) {
 }))
 @Form.create()
 class BasicList extends PureComponent {
-  // this.state = {
-  //   modalVisible: false,
-  //   updateModalVisible: false,
-  //   selectedRows: [],
-  //   formValues: {},
-  //   stepFormValues: {},
-  // };
 
   constructor(props) {
     super(props);
@@ -287,29 +278,22 @@ class BasicList extends PureComponent {
     } = this.props;
     return (
       <div>
-      <Search
-      ref="search"
-      placeholder="输入想要查询的用户ID"
-      enterButton
-      size="large"
-      onSearch={this.handletitleChange}
-    />
-      {/* <Form onSubmit={this.handleSearch} layout="inline">
+      <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8,lg: 24,xl: 48 }}>
           <Col md={7} sm={24}>
             <FormItem label="文章作者">
-              {getFieldDecorator('author')(<Input placeholder="请输入" onSearch={this.handleauthorChange} />)}
+              {getFieldDecorator('author')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
           <Col md={7} sm={24}>
             <FormItem label="文章标题">
-              {getFieldDecorator('title')(<Input placeholder="请输入" onSearch={this.handletitleChange} />)}
+              {getFieldDecorator('title')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
           <Col md={7} sm={24}>
             <FormItem label="文章分类">
               {getFieldDecorator('tag')(
-                <Cascader options={options} onChange={onChange} placeholder="请选择" showSearch={{ filter }} />
+                <Cascader options={options} placeholder="请选择" showSearch={{ filter }} />
               )}
             </FormItem>
           </Col>
@@ -319,7 +303,7 @@ class BasicList extends PureComponent {
             </span>
           </Col>
         </Row>
-      </Form> */}
+      </Form>
       </div>
     )
   }
