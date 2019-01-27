@@ -23,6 +23,7 @@ import {
   Cascader,
 } from "antd";
 
+import Highlighter from 'react-highlight-words';
 import PageHeaderWrapper from "@/components/PageHeaderWrapper";
 import ArticleListContent from "@/components/ArticleListContent";
 import styles from "./BasicList.less";
@@ -33,98 +34,32 @@ const Search = Input.Search;
 const FormItem = Form.Item;
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
-//const { Search } = Input;
 const pageSize = 5;
-const getValue = obj =>
-  Object.keys(obj)
-    .map(key => obj[key])
-    .join(',');
-const tag = ['文化资讯', '书香银川', '遗脉相承', '银川旅游', '艺术空间', '凤城演绎', '文化消费', '文化品牌'];
-const options = [{
-  value: '0',
-  label: '文化资讯',
-  children: [{
-    value: '00',
-    label: '文化动态',
-  },{
-    value: '01',
-    label: '通知公告',
-  },{
-    value: '02',
-    label: '政策法规',
-  },{
-    value: '03',
-    label: '免费开放',
-  }],
-},{
-  value: '1',
-  label: '书香银川',
-  children: [{
-    value: '11',
-    label: '图书借阅',
-  },{
-    value: '12',
-    label: '服务指南',
-  },{
-    value: '13',
-    label: '数字资源',
-  },{
-    value: '14',
-    label: '好书推荐',
-  }]
-},{
-  value: '2',
-  label: '遗脉相承',
-  children: [{
-    value: '21',
-    label: '文化遗产',
-  },{
-    value: '22',
-    label: '非遗传承',
-  }]
-},{
-  value: '3',
-  label: '银川旅游',
-},{
-  value: '4',
-  label: '艺术空间',
-  children: [{
-    value: '41',
-    label: '艺术资讯',
-  },{
-    value: '42',
-    label: '名家介绍',
-  },{
-    value: '43',
-    label: '艺术展示',
-  },{
-    value: '44',
-    label: '艺术场馆',
-  }]
-},{
-  value: '5',
-  label: '凤城演绎',
-  children: [{
-    value: '51',
-    label: '群众文化',
-  },{
-    value: '52',
-    label: '银川记忆',
-  }]
-},{
-  value: '6',
-  label: '文化消费',
-  children: [{
-    value: '61',
-    label: '银川影院',
-  },{
-    value: '62',
-    label: '艺术剧院',
-  }]
-},{
-  value: '7',
-  label: '文化品牌',
-}];
+// const data = [{
+//   key: '0',
+//   name: '文化资讯',
+// },{
+//   key: '1',
+//   name: '书香银川',
+// },{
+//   key: '2',
+//   name: '遗脉相承',
+// },{
+//   key: '3',
+//   name: '银川旅游',
+// },{
+//   key: '4',
+//   name: '艺术空间',
+// },{
+//   key: '5',
+//   name: '凤城演绎',
+// },{
+//   key: '6',
+//   name: '文化消费',
+// },{
+//   key: '7',
+//   name: '文化品牌',
+// }];
 
 function filter(inputValue, path) {
   return (path.some(option => (option.label).toLowerCase().indexOf(inputValue.toLowerCase()) > -1));
@@ -137,18 +72,66 @@ function filter(inputValue, path) {
 }))
 @Form.create()
 class BasicList extends PureComponent {
-
   constructor(props) {
     super(props);
     this.state = {
       modalVisible: false,
       updateModalVisible: false,
       selectedRows: [],
-      formValues: {},
       stepFormValues: {},
-      value: '',
+      searchText: '',
     };
   };
+
+  getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({
+      setSelectedKeys, selectedKeys, confirm, clearFilters,
+    }) => (
+      <Card bordered={false}>
+        <div style={{ padding: 0 }}>
+          <Input
+            ref={node => { this.searchInput = node; }}
+            placeholder='请输入'
+            value={selectedKeys[0]}
+            onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+            onPressEnter={() => this.handleSearch(selectedKeys, confirm)}
+            style={{ width: 188, marginBottom: 8, display: 'block' }}
+          />
+          <Button
+            type="primary"
+            onClick={() => this.handleSearch(selectedKeys, confirm)}
+            icon="search"
+            size="small"
+            style={{ width: 90, marginRight: 8, height: 30 }}
+          >
+            查找
+          </Button>
+          <Button
+            onClick={() => this.handleReset(clearFilters)}
+            size="small"
+            style={{ width: 90, height: 30 }}
+          >
+            重置
+          </Button>
+        </div>
+      </Card>
+    ),
+    filterIcon: filtered => <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />,
+    onFilter: (value, record) => record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+    onFilterDropdownVisibleChange: (visible) => {
+      if (visible) {
+        setTimeout(() => this.searchInput.select());
+      }
+    },
+    render: (text) => (
+      <Highlighter
+        highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+        searchWords={[this.state.searchText]}
+        autoEscape
+        textToHighlight={text.toString()}
+      />
+    ),
+  })
 
   formLayout = {
     labelCol: { span: 7 },
@@ -167,34 +150,18 @@ class BasicList extends PureComponent {
     });
   };
 
-  handleStandardTableChange = (pagination, filtersArg, sorter) => {
-    const  { dispatch } = this.props;
-    const {formValues } = this.state;
-
-    const filters = Object.keys(filtersArg).reduce((obj, key) => {
-      const newObj = { ...obj };
-      newObj[key] = getValue(filtersArg[key]);
-      return newObj;
-    }, {});
-
-    const params = {
-      currentPage: pagination.current,
-      pageSize: pagination.pageSize,
-      ...formValues,
-      ...filters,
-    };
-    if (sorter.field) {
-      params.sorter = `${sorter.field}_${sorter.order}`
-    }
-
-    dispatch({
-      type: 'rule/fetch',
-      payload: {
-        category: 0,
-        page: 0,
-        tag: 0,
-      }
+  showEditModal = item => {
+    this.setState({
+      visible: true,
+      current: item,
     });
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'rule/gettext',
+      payload: {
+        
+      },
+    })
   };
 
   handleSelectRows = rows => {
@@ -203,109 +170,34 @@ class BasicList extends PureComponent {
     });
   };
 
-  handleauthorChange = (input) => {
-    this.setState({
-      value: input
-    })
-    const data = {
-      "author": input
-    }
+  handleSearch = (selectedKeys, confirm) => {
+    confirm();
+    this.setState({ searchText: selectedKeys[0] });
+  }
+
+  handleReset = (clearFilters) => {
+    clearFilters();
+    this.setState({ searchText: '' });
+  }
+
+  deleteConfirm = (id) => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'rule/fetch',
+      type: 'rule/remove',
       payload: {
-        ...data,
+        id,
       },
     })
   }
 
-  handletitleChange = (input) => {
-    this.setState({
-      value: input
-    })
-    const data = {
-      "title": input
-    }
+  editText = (aid) => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'rule/fetch',
+      type: 'list/addlist',
       payload: {
-        ...data,
-      },
+        aid,
+      }
     })
-  }
-
-  handleSearch = e => {
-    e.preventDefault();
-
-    const { dispatch, form } = this.props;
-    console.log(dispatch,"4")
-
-    form.validateFields((err,fieldsValue) => {
-      if (err) return;
-      this.setState({
-        formValues: fieldsValue,
-      });
-      const values = {
-        ...fieldsValue,
-        updateAt: fieldsValue.updateAt && fieldsValue.updateAt.valueOf(),
-      };
-
-      dispatch({
-        type: 'rule/fetch',
-        payload: {
-          category: 0,
-          page: 0,
-          tag: 0,
-        },
-      });
-    });
-  };
-
-  deleteConfirm = (itemId) => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'list/removeList',
-      payload: {
-        target_id: itemId,
-      },
-    })
-  }
-
-  renderForm() {
-    const {
-      form: { getFieldDecorator },
-    } = this.props;
-    return (
-      <div>
-      <Form onSubmit={this.handleSearch} layout="inline">
-        <Row gutter={{ md: 8,lg: 24,xl: 48 }}>
-          <Col md={7} sm={24}>
-            <FormItem label="文章作者">
-              {getFieldDecorator('author')(<Input placeholder="请输入" />)}
-            </FormItem>
-          </Col>
-          <Col md={7} sm={24}>
-            <FormItem label="文章标题">
-              {getFieldDecorator('title')(<Input placeholder="请输入" />)}
-            </FormItem>
-          </Col>
-          <Col md={7} sm={24}>
-            <FormItem label="文章分类">
-              {getFieldDecorator('tag')(
-                <Cascader options={options} placeholder="请选择" showSearch={{ filter }} />
-              )}
-            </FormItem>
-          </Col>
-          <Col md={3} sm={24}>
-            <span className={styles.submitButtons}>
-              <Button type="primary" htmlType="submit">查找</Button>
-            </span>
-          </Col>
-        </Row>
-      </Form>
-      </div>
-    )
   }
 
   render() {
@@ -313,18 +205,25 @@ class BasicList extends PureComponent {
       {
         title: '文章作者',
         dataIndex: 'author',
+        key: 'author',
+        ...this.getColumnSearchProps('author'),
       },
       {
         title: '文章标题',
         dataIndex: 'title',
+        key: 'title',
+        ...this.getColumnSearchProps('title'),
       },
       {
         title: '文章分类',
-        dataIndex: 'tag',
+        dataIndex: 'category',
+        key: 'category',
+        ...this.getColumnSearchProps('category'),
       },
       {
         title: '更新时间',
         dataIndex: 'date',
+        key: 'date',
         render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>
       },
       {
@@ -340,7 +239,15 @@ class BasicList extends PureComponent {
               <a>删除</a>
             </Popconfirm>
             <Divider type="vertical" />
-            <a href="adding-list">编辑</a>
+            <a 
+              onClick={e => {
+                e.preventDefault();
+                this.showEditModal(item);
+              }}
+              //href="adding-list"
+            >
+              编辑
+            </a>
           </Fragment>
         ),
       },
@@ -348,9 +255,6 @@ class BasicList extends PureComponent {
     const {
       rule: { data },
       loading,
-    } = this.props;
-    const {
-      form: { getFieldDecorator }
     } = this.props;
     const { selectedRows,modalVisible,updateModalVisible, stepFormValues } = this.state;
 
@@ -366,14 +270,13 @@ class BasicList extends PureComponent {
             添加文章
           </Button>
           <div className={styles.tableList}>
-            <div className={styles.tableListForm}>{this.renderForm()}</div>
+            <div className={styles.tableListForm}></div>
             <StandardTable
               selectedRows={selectedRows}
               loading={loading}
               data={data}
               columns={columns}
               onSelectRow={this.handleSelectRows}
-              onChange={this.handleStandardTableChange}
             />
           </div>
         </Card>

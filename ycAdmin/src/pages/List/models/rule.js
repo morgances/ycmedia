@@ -1,4 +1,4 @@
-import { queryRule, removeRule, addRule, updateRule } from "@/services/api";
+import { queryRule, removeRule, addRule, updateRule, getText } from "@/services/api";
 
 export default {
   namespace: "rule",
@@ -22,8 +22,8 @@ export default {
     *add({ payload, callback }, { call, put }) {
       const response = yield call(addRule, payload);
       yield put({
-        type: "save",
-        payload: response
+        type: "addRule",
+        payload: response.data
       });
       if (callback) callback();
     },
@@ -42,7 +42,15 @@ export default {
         payload: response
       });
       if (callback) callback();
-    }
+    },
+    *gettext({ payload, callback }, { call, put }) {
+      const response = yield call(getText, payload);
+      yield put({
+        type: "save",
+        payload: response
+      });
+      if (callback) callback();
+    },
   },
 
   reducers: {
@@ -52,6 +60,13 @@ export default {
         ...state,
         data: action.payload
       };
-    }
+    },
+    addRule(state, { payload }) {
+      console.log('添加后', payload)
+      return {
+        ...state,
+        data: payload,
+      };
+    },
   }
 };

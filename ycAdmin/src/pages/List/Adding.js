@@ -9,77 +9,8 @@ import Editor from 'react-quill-antd';
 import 'react-quill-antd/dist/index.css';
 import moment from 'moment';
 
-function getRule(res) {
-
-  const params = parse(url, true).query;
-
-  let dataSource = this.props;
-  console.log(dataSource,"0")
-
-  if (params.status) {
-    const status = params.status.split(',');
-    let filterDataSource = [];
-    status.forEach(s => {
-      filterDataSource = filterDataSource.concat(
-        dataSource.filter(data => parseInt(data.status, 10) === parseInt(s[0], 10))
-      );
-    });
-    dataSource = filterDataSource;
-  }
-
-  if (params.author) {
-    dataSource = dataSource.filter(data => data.author.indexOf(params.author) > -1);
-  }
-
-  const result = {
-    list: dataSource,
-    pagination: {
-      total: dataSource.length,
-      pageSize,
-      current: parseInt(params.currentPage, 10) || 1,
-    },
-  };
-
-  return res.json(result);
-}
-
 const date = new Date();
 const Option = Select.Option;
-const provinceData = ['文化资讯','书香银川','遗脉相承','银川旅游','艺术空间','文化消费','文化品牌','凤城演绎'];
-const cityData = {
-  文化资讯: ['文化动态','通知公告','政策法规','免费开放'],
-  书香银川: ['图书借阅','服务指南','数字资源','好书推荐'],
-  遗脉相承: ['文化遗产','非遗传承'],
-  银川旅游: [],
-  艺术空间: ['艺术资讯','名家介绍','艺术展示','艺术场馆'],
-  文化消费: ['银川影院','艺术剧院'],
-  文化品牌: ['公益性文化产品','公益性文化活动','中华优秀传统文化与民族文化'],
-  凤城演绎: ['群众文化','银川记忆']
-};
-const secondCityData = {
-  文化动态: [],
-  通知公告: [],
-  政策法规: [],
-  免费开放: [],
-  图书借阅: [],
-  服务指南: [],
-  数字资源: [],
-  好书推荐: [],
-  文化遗产: ['文化遗址','文物鉴赏','文物保护'],
-  非遗传承: ['项目名单','传承保护','非遗展馆','民俗活动','传承基地','传承人'],
-  艺术资讯: [],
-  名家介绍: [],
-  艺术展示: ['绘画','书法','音乐','展览'],
-  艺术场馆: [],
-  银川影院: [],
-  艺术剧院: ['院团介绍','剧目介绍','商业演出'],
-  公益性文化产品: [],
-  公益性文化活动: [],
-  中华优秀传统文化与民族文化: [],
-  群众文化: ['群文活动','民间团队','公益培训'],
-  银川记忆: ['西夏古都','民间传说','老银川']
-};
-console.log(secondCityData[cityData[provinceData[0]][0]],"5")
 const FormItem = Form.Item;
 
 @connect(({ list, loading }) => ({
@@ -88,18 +19,24 @@ const FormItem = Form.Item;
 }))
 @Form.create()
 class Adding extends React.Component {
-  state = {
-    cities: cityData[provinceData[0]],
-    secondCity: cityData[provinceData[0]][0],
-    cities1: secondCityData[cityData[provinceData[0]][0]],
-    thirdCity: secondCityData[cityData[provinceData[0]][0]][0],
-    fileList: [],
-    content: '',
-
-  }
-
   constructor(props) {
     super(props);
+    this.modeOptions = {
+      '0': {options: ['文化动态', '通知公告', '政策法规', '免费开放']},
+      '1': {options: ['图书借阅', '服务指南', '数字资源', '好书推荐']},
+      '2': {options: ['文化遗产','非遗传承']},
+      '3': {options: []},
+      '4': {options: ['艺术资讯','名家介绍','艺术展示','艺术场馆']},
+      '5': {options: ['银川影院','艺术剧院']},
+      '6': {options: ['公益性文化产品','公益性文化活动','中华优秀传统文化']},
+      '7': {options: ['群众文化','银川记忆']}
+    }
+    this.state = {
+      selectMode: '0',
+      fileList: [],
+      content: '',
+    }
+    this.selectMode = this.selectMode.bind(this)
   }
 
   componentDidMount() {
@@ -114,26 +51,6 @@ class Adding extends React.Component {
     })
   }
 
-  handleProvinceChange = (value) => {
-    this.setState({
-      cities: cityData[value],
-      secondCity: cityData[value][0],
-    });
-  }
-
-  onSecondCityChange = (value) => {
-    this.setState({
-      secondCity: value,
-      cities1: secondCityData[value],
-      thirdCity: secondCityData[value][0],
-    });
-  }
-
-  onThirdCityChange = (value) => {
-    this.setState({
-      thirdCity: value,
-    })
-  }
   formLayout = {
     labelCol: { span: 7 },
     wrapperCol: { span: 13 }
@@ -172,12 +89,11 @@ class Adding extends React.Component {
   handleSubmit = e => {
     e.preventDefault();
     const { dispatch, form } = this.props;
-    const { current } = this.state;
-    const id = current ? current.id : "";
 
     setTimeout(() => this.addBtn.blur(), 0);
-    form.validateFields((err, fieldsValue) => {
+    form.validateFields(async (err, fieldsValue) => {
       if (err) return;
+      console.log('数据：', fieldsValue);
       this.setState({
         done: true
       });
@@ -188,9 +104,21 @@ class Adding extends React.Component {
       });
     });
   };
+  selectMode(value) {
+    this.setState({
+        selectMode: value
+    })
+  }
 
   render() {
-    const { cities, cities1, fileList } = this.state;
+    const { fileList } = this.state;
+    let modelOptions = null;
+    if(this.modeOptions[this.state.selectMode].options.length !== 0) {
+      modelOptions = [];
+      this.modeOptions[this.state.selectMode].options.map((item, index) => {
+        modelOptions.push(<Option key={index}>{item}</Option>)
+      })
+    }
     const uploadButton = (
       <div>
         <Icon type="plus" />
@@ -249,48 +177,31 @@ class Adding extends React.Component {
               rules: [{ required: true, message: "请输入文章作者" }],
             })(<Input placeholder="请输入" />)}
           </FormItem>
-          <FormItem label="文章分类" {...this.formLayout}>
+          <FormItem label="文章分类" {...this.formLayout} >
             {getFieldDecorator("category", {
-              initialValue: provinceData[0],
-              rules: [{ required: true, message: "请选择文章类别" }]
+              rules: [{ required: true, message: "请选择文章分类" }],
             })(
-                <Select
-                  onChange={this.handleProvinceChange}
-                  getPopupContainer={triggerNode => triggerNode.parentNode}
-                >
-                  {provinceData.map(province => <Option key={province}>{province}</Option>)}
-                </Select>
-              )}
+              <Select onChange={this.selectMode} getPopupContainer={triggerNode => triggerNode.parentNode} placeholder="请选择">
+                <Option value="0">Culture</Option>
+                <Option value="1">Book</Option>
+                <Option value="2">Heritage</Option>
+                <Option value="3">Travel</Option>
+                <Option value="4">Art</Option>
+                <Option value="5">Consumption</Option>
+                <Option value="6">Brand</Option>
+                <Option value="7">Interpretation</Option>
+              </Select>
+            )}
           </FormItem>
-          <FormItem label="文章标签" {...this.formLayout}>
+          <FormItem label="文章标签" {...this.formLayout} >
             {getFieldDecorator("tag", {
-              initialValue: this.state.secondCity,
             })(
-                <Select
-                  onChange={this.onSecondCityChange}
-                  getPopupContainer={triggerNode => triggerNode.parentNode}
-                  notFoundContent
-                >
-                  {cities.map(city => <Option key={city}>{city}</Option>)}
-                </Select>
-              )}
-          </FormItem>
-          <FormItem label="文章label" {...this.formLayout}>
-            {getFieldDecorator("label", {
-              initialValue: this.state.thirdCity,
-            })(
-                <Select
-                  onChange={this.onThirdCityChange}
-                  getPopupContainer={triggerNode => triggerNode.parentNode}
-                  notFoundContent
-                >
-                  {cities1.map(city1 => <Option key={city1}>{city1}</Option>)}
-                </Select>
-              )}
+              <Select getPopupContainer={triggerNode => triggerNode.parentNode} placeholder="请选择">{modelOptions}</Select>
+            )}
           </FormItem>
           <FormItem {...this.formLayout} >
             {getFieldDecorator("date",{
-                initialValue:moment(date)
+                initialValue: moment(date)
               })(
                 <div>
                 </div>
@@ -301,7 +212,7 @@ class Adding extends React.Component {
     };
     return (
       <PageHeaderWrapper title="添加文章">
-      <Form onSubmit={this.handleSubmit}>
+      <Form>
         <FormItem>
           {getFieldDecorator("text", {
             initialValue: ""

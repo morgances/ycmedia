@@ -20,7 +20,7 @@ export async function queryRule(params) {
 }
 
 export async function removeRule(params) {
-  return request("/api/rule", {
+  return request("/api/v1/article/delete", {
     method: "POST",
     body: {
       ...params,
@@ -29,15 +29,24 @@ export async function removeRule(params) {
   });
 }
 
-// export async function addRule(params) {
-//   return request("/api/rule", {
-//     method: "POST",
-//     body: {
-//       ...params,
-//       method: "post"
-//     }
-//   });
-// }
+export async function addRule(params) {
+  return request("/api/v1/article/add", {
+    method: "POST",
+    body: {
+      ...params,
+      method: "post"
+    }
+  });
+}
+
+export async function getText(params) {
+  return request("/api/v1/article/gettext",{
+    method: "POST",
+    body: {
+      ...params,
+    }
+  })
+}
 
 // export async function updateRule(params) {
 //   return request("/api/rule", {
