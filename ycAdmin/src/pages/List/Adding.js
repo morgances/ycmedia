@@ -5,9 +5,11 @@ import Result from "@/components/Result";
 import styles from "./Adding.less";
 import { connect } from "dva";
 import PageHeaderWrapper from "@/components/PageHeaderWrapper";
-import Editor from 'react-quill-antd';
-import 'react-quill-antd/dist/index.css';
 import moment from 'moment';
+import BraftEditor from 'braft-editor';
+import 'braft-editor/dist/index.css';
+import { ContentUtils } from 'braft-utils';
+import { ImageUtils } from 'braft-finder';
 
 const date = new Date();
 const Option = Select.Option;
@@ -42,6 +44,13 @@ class Adding extends React.Component {
   componentDidMount() {
     this.getData();
     this.props.form.validateFields();
+    this.isLivinig = true
+    // 3秒后更改编辑器内容
+    setTimeout(this.setEditorContentAsync, 3000)
+  }
+
+  componentWillUnmount () {
+    this.isLivinig = false
   }
 
   getData = async () => {
@@ -57,6 +66,28 @@ class Adding extends React.Component {
   };
 
   handleChange = ({ fileList }) => this.setState({ fileList })
+
+  handleEditorChange = (editorState) => {
+    this.setState({
+      editorState: editorState,
+      //outputHTML: editorState.toHTML()
+    })
+  }
+
+  uploadHandler = (param) => {
+
+    if (!param.file) {
+      return false
+    }
+  
+    this.setState({
+      editorState: ContentUtils.insertMedias(this.state.editorState, [{
+        type: 'IMAGE',
+        url: URL.createObjectURL(param.file)
+      }])
+    })
+
+  }
 
   beforeUploadHandle=()=>{
     this.setState(({fileData})=>({
@@ -89,10 +120,14 @@ class Adding extends React.Component {
   handleSubmit = e => {
     e.preventDefault();
     const { dispatch, form } = this.props;
-
     setTimeout(() => this.addBtn.blur(), 0);
-    form.validateFields(async (err, fieldsValue) => {
+    form.validateFields((err, fieldsValue) => {
       if (err) return;
+      const submitData = {
+        title: fieldsValue.title,
+        //content: fieldsValue.content.toRAW() // or fieldsValue.content.toHTML()
+      }
+      console.log(submitData)
       console.log('数据：', fieldsValue);
       this.setState({
         done: true
@@ -102,6 +137,10 @@ class Adding extends React.Component {
         payload: { 
           ...fieldsValue }
       });
+      // form.resetFields();
+      // this.setState({
+      //   visible: false,
+      // });
     });
   };
   selectMode(value) {
@@ -111,7 +150,35 @@ class Adding extends React.Component {
   }
 
   render() {
-    const { fileList } = this.state;
+    const { fileList, editorState, outputHTML } = this.state;
+    const controls = [
+      'undo', 'redo', 'separator',
+      'font-size', 'letter-spacing', 'separator',
+      'text-color', 'bold', 'italic', 'underline', 'strike-through', 'separator',
+      'remove-styles', 'emoji',  'separator', 'text-indent', 'text-align', 'separator',
+      'headings', 'list-ul', 'list-ol', 'blockquote', 'code', 'separator',
+      'link', 'separator', 'hr', 'separator',
+      // 'image', 'separator',
+      'clear', 'separator',
+    ]
+    const extendControls = [
+      {
+        key: 'antd-uploader',
+        type: 'component',
+        component: (
+          <Upload
+            accept="image/*"
+            showUploadList={false}
+            customRequest={this.uploadHandler}
+          >
+            {/* 这里的按钮最好加上type="button"，以避免在表单容器中触发表单提交，用Antd的Button组件则无需如此 */}
+            <button type="button" className="control-item button upload-button" data-title="插入图片">
+              <Icon type="picture" theme="filled" />
+            </button>
+          </Upload>
+        )
+      }
+    ]
     let modelOptions = null;
     if(this.modeOptions[this.state.selectMode].options.length !== 0) {
       modelOptions = [];
@@ -169,16 +236,19 @@ class Adding extends React.Component {
           </FormItem>
           <FormItem label="文章标题" {...this.formLayout}>
             {getFieldDecorator("title", {
+              initialValue: "标题",
               rules: [{ required: true, message: "请输入文章标题" }],
             })(<Input placeholder="请输入" />)}
           </FormItem>
           <FormItem label="文章作者" {...this.formLayout}>
             {getFieldDecorator("author", {
+              initialValue: "作者",
               rules: [{ required: true, message: "请输入文章作者" }],
             })(<Input placeholder="请输入" />)}
           </FormItem>
           <FormItem label="文章分类" {...this.formLayout} >
             {getFieldDecorator("category", {
+              initialValue: "0",
               rules: [{ required: true, message: "请选择文章分类" }],
             })(
               <Select onChange={this.selectMode} getPopupContainer={triggerNode => triggerNode.parentNode} placeholder="请选择">
@@ -201,7 +271,7 @@ class Adding extends React.Component {
           </FormItem>
           <FormItem {...this.formLayout} >
             {getFieldDecorator("date",{
-                initialValue: moment(date)
+                initialValue: moment(date).add(8, 'hours')
               })(
                 <div>
                 </div>
@@ -212,23 +282,33 @@ class Adding extends React.Component {
     };
     return (
       <PageHeaderWrapper title="添加文章">
-      <Form>
-        <FormItem>
-          {getFieldDecorator("text", {
-            initialValue: ""
-          })(<Editor />)}
-        </FormItem>
-        <FormItem>
-          <Button 
-            type="primary" 
-            htmlType="submit" 
-            onClick={this.showModal} ref={component => {
-              this.addBtn = findDOMNode(component);
-            }}>
-            发布
-          </Button>
-        </FormItem>
-      </Form>
+        <Card bordered={false}>
+          <div className="editor-wrapper">
+              <FormItem>
+                {getFieldDecorator('text', {
+                  validateTrigger: 'onBlur',
+                })(
+                  <BraftEditor
+                    className="my-editor"
+                    controls={controls}
+                    extendControls={extendControls}
+                    placeholder="请输入文章内容"
+                    onChange={this.handleEditorChange}
+                  />
+                )}
+              </FormItem>
+          </div>
+        </Card>
+        <Button
+          style={{ marginTop: 20 }}
+          type="primary" 
+          htmlType="submit" 
+          onClick={this.showModal} ref={component => {
+            this.addBtn = findDOMNode(component);
+          }}
+        >
+          发布
+        </Button>
         <Modal
           title={done ? null : `文章${current ? "发布" : "添加"}`}
           className={styles.standardListForm}
