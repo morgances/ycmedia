@@ -15,6 +15,12 @@ const date = new Date();
 const Option = Select.Option;
 const FormItem = Form.Item;
 
+function getBase64(img, callback) {
+  const reader = new FileReader();
+  reader.addEventListener('load', () => callback(reader.result));
+  reader.readAsDataURL(img);
+}
+
 @connect(({ list, loading }) => ({
   list,
   loading: loading.models.list
@@ -34,66 +40,87 @@ class Adding extends React.Component {
       '7': {options: ['群众文化','银川记忆']}
     }
     this.state = {
+      loading: false,
+      file_name:"",
       selectMode: '0',
-      fileList: [],
-      content: '',
+      content: "",
+      editorState: BraftEditor.createEditorState(null)
     }
     this.selectMode = this.selectMode.bind(this)
   }
 
   componentDidMount() {
-    this.getData();
     this.props.form.validateFields();
-    this.isLivinig = true
-    // 3秒后更改编辑器内容
-    setTimeout(this.setEditorContentAsync, 3000)
-  }
-
-  componentWillUnmount () {
-    this.isLivinig = false
-  }
-
-  getData = async () => {
     const { dispatch } = this.props;
-    await dispatch({
+    dispatch({
       type: 'list/addList',
     })
   }
+
+  // componentWillReceiveProps(nextProps) {
+  //   if ('value' in nextProps) {
+  //       const editorState = nextProps.value;
+  //       this.setState({
+  //           editorState,
+  //       });
+  //   }
+  // }
 
   formLayout = {
     labelCol: { span: 7 },
     wrapperCol: { span: 13 }
   };
 
-  handleChange = ({ fileList }) => this.setState({ fileList })
-
   handleEditorChange = (editorState) => {
     this.setState({
-      editorState: editorState,
+      editorState
       //outputHTML: editorState.toHTML()
     })
   }
+//上传文章封面
 
-  uploadHandler = (param) => {
-
-    if (!param.file) {
-      return false
-    }
-  
-    this.setState({
-      editorState: ContentUtils.insertMedias(this.state.editorState, [{
-        type: 'IMAGE',
-        url: URL.createObjectURL(param.file)
-      }])
-    })
-
+  beforeUploadHandle = (file) => {
+    getBase64(file, (imageUrl) =>
+    {
+      this.setState({
+        imageUrl,
+        loading: false
+      })
+      if(imageUrl){
+        let apirul = '39.98.162.91:9573/api/v1/upload';
+        let u = imageUrl.substring(imageUrl.indexOf(',') + 1, imageUrl.length)
+        let data = {
+          image_name:file.name,
+          image_data:u
+        }
+        fetch(apirul,{
+          method: 'POST',
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(data),
+        })
+        .then(res => res.json())
+        .then(res => {
+          this.setState({pic_url:res.pic_url});
+        })
+      }
+    });
+    return 1;
   }
 
-  beforeUploadHandle=()=>{
-    this.setState(({fileData})=>({
-        fileData:[...fileData],
-    }))
-    return false;
+  handleChange = (info) => {
+    if (info.file.status === 'uploading') {
+      this.setState({ loading: true });
+      return;
+    }
+    if (info.file.status === 'done') {
+      // Get this url from response in real world.
+      getBase64(info.file.originFileObj, imageUrl => this.setState({
+        imageUrl,
+        loading: false,
+      }));
+    }
   }
 
   showModal = () => {
@@ -102,6 +129,7 @@ class Adding extends React.Component {
       current: undefined
     });
   };
+
   handleDone = () => {
     setTimeout(() => this.addBtn.blur(), 0);
     this.setState({
@@ -137,12 +165,9 @@ class Adding extends React.Component {
         payload: { 
           ...fieldsValue }
       });
-      // form.resetFields();
-      // this.setState({
-      //   visible: false,
-      // });
     });
   };
+
   selectMode(value) {
     this.setState({
         selectMode: value
@@ -150,28 +175,53 @@ class Adding extends React.Component {
   }
 
   render() {
-    const { fileList, editorState, outputHTML } = this.state;
+    const uploadButton = (
+      <div>
+        <Icon type={this.state.loading ? 'loading' : 'plus'} />
+        <div className="ant-upload-text">Upload</div>
+      </div>
+    );
+    const imageUrl = this.state.imageUrl;
+    const { getFieldProps } = this.props.form;
+    const { fileList, outputHTML, editorState } = this.state;
     const controls = [
       'undo', 'redo', 'separator',
-      'font-size', 'letter-spacing', 'separator',
+      'font-size', 'separator',
       'text-color', 'bold', 'italic', 'underline', 'strike-through', 'separator',
       'remove-styles', 'emoji',  'separator', 'text-indent', 'text-align', 'separator',
       'headings', 'list-ul', 'list-ol', 'blockquote', 'code', 'separator',
       'link', 'separator', 'hr', 'separator',
-      // 'image', 'separator',
-      'clear', 'separator',
+      'clear', 'separator'
     ]
+    //富文本上传图片
+    const onSuccess = (file) => {
+      this.setState({
+        editorState: ContentUtils.insertMedias(editorState, [{
+          type: 'IMAGE',
+          url: file.files[0].url,
+        }]),
+      })
+    }
+
+    const uploaderProps = {
+      action: "http://39.98.162.91:9573/api/v1/upload",
+      multiple: true,
+    }
+
     const extendControls = [
       {
         key: 'antd-uploader',
         type: 'component',
         component: (
           <Upload
+            name="files[]"
             accept="image/*"
             showUploadList={false}
+            onSuccess={onSuccess}
+            {...uploaderProps}
+            //onChange = {this.handleUploadChange}
             customRequest={this.uploadHandler}
           >
-            {/* 这里的按钮最好加上type="button"，以避免在表单容器中触发表单提交，用Antd的Button组件则无需如此 */}
             <button type="button" className="control-item button upload-button" data-title="插入图片">
               <Icon type="picture" theme="filled" />
             </button>
@@ -186,12 +236,6 @@ class Adding extends React.Component {
         modelOptions.push(<Option key={index}>{item}</Option>)
       })
     }
-    const uploadButton = (
-      <div>
-        <Icon type="plus" />
-        <div className="ant-upload-text">添加封面更有助于吸引读者</div>
-      </div>
-    );
     const {
       form: { getFieldDecorator }
     } = this.props;
@@ -221,18 +265,20 @@ class Adding extends React.Component {
       return (
         <Form onSubmit={this.handleSubmit}>
           <FormItem label="文章封面" {...this.formLayout}>
-            {getFieldDecorator("image")(
+            {/* {getFieldDecorator("image")( */}
                 <Upload
-                  action="路径"
+                  name="image"
+                  {...getFieldProps("image")}
                   className="avatar-uploader"
+                  showUploadList={false}
                   listType="picture-card"
-                  fileList={fileList}
+                  action="http://39.98.162.91:9573/api/v1/upload"
                   onChange={this.handleChange}
-                  beforUpload={this.beforeUploadHandle}
+                  beforUpload={this.beforeUploadHandle.bind(this)}
                 >
-                  {fileList.length >= 1 ? null : uploadButton}
+                  {imageUrl ? <img src={imageUrl} alt="image" /> : uploadButton}
                 </Upload>
-              )}
+              {/* )} */}
           </FormItem>
           <FormItem label="文章标题" {...this.formLayout}>
             {getFieldDecorator("title", {
@@ -284,23 +330,16 @@ class Adding extends React.Component {
       <PageHeaderWrapper title="添加文章">
         <Card bordered={false}>
           <div className="editor-wrapper">
-              <FormItem>
-                {getFieldDecorator('text', {
-                  validateTrigger: 'onBlur',
-                })(
-                  <BraftEditor
-                    className="my-editor"
-                    controls={controls}
-                    extendControls={extendControls}
-                    placeholder="请输入文章内容"
-                    onChange={this.handleEditorChange}
-                  />
-                )}
-              </FormItem>
+            <BraftEditor
+                onChange={this.handleEditorChange}
+                value={this.state.editorState}
+                controls={controls}
+                extendControls= {extendControls}
+            />
           </div>
         </Card>
         <Button
-          style={{ marginTop: 20 }}
+          style={{ marginTop: 15 }}
           type="primary" 
           htmlType="submit" 
           onClick={this.showModal} ref={component => {

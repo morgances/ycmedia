@@ -49,7 +49,7 @@ class DynamicPost extends Component {
         <Card>
           <div className="clearfix">
             <Upload
-              action="//jsonplaceholder.typicode.com/posts/"
+              action="//39.98.162.91:9573/api/v1/upload"
               listType="picture-card"
               fileList={fileList}
               onPreview={this.handlePreview}
