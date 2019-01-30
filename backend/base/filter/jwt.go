@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"github.com/TechCatsLab/apix/http/server"
-	log "github.com/TechCatsLab/logging/logrus"
 	jwtgo "github.com/dgrijalva/jwt-go"
 	"github.com/morgances/ycmedia/backend/base"
 )
@@ -49,17 +48,19 @@ func NewAdminToken(userID uint32, tokenKey string) (string, error) {
 }
 
 func (f *JWTFilter) Check(ctx *server.Context) bool {
+	//which to get user id
 	c := &base.Context{Context: ctx}
 
-	claims, err := f.checkJWT(c)
-	if err != nil {
-		log.Error(err)
-		return false
-	}
+	// claims, err := f.checkJWT(c)
+	// if err != nil {
+	// 	log.Error(err)
+	// 	return false
+	// }
 
-	rawUID := uint32(claims[base.CtxKeyUID].(float64))
-	c.SetUID(rawUID)
-
+	// rawUID := uint32(claims[base.CtxKeyUID].(float64))
+	// c.SetUID(rawUID)
+	c.SetUID(1000)
+	//which to authentication
 	//url := c.Request().URL.Path
 	// result, err := mysql.Service.URLPermissions(f.db, url)
 	// if err != nil {
