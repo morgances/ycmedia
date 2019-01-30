@@ -8,7 +8,6 @@ package http
 import (
 	"crypto/md5"
 	"encoding/hex"
-	"io"
 	"os"
 
 	"github.com/morgances/ycmedia/backend/base/constants"
@@ -40,9 +39,9 @@ func classifyBySuffix(suffix string) string {
 	return constants.OtherDir
 }
 
-func MD5(file io.Reader) (string, error) {
+func MD5(file []byte) (string, error) {
 	sum := md5.New()
-	_, err := io.Copy(sum, file)
+	_, err := sum.Write(file)
 	if err != nil {
 		return "", err
 	}
@@ -51,13 +50,13 @@ func MD5(file io.Reader) (string, error) {
 	return MD5Str, nil
 }
 
-func CopyFile(path string, file io.Reader) error {
+func CopyFile(path string, file []byte) error {
 	cur, err := os.Create(path)
 	defer cur.Close()
 	if err != nil {
 		return err
 	}
 
-	_, err = io.Copy(cur, file)
+	_, err = cur.Write(file)
 	return err
 }

@@ -6,6 +6,7 @@
 package http
 
 import (
+	"io/ioutil"
 	"net/http"
 	"path"
 
@@ -47,7 +48,13 @@ func (u *UploadController) Upload(c *server.Context) error {
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, nil))
 	}
 
-	MD5Str, err := MD5(file)
+	data, err := ioutil.ReadAll(file)
+	if err != nil {
+		log.Error(err)
+		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, nil))
+	}
+
+	MD5Str, err := MD5(data)
 	if err != nil {
 		log.Error(err)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, nil))
@@ -67,7 +74,7 @@ func (u *UploadController) Upload(c *server.Context) error {
 	fileSuffix := path.Ext(header.Filename)
 	filePath = constants.FileUploadDir + "/" + classifyBySuffix(fileSuffix) + "/" + MD5Str + fileSuffix
 
-	err = CopyFile(filePath, file)
+	err = CopyFile(filePath, data)
 	if err != nil {
 		log.Error(err)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, nil))
