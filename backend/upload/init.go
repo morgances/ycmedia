@@ -44,6 +44,7 @@ func InitRouter(r *server.Router, db *sql.DB, baseUrl, tokenKey string) {
 
 	jwt := filter.NewWithDB(tokenKey, db)
 
+	filter.URLMap["/api/v1/upload"] = struct{}{}
 	r.Post("/api/v1/upload", c.Upload, jwt.Check)
 }
 
