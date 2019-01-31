@@ -12,14 +12,9 @@ import { ContentUtils } from 'braft-utils';
 import { ImageUtils } from 'braft-finder';
 
 const date = new Date();
+console.log(date)
 const Option = Select.Option;
 const FormItem = Form.Item;
-
-function getBase64(img, callback) {
-  const reader = new FileReader();
-  reader.addEventListener('load', () => callback(reader.result));
-  reader.readAsDataURL(img);
-}
 
 @connect(({ list, loading }) => ({
   list,
@@ -77,51 +72,6 @@ class Adding extends React.Component {
       //outputHTML: editorState.toHTML()
     })
   }
-//上传文章封面
-
-  beforeUploadHandle = (file) => {
-    getBase64(file, (imageUrl) =>
-    {
-      this.setState({
-        imageUrl,
-        loading: false
-      })
-      if(imageUrl){
-        let apirul = '39.98.162.91:9573/api/v1/upload';
-        let u = imageUrl.substring(imageUrl.indexOf(',') + 1, imageUrl.length)
-        let data = {
-          image_name:file.name,
-          image_data:u
-        }
-        fetch(apirul,{
-          method: 'POST',
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(data),
-        })
-        .then(res => res.json())
-        .then(res => {
-          this.setState({pic_url:res.pic_url});
-        })
-      }
-    });
-    return 1;
-  }
-
-  handleChange = (info) => {
-    if (info.file.status === 'uploading') {
-      this.setState({ loading: true });
-      return;
-    }
-    if (info.file.status === 'done') {
-      // Get this url from response in real world.
-      getBase64(info.file.originFileObj, imageUrl => this.setState({
-        imageUrl,
-        loading: false,
-      }));
-    }
-  }
 
   showModal = () => {
     this.setState({
@@ -174,14 +124,15 @@ class Adding extends React.Component {
     })
   }
 
+  normFile = (e) => {
+    console.log('Upload event:', e);
+    if (Array.isArray(e)) {
+      return e;
+    }
+    return e && e.fileList;
+  }
+
   render() {
-    const uploadButton = (
-      <div>
-        <Icon type={this.state.loading ? 'loading' : 'plus'} />
-        <div className="ant-upload-text">Upload</div>
-      </div>
-    );
-    const imageUrl = this.state.imageUrl;
     const { getFieldProps } = this.props.form;
     const { fileList, outputHTML, editorState } = this.state;
     const controls = [
@@ -265,20 +216,20 @@ class Adding extends React.Component {
       return (
         <Form onSubmit={this.handleSubmit}>
           <FormItem label="文章封面" {...this.formLayout}>
-            {/* {getFieldDecorator("image")( */}
+            {getFieldDecorator("image", {
+              valuePropName: 'fileList',
+              getValueFromEvent: this.normFile,
+            })(
                 <Upload
                   name="image"
-                  {...getFieldProps("image")}
-                  className="avatar-uploader"
-                  showUploadList={false}
-                  listType="picture-card"
+                  listType="picture"
                   action="http://39.98.162.91:9573/api/v1/upload"
-                  onChange={this.handleChange}
-                  beforUpload={this.beforeUploadHandle.bind(this)}
                 >
-                  {imageUrl ? <img src={imageUrl} alt="image" /> : uploadButton}
+                  <Button>
+                    <Icon type="upload" /> Click to upload
+                  </Button>
                 </Upload>
-              {/* )} */}
+            )}
           </FormItem>
           <FormItem label="文章标题" {...this.formLayout}>
             {getFieldDecorator("title", {
@@ -317,11 +268,10 @@ class Adding extends React.Component {
           </FormItem>
           <FormItem {...this.formLayout} >
             {getFieldDecorator("date",{
-                initialValue: moment(date).add(8, 'hours')
-              })(
-                <div>
-                </div>
-              )}
+              initialValue: date.toISOString(date.getHours() + 8)
+            })(
+              <div></div>
+            )}
           </FormItem>
         </Form>
       );
