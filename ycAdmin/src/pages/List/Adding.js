@@ -11,11 +11,11 @@ import 'braft-editor/dist/index.css';
 import { ContentUtils } from 'braft-utils';
 import { ImageUtils } from 'braft-finder';
 
-const date = new Date();
+const date = new Date(+new Date() + 8 * 3600 * 1000);
 console.log(date)
+var length = 0;
 const Option = Select.Option;
 const FormItem = Form.Item;
-
 @connect(({ list, loading }) => ({
   list,
   loading: loading.models.list
@@ -35,6 +35,7 @@ class Adding extends React.Component {
       '7': {options: ['群众文化','银川记忆']}
     }
     this.state = {
+      fileList: [],
       loading: false,
       file_name:"",
       selectMode: '0',
@@ -129,12 +130,13 @@ class Adding extends React.Component {
     if (Array.isArray(e)) {
       return e;
     }
+    console.log(e.fileList.length)
+    length = e.fileList.length;
     return e && e.fileList;
   }
 
   render() {
-    const { getFieldProps } = this.props.form;
-    const { fileList, outputHTML, editorState } = this.state;
+    const { outputHTML, editorState } = this.state;
     const controls = [
       'undo', 'redo', 'separator',
       'font-size', 'separator',
@@ -149,7 +151,7 @@ class Adding extends React.Component {
       this.setState({
         editorState: ContentUtils.insertMedias(editorState, [{
           type: 'IMAGE',
-          url: file.files[0].url,
+          url: file.url,
         }]),
       })
     }
@@ -184,7 +186,7 @@ class Adding extends React.Component {
     if(this.modeOptions[this.state.selectMode].options.length !== 0) {
       modelOptions = [];
       this.modeOptions[this.state.selectMode].options.map((item, index) => {
-        modelOptions.push(<Option key={index}>{item}</Option>)
+        modelOptions.push(<Option value={index}>{item}</Option>)
       })
     }
     const {
@@ -218,14 +220,14 @@ class Adding extends React.Component {
           <FormItem label="文章封面" {...this.formLayout}>
             {getFieldDecorator("image", {
               valuePropName: 'fileList',
-              getValueFromEvent: this.normFile,
+              getValueFromEvent: this.normFile
             })(
                 <Upload
                   name="image"
                   listType="picture"
                   action="http://39.98.162.91:9573/api/v1/upload"
                 >
-                  <Button>
+                  <Button disabled={length >= 1}>
                     <Icon type="upload" /> Click to upload
                   </Button>
                 </Upload>
@@ -245,18 +247,18 @@ class Adding extends React.Component {
           </FormItem>
           <FormItem label="文章分类" {...this.formLayout} >
             {getFieldDecorator("category", {
-              initialValue: "0",
+              initialValue: 0,
               rules: [{ required: true, message: "请选择文章分类" }],
             })(
               <Select onChange={this.selectMode} getPopupContainer={triggerNode => triggerNode.parentNode} placeholder="请选择">
-                <Option value="0">Culture</Option>
-                <Option value="1">Book</Option>
-                <Option value="2">Heritage</Option>
-                <Option value="3">Travel</Option>
-                <Option value="4">Art</Option>
-                <Option value="5">Consumption</Option>
-                <Option value="6">Brand</Option>
-                <Option value="7">Interpretation</Option>
+                <Option value={0}>Culture</Option>
+                <Option value={1}>Book</Option>
+                <Option value={2}>Heritage</Option>
+                <Option value={3}>Travel</Option>
+                <Option value={4}>Art</Option>
+                <Option value={5}>Consumption</Option>
+                <Option value={6}>Brand</Option>
+                <Option value={7}>Interpretation</Option>
               </Select>
             )}
           </FormItem>
@@ -268,7 +270,7 @@ class Adding extends React.Component {
           </FormItem>
           <FormItem {...this.formLayout} >
             {getFieldDecorator("date",{
-              initialValue: date.toISOString(date.getHours() + 8)
+              initialValue: date
             })(
               <div></div>
             )}
@@ -282,7 +284,7 @@ class Adding extends React.Component {
           <div className="editor-wrapper">
             <BraftEditor
                 onChange={this.handleEditorChange}
-                value={this.state.editorState}
+                value={editorState}
                 controls={controls}
                 extendControls= {extendControls}
             />
