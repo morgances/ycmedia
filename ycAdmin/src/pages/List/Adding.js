@@ -8,12 +8,16 @@ import PageHeaderWrapper from "@/components/PageHeaderWrapper";
 import moment from 'moment';
 import BraftEditor from 'braft-editor';
 import 'braft-editor/dist/index.css';
-import { ContentUtils } from 'braft-utils';
-import { ImageUtils } from 'braft-finder';
+import Axios from 'axios';
+
+function getBase64(img,callback) {
+  const reader = new FileReader();
+  reader.addEventListener('load',() => callback(reader.result));
+  reader.readAsDataURL(img);
+}
 
 const date = new Date(+new Date() + 8 * 3600 * 1000);
 console.log(date)
-var length = 0;
 const Option = Select.Option;
 const FormItem = Form.Item;
 @connect(({ list, loading }) => ({
@@ -35,44 +39,26 @@ class Adding extends React.Component {
       '7': {options: ['群众文化','银川记忆']}
     }
     this.state = {
-      fileList: [],
       loading: false,
       file_name:"",
       selectMode: '0',
-      content: "",
-      editorState: BraftEditor.createEditorState(null)
+      imageUrl: ''
     }
     this.selectMode = this.selectMode.bind(this)
   }
 
   componentDidMount() {
-    this.props.form.validateFields();
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'list/addList',
-    })
+    setTimeout(() => {
+      this.props.form.setFieldsValue({
+        text: BraftEditor.createEditorState('<p>Hello <b>World!</b></p>')
+      })
+    }, 1000)
   }
-
-  // componentWillReceiveProps(nextProps) {
-  //   if ('value' in nextProps) {
-  //       const editorState = nextProps.value;
-  //       this.setState({
-  //           editorState,
-  //       });
-  //   }
-  // }
 
   formLayout = {
     labelCol: { span: 7 },
     wrapperCol: { span: 13 }
   };
-
-  handleEditorChange = (editorState) => {
-    this.setState({
-      editorState
-      //outputHTML: editorState.toHTML()
-    })
-  }
 
   showModal = () => {
     this.setState({
@@ -101,21 +87,22 @@ class Adding extends React.Component {
     const { dispatch, form } = this.props;
     setTimeout(() => this.addBtn.blur(), 0);
     form.validateFields((err, fieldsValue) => {
-      if (err) return;
-      const submitData = {
-        title: fieldsValue.title,
-        //content: fieldsValue.content.toRAW() // or fieldsValue.content.toHTML()
+      if (!err) {
+        const submitData = {
+          text: fieldsValue.text.toHTML()
+        }
+        console.log(submitData)
+        this.setState({
+          done: true,
+        });
+        dispatch({
+          type: "list/addList",
+          payload: {
+            ...fieldsValue,
+            text: fieldsValue.text.toHTML()
+          }
+        });
       }
-      console.log(submitData)
-      console.log('数据：', fieldsValue);
-      this.setState({
-        done: true
-      });
-      dispatch({
-        type: "list/addList",
-        payload: { 
-          ...fieldsValue }
-      });
     });
   };
 
@@ -125,63 +112,59 @@ class Adding extends React.Component {
     })
   }
 
-  normFile = (e) => {
-    console.log('Upload event:', e);
-    if (Array.isArray(e)) {
-      return e;
+  handleChange = (info) => {
+    console.log('info',info)
+    const isJPG = info.file.type === 'image/jpeg';
+    const isPNG = info.file.type === 'image/png';
+    if(!isJPG && !isPNG) {
+      message.error('仅支持JPG，JPEG，PNG');
     }
-    console.log(e.fileList.length)
-    length = e.fileList.length;
-    return e && e.fileList;
+    const isLt1M = info.file.size / 1024 / 1024 < 1;
+    if(!isLt1M) {
+      message.error('图片限制1M以下');
+    }
+    if(!((isJPG || isPNG) && isLt1M)) {
+      return false;
+    }
+    let formData = new window.FormData()
+    formData.append('file',info.file,info.file.name)
+    Axios({
+      headers: {
+        'Content-Type':'multipart/form-data'
+      },
+      method: 'post',
+      data: formData,
+      url: 'http://39.98.162.91:9573/api/v1/upload'
+    }).then(res => {
+      console.log('res',res)
+      console.log('1',this)
+      if(res.data.code === 200) {
+        let imgurl = res.data.result[0].photoBig
+        this.setState({
+          imageUrl: 'http://39.98.162.91:9573/' + imgurl
+        })
+      }
+    },err => {
+      console.log('err',err)
+    })
   }
 
+  beforeUpload(file) {
+    return false
+  }
+
+
   render() {
-    const { outputHTML, editorState } = this.state;
     const controls = [
       'undo', 'redo', 'separator',
       'font-size', 'separator',
       'text-color', 'bold', 'italic', 'underline', 'strike-through', 'separator',
       'remove-styles', 'emoji',  'separator', 'text-indent', 'text-align', 'separator',
       'headings', 'list-ul', 'list-ol', 'blockquote', 'code', 'separator',
-      'link', 'separator', 'hr', 'separator',
+      'link', 'media', 'hr', 'separator',
       'clear', 'separator'
     ]
-    //富文本上传图片
-    const onSuccess = (file) => {
-      this.setState({
-        editorState: ContentUtils.insertMedias(editorState, [{
-          type: 'IMAGE',
-          url: file.url,
-        }]),
-      })
-    }
 
-    const uploaderProps = {
-      action: "http://39.98.162.91:9573/api/v1/upload",
-      multiple: true,
-    }
-
-    const extendControls = [
-      {
-        key: 'antd-uploader',
-        type: 'component',
-        component: (
-          <Upload
-            name="files[]"
-            accept="image/*"
-            showUploadList={false}
-            onSuccess={onSuccess}
-            {...uploaderProps}
-            //onChange = {this.handleUploadChange}
-            customRequest={this.uploadHandler}
-          >
-            <button type="button" className="control-item button upload-button" data-title="插入图片">
-              <Icon type="picture" theme="filled" />
-            </button>
-          </Upload>
-        )
-      }
-    ]
     let modelOptions = null;
     if(this.modeOptions[this.state.selectMode].options.length !== 0) {
       modelOptions = [];
@@ -190,9 +173,9 @@ class Adding extends React.Component {
       })
     }
     const {
-      form: { getFieldDecorator }
+      form: { getFieldDecorator, setFieldsValue }
     } = this.props;
-    const { visible, done, current = {} } = this.state;
+    const { visible, done, current = {}, imageUrl } = this.state;
     const modalFooter = done
       ? { footer: null, onCancel: this.handleDone }
       : {
@@ -219,18 +202,20 @@ class Adding extends React.Component {
         <Form onSubmit={this.handleSubmit}>
           <FormItem label="文章封面" {...this.formLayout}>
             {getFieldDecorator("image", {
-              valuePropName: 'fileList',
-              getValueFromEvent: this.normFile
             })(
-                <Upload
-                  name="image"
-                  listType="picture"
-                  action="http://39.98.162.91:9573/api/v1/upload"
-                >
-                  <Button disabled={length >= 1}>
-                    <Icon type="upload" /> Click to upload
-                  </Button>
-                </Upload>
+                <div>
+                  <Upload
+                    name="image"
+                    showUploadList={false}
+                    beforeUpload={this.beforeUpload}
+                    onChange={this.handleChange}
+                  >
+                    <Button>
+                      <Icon type="upload" /> Click to upload
+                    </Button><br/>
+                    <p style={{marginTop: 10}}>（大小426 * 240像素，图片限制1M以下，仅支持JPG，JPEG，PNG）</p>
+                  </Upload>
+                </div>
             )}
           </FormItem>
           <FormItem label="文章标题" {...this.formLayout}>
@@ -282,12 +267,27 @@ class Adding extends React.Component {
       <PageHeaderWrapper title="添加文章">
         <Card bordered={false}>
           <div className="editor-wrapper">
-            <BraftEditor
-                onChange={this.handleEditorChange}
-                value={editorState}
-                controls={controls}
-                extendControls= {extendControls}
-            />
+            <Form onSubmit={this.handleSubmit}>
+              <FormItem>
+                {getFieldDecorator("text",{
+                  validateTrigger: 'onBlur',
+                  rules: [{
+                    required: true,
+                    validator: (_, value, callback) => {
+                      if (value.isEmpty()) {
+                        callback('请输入文章内容')
+                      } else {
+                        callback()
+                      }
+                    }
+                  }],
+                })(
+                  <BraftEditor
+                    controls={controls}
+                  ></BraftEditor>
+                )}
+              </FormItem>
+            </Form>
           </div>
         </Card>
         <Button

@@ -21,6 +21,7 @@ import {
   Select,
   Popconfirm,
   Cascader,
+  Pagination,
 } from "antd";
 
 import Highlighter from 'react-highlight-words';
@@ -34,7 +35,6 @@ const Search = Input.Search;
 const FormItem = Form.Item;
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
-const pageSize = 5;
 // const data = [{
 //   key: '0',
 //   name: '文化资讯',
@@ -80,6 +80,7 @@ class BasicList extends PureComponent {
       selectedRows: [],
       stepFormValues: {},
       searchText: '',
+      formValues: {},
     };
   };
 
@@ -149,6 +150,24 @@ class BasicList extends PureComponent {
       }
     });
   };
+
+  handleStandardTableChange = (Pagination) => {
+    const { dispatch } = this.props;
+    const { formValues } = this.state;
+
+    const params = {
+      currentPage: Pagination.current,
+      pageSize: Pagination.pageSize,
+      ...formValues
+    }
+
+    dispatch({
+      type: 'rule/fetch',
+      payload: {
+        params,
+      }
+    })
+  }
 
   showEditModal = item => {
     this.setState({
@@ -277,6 +296,7 @@ class BasicList extends PureComponent {
               data={data}
               columns={columns}
               onSelectRow={this.handleSelectRows}
+              onChange={this.handleStandardTableChange}
             />
           </div>
         </Card>

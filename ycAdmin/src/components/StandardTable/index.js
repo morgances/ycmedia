@@ -2,8 +2,6 @@ import React, { PureComponent, Fragment } from 'react';
 import { Table, Alert } from 'antd';
 import styles from './index.less';
 
-const pageSize = 5;
-
 function initTotalList(columns) {
   const totalList = [];
   columns.forEach(column => {
@@ -66,6 +64,7 @@ class StandardTable extends PureComponent {
   render() {
     const { selectedRowKeys, needTotalList } = this.state;
     const { data = {}, rowKey, ...rest } = this.props;
+    const { pagination } = data;
     const list = Array.from(data);
     console.log(data,'2'),
     console.log(list,'3')
@@ -73,8 +72,7 @@ class StandardTable extends PureComponent {
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,
-      pageSize: 10,
-      total: 10,
+      ...pagination,
     };
 
     const rowSelection = {
