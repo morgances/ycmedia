@@ -16,10 +16,116 @@ function getBase64(img,callback) {
   reader.readAsDataURL(img);
 }
 
-const date = new Date(+new Date() + 8 * 3600 * 1000);
-console.log(date)
+const date = new Date();
 const Option = Select.Option;
 const FormItem = Form.Item;
+
+const categoryData = {
+  '文化资讯': 0,
+  '书香银川': 1,
+  '遗脉相承': 2,
+  '银川旅游': 3,
+  '艺术空间': 4,
+  '文化消费': 5,
+  '文化品牌': 6,
+  '凤城演绎': 7
+};
+const tagData = {
+  0: {
+    '文化动态': 0,
+    '通知公告': 1,
+    '政策法规': 2,
+    '免费开放': 3
+  },
+  1: {
+    '图书借阅': 4,
+    '服务指南': 5,
+    '数字资源': 6,
+    '好书推荐': 7
+  },
+  2: {
+    '文化遗产': 8,
+    '非遗传承': 9
+  },
+  3: {},
+  4: {
+    '艺术资讯': 10,
+    '名家介绍': 11,
+    '艺术展示': 12,
+    '艺术场馆': 13
+  },
+  5: {
+    '银川影院': 14,
+    '艺术剧院': 15
+  },
+  6: {
+    '公益性文化产品': 16,
+    '公益性文化活动': 17,
+    '中华优秀传统文化与民族文化': 18
+  },
+  7: {
+    '群众文化': 19,
+    '银川记忆': 20
+  }
+};
+console.log(Object.values(Object.values(tagData)[2])[0],'0')
+console.log(Object.values(Object.values(tagData)[Object.values(categoryData)[0]]),'1')
+const secondTagData = {
+  0: {},
+  1: {},
+  2: {},
+  3: {},
+  4: {},
+  5: {},
+  6: {},
+  7: {},
+  8: {
+    '文化遗址': 0,
+    '文物鉴赏': 1,
+    '文物保护': 2
+  },
+  9: {
+    '项目名单': 0,
+    '传承保护': 1,
+    '非遗展馆': 2,
+    '民俗活动': 3,
+    '传承基地': 4,
+    '传承人': 5
+  },
+  10: {},
+  11: {},
+  12: {
+    '绘画': 0,
+    '书法': 1,
+    '音乐': 2,
+    '展览': 3
+  },
+  13: {},
+  14: {},
+  15: {
+    '院团介绍': 0,
+    '剧目介绍': 1,
+    '商业演出': 2
+  },
+  16: {},
+  17: {},
+  18: {},
+  19: {
+    '群文活动': 0,
+    '民间团队': 1,
+    '公益培训': 2
+  },
+  20: {
+    '西夏古都': 0,
+    '民间传说': 1,
+    '老银川': 2
+  }
+};
+// console.log(Object.values(secondTagData)[Object.values(Object.values(tagData)[Object.values(categoryData)[2]])[0]],'2')
+// console.log(Object.values(Object.values(secondTagData)[Object.values(Object.values(tagData)[Object.values(categoryData)[2]])[0]])[0],'3')
+// console.log(Object.keys(Object.values(secondTagData)[Object.values(Object.values(tagData)[Object.values(categoryData)[2]])[0]]),'4')
+console.log(Object.values(secondTagData)[Object.values(Object.values(tagData)[2])[0]],'5')
+
 @connect(({ list, loading }) => ({
   list,
   loading: loading.models.list
@@ -28,23 +134,15 @@ const FormItem = Form.Item;
 class Adding extends React.Component {
   constructor(props) {
     super(props);
-    this.modeOptions = {
-      '0': {options: ['文化动态', '通知公告', '政策法规', '免费开放']},
-      '1': {options: ['图书借阅', '服务指南', '数字资源', '好书推荐']},
-      '2': {options: ['文化遗产','非遗传承']},
-      '3': {options: []},
-      '4': {options: ['艺术资讯','名家介绍','艺术展示','艺术场馆']},
-      '5': {options: ['银川影院','艺术剧院']},
-      '6': {options: ['公益性文化产品','公益性文化活动','中华优秀传统文化']},
-      '7': {options: ['群众文化','银川记忆']}
-    }
     this.state = {
       loading: false,
       file_name:"",
-      selectMode: '0',
-      imageUrl: ''
+      imageUrl: '',
+      tags: Object.keys(Object.values(tagData)[Object.values(categoryData)[0]]),
+      secondTag: Object.values(Object.values(tagData)[Object.values(categoryData)[0]])[0],
+      labels: Object.keys(Object.values(secondTagData)[Object.values(Object.values(tagData)[0])[0]]),
+      thirdLabel: Object.values(Object.values(secondTagData)[Object.values(Object.values(tagData)[0])[0]])[0],
     }
-    this.selectMode = this.selectMode.bind(this)
   }
 
   componentDidMount() {
@@ -53,6 +151,27 @@ class Adding extends React.Component {
         text: BraftEditor.createEditorState('<p>Hello <b>World!</b></p>')
       })
     }, 1000)
+  }
+//联动
+  handleCategoryChange = (value) => {
+    this.setState({
+      tags: Object.keys(Object.values(tagData)[value]),
+      secondTag: Object.values(Object.values(tagData)[value])[0],
+    });
+  }
+
+  onSecondTagChange = (value) => {
+    this.setState({
+      //secondTag: value,
+      labels: Object.keys(Object.values(secondTagData)[value]),
+      thirdLabel: Object.values(Object.values(secondTagData)[value])[0],
+    });
+  }
+
+  onThirdLabelChange = (value) => {
+    this.setState({
+      thirdLabel: value,
+    })
   }
 
   formLayout = {
@@ -155,6 +274,9 @@ class Adding extends React.Component {
 
 
   render() {
+    const { tags, labels, fileList } = this.state;
+    console.log(tags, '3')
+    console.log(labels, '4')
     const controls = [
       'undo', 'redo', 'separator',
       'font-size', 'separator',
@@ -165,13 +287,6 @@ class Adding extends React.Component {
       'clear', 'separator'
     ]
 
-    let modelOptions = null;
-    if(this.modeOptions[this.state.selectMode].options.length !== 0) {
-      modelOptions = [];
-      this.modeOptions[this.state.selectMode].options.map((item, index) => {
-        modelOptions.push(<Option value={index}>{item}</Option>)
-      })
-    }
     const {
       form: { getFieldDecorator, setFieldsValue }
     } = this.props;
@@ -232,25 +347,39 @@ class Adding extends React.Component {
           </FormItem>
           <FormItem label="文章分类" {...this.formLayout} >
             {getFieldDecorator("category", {
-              initialValue: 0,
+              initialValue: Object.values(categoryData)[0],
+              onChange: this.handleCategoryChange,
               rules: [{ required: true, message: "请选择文章分类" }],
             })(
-              <Select onChange={this.selectMode} getPopupContainer={triggerNode => triggerNode.parentNode} placeholder="请选择">
-                <Option value={0}>Culture</Option>
-                <Option value={1}>Book</Option>
-                <Option value={2}>Heritage</Option>
-                <Option value={3}>Travel</Option>
-                <Option value={4}>Art</Option>
-                <Option value={5}>Consumption</Option>
-                <Option value={6}>Brand</Option>
-                <Option value={7}>Interpretation</Option>
-              </Select>
+                <Select
+                  getPopupContainer={triggerNode => triggerNode.parentNode}
+                >
+                  {Object.keys(categoryData).map((category, index) => <Option value={index}>{category}</Option>)}
+                </Select>
             )}
           </FormItem>
           <FormItem label="文章标签" {...this.formLayout} >
             {getFieldDecorator("tag", {
+              initialValue: this.state.secondTag,
+              onChange: this.onSecondTagChange
             })(
-              <Select getPopupContainer={triggerNode => triggerNode.parentNode} placeholder="请选择">{modelOptions}</Select>
+                <Select
+                  getPopupContainer={triggerNode => triggerNode.parentNode}
+                >
+                  {tags.map((tag, index) => <Option value={index}>{tag}</Option>)}
+                </Select>
+            )}
+          </FormItem>
+          <FormItem label="文章label" {...this.formLayout}>
+            {getFieldDecorator("label", {
+              initialValue: this.state.thirdLabel,
+              onChange: this.onThirdLabelChange
+            })(
+                <Select
+                  getPopupContainer={triggerNode => triggerNode.parentNode}
+                >
+                  {labels.map((label, index) => <Option value={index}>{label}</Option>)}
+                </Select>
             )}
           </FormItem>
           <FormItem {...this.formLayout} >

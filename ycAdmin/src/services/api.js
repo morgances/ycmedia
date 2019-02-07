@@ -92,11 +92,11 @@ export async function queryFakeList(params) {
 
 export async function removeList(params) {
   //const { count = 5, ...restParams } = params;
-  return request("/api/v1/article/delete", {
+  return await request(`/api/v1/article/delete`, {
     method: "POST",
     body: {
       ...params,
-      method: "delete"
+      method: "post"
     }
   });
 }

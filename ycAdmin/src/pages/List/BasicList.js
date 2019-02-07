@@ -199,12 +199,12 @@ class BasicList extends PureComponent {
     this.setState({ searchText: '' });
   }
 
-  deleteConfirm = (id) => {
+  deleteConfirm = (aid) => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'rule/remove',
+      type: 'list/removeList',
       payload: {
-        id,
+        aid
       },
     })
   }
@@ -250,10 +250,10 @@ class BasicList extends PureComponent {
         render: (text, record) => (
           <Fragment>
             <Popconfirm
-            title="确定删除？"
-            onConfirm={() => this.deleteConfirm(record.id)}
-            okText="确认"
-            cancelText="取消"
+              title="确定删除？"
+              onConfirm={() => this.deleteConfirm(record.aid)}
+              okText="确认"
+              cancelText="取消"
             >
               <a>删除</a>
             </Popconfirm>
