@@ -114,7 +114,7 @@ export async function addList(params) {
 
 export async function updateFakeList(params) {
   //const { count = 5, ...restParams } = params;
-  return request("/api/v1/article/getlist", {
+  return request("/api/v1/article/update", {
     method: "POST",
     body: {
       ...params,

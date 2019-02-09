@@ -147,6 +147,7 @@ class BasicList extends PureComponent {
         category: 0,
         page: 0,
         tag: 0,
+        label: 0
       }
     });
   };
@@ -169,16 +170,16 @@ class BasicList extends PureComponent {
     })
   }
 
-  showEditModal = item => {
+  showEditModal = aid => {
     this.setState({
       visible: true,
-      current: item,
+      current: aid,
     });
     const { dispatch } = this.props;
     dispatch({
       type: 'rule/gettext',
       payload: {
-        
+        aid: 123
       },
     })
   };
@@ -220,6 +221,7 @@ class BasicList extends PureComponent {
   }
 
   render() {
+    const { category, tag, label } = this.props;
     const columns = [
       {
         title: '文章作者',
@@ -234,10 +236,14 @@ class BasicList extends PureComponent {
         ...this.getColumnSearchProps('title'),
       },
       {
-        title: '文章分类',
+        title: '文章类别',
         dataIndex: 'category',
         key: 'category',
-        ...this.getColumnSearchProps('category'),
+        ...this.getColumnSearchProps('category','tag','label'),
+        render: category => 
+          <span>
+            <Tag color="blue" key={category}>{category}</Tag>
+          </span>
       },
       {
         title: '更新时间',
@@ -261,7 +267,7 @@ class BasicList extends PureComponent {
             <a 
               onClick={e => {
                 e.preventDefault();
-                this.showEditModal(item);
+                this.showEditModal(aid);
               }}
               //href="adding-list"
             >

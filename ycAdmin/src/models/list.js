@@ -59,9 +59,9 @@ export default {
     },
     *removeList({ payload }, { call,put }) {
       const response = yield call(removeList, payload);
-      if (response.status === 0) {
-        const response = yield call(queryFakeList, payload);
-        if (response.status !== 0) {
+      if (response.status === 200) {
+        const response = yield call(updateFakeList, payload);
+        if (response.status !== 200) {
           return
         }
         yield put({

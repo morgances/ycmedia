@@ -47,7 +47,7 @@ const tagData = {
     '文化遗产': 8,
     '非遗传承': 9
   },
-  3: {},
+  3: [],
   4: {
     '艺术资讯': 10,
     '名家介绍': 11,
@@ -71,14 +71,14 @@ const tagData = {
 console.log(Object.values(Object.values(tagData)[2])[0],'0')
 console.log(Object.values(Object.values(tagData)[Object.values(categoryData)[0]]),'1')
 const secondTagData = {
-  0: {},
-  1: {},
-  2: {},
-  3: {},
-  4: {},
-  5: {},
-  6: {},
-  7: {},
+  0: [],
+  1: [],
+  2: [],
+  3: [],
+  4: [],
+  5: [],
+  6: [],
+  7: [],
   8: {
     '文化遗址': 0,
     '文物鉴赏': 1,
@@ -92,24 +92,24 @@ const secondTagData = {
     '传承基地': 4,
     '传承人': 5
   },
-  10: {},
-  11: {},
+  10: [],
+  11: [],
   12: {
     '绘画': 0,
     '书法': 1,
     '音乐': 2,
     '展览': 3
   },
-  13: {},
-  14: {},
+  13: [],
+  14: [],
   15: {
     '院团介绍': 0,
     '剧目介绍': 1,
     '商业演出': 2
   },
-  16: {},
-  17: {},
-  18: {},
+  16: [],
+  17: [],
+  18: [],
   19: {
     '群文活动': 0,
     '民间团队': 1,
@@ -121,11 +121,6 @@ const secondTagData = {
     '老银川': 2
   }
 };
-// console.log(Object.values(secondTagData)[Object.values(Object.values(tagData)[Object.values(categoryData)[2]])[0]],'2')
-// console.log(Object.values(Object.values(secondTagData)[Object.values(Object.values(tagData)[Object.values(categoryData)[2]])[0]])[0],'3')
-// console.log(Object.keys(Object.values(secondTagData)[Object.values(Object.values(tagData)[Object.values(categoryData)[2]])[0]]),'4')
-console.log(Object.values(secondTagData)[Object.values(Object.values(tagData)[2])[0]],'5')
-
 @connect(({ list, loading }) => ({
   list,
   loading: loading.models.list
@@ -140,8 +135,8 @@ class Adding extends React.Component {
       imageUrl: '',
       tags: Object.keys(Object.values(tagData)[Object.values(categoryData)[0]]),
       secondTag: Object.values(Object.values(tagData)[Object.values(categoryData)[0]])[0],
-      labels: Object.keys(Object.values(secondTagData)[Object.values(Object.values(tagData)[0])[0]]),
-      thirdLabel: Object.values(Object.values(secondTagData)[Object.values(Object.values(tagData)[0])[0]])[0],
+      labels: Object.keys(Object.values(secondTagData)[Object.values(Object.values(tagData)[Object.values(categoryData)[0]])[0]]),
+      thirdLabel: Object.keys(Object.values(secondTagData)[Object.values(Object.values(tagData)[Object.values(categoryData)[0]])[0]])[0],
     }
   }
 
@@ -162,10 +157,10 @@ class Adding extends React.Component {
 
   onSecondTagChange = (value) => {
     this.setState({
-      //secondTag: value,
+      secondTag: value,
       labels: Object.keys(Object.values(secondTagData)[value]),
-      thirdLabel: Object.values(Object.values(secondTagData)[value])[0],
-    });
+      thirdLabel: Object.keys(Object.values(secondTagData)[value])[0],
+    }); 
   }
 
   onThirdLabelChange = (value) => {
@@ -231,6 +226,7 @@ class Adding extends React.Component {
     })
   }
 
+  //上传图片
   handleChange = (info) => {
     console.log('info',info)
     const isJPG = info.file.type === 'image/jpeg';
@@ -275,8 +271,7 @@ class Adding extends React.Component {
 
   render() {
     const { tags, labels, fileList } = this.state;
-    console.log(tags, '3')
-    console.log(labels, '4')
+
     const controls = [
       'undo', 'redo', 'separator',
       'font-size', 'separator',
@@ -324,6 +319,7 @@ class Adding extends React.Component {
                     showUploadList={false}
                     beforeUpload={this.beforeUpload}
                     onChange={this.handleChange}
+                    accept="image/*"
                   >
                     <Button>
                       <Icon type="upload" /> Click to upload
@@ -354,7 +350,7 @@ class Adding extends React.Component {
                 <Select
                   getPopupContainer={triggerNode => triggerNode.parentNode}
                 >
-                  {Object.keys(categoryData).map((category, index) => <Option value={index}>{category}</Option>)}
+                  {Object.keys(categoryData).map((category, index) => <Option key={category} value={index}>{category}</Option>)}
                 </Select>
             )}
           </FormItem>
@@ -366,7 +362,7 @@ class Adding extends React.Component {
                 <Select
                   getPopupContainer={triggerNode => triggerNode.parentNode}
                 >
-                  {tags.map((tag, index) => <Option value={index}>{tag}</Option>)}
+                  {tags.map((tag, index) => <Option key={tag} value={index}>{tag}</Option>)}
                 </Select>
             )}
           </FormItem>
@@ -378,7 +374,7 @@ class Adding extends React.Component {
                 <Select
                   getPopupContainer={triggerNode => triggerNode.parentNode}
                 >
-                  {labels.map((label, index) => <Option value={index}>{label}</Option>)}
+                  {labels.map((label, index) => <Option key={label} value={index}>{label}</Option>)}
                 </Select>
             )}
           </FormItem>
