@@ -2,7 +2,9 @@ import {
   queryFakeList,
   removeList,
   addList,
-  updateFakeList
+  updateFakeList,
+  addPictureList,
+  queryPictureList
 } from "@/services/api";
 
 export default {
@@ -48,6 +50,21 @@ export default {
         return false
       } else {
         const addResponse = yield call(queryFakeList, payload);
+        if (addResponse.status !== 0) {
+          return
+        }
+        yield put({
+          type: 'addList',
+          payload: addResponse.data,
+        });
+      }
+    },
+    *addPictureList({ payload }, { call, put }) {
+      const response = yield call(addPictureList, payload);
+      if(response.status !== 0) {
+        return false
+      } else {
+        const addResponse = yield call(queryPictureList, payload);
         if (addResponse.status !== 0) {
           return
         }

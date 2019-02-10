@@ -90,6 +90,15 @@ export async function queryFakeList(params) {
   });
 }
 
+export async function queryPictureList(params) {
+  return request("/api/v1/banner/list", {
+    method: "POST",
+    body: {
+      ...params,
+    }
+  });
+}
+
 export async function removeList(params) {
   //const { count = 5, ...restParams } = params;
   return await request(`/api/v1/article/delete`, {
@@ -104,6 +113,17 @@ export async function removeList(params) {
 export async function addList(params) {
   //const { count = 5, ...restParams } = params;
   return request("/api/v1/article/add", {
+    method: "POST",
+    body: {
+      ...params,
+      method: "post"
+    }
+  });
+}
+
+export async function addPictureList(params) {
+  //const { count = 5, ...restParams } = params;
+  return request("/api/v1/banner/create", {
     method: "POST",
     body: {
       ...params,

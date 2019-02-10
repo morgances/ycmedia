@@ -10,12 +10,6 @@ import BraftEditor from 'braft-editor';
 import 'braft-editor/dist/index.css';
 import Axios from 'axios';
 
-function getBase64(img,callback) {
-  const reader = new FileReader();
-  reader.addEventListener('load',() => callback(reader.result));
-  reader.readAsDataURL(img);
-}
-
 const date = new Date();
 const Option = Select.Option;
 const FormItem = Form.Item;
@@ -130,6 +124,9 @@ class Adding extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      fileList: [],
+      previewVisible: false,
+      previewImage: '',
       loading: false,
       file_name:"",
       imageUrl: '',
@@ -228,6 +225,8 @@ class Adding extends React.Component {
 
   //上传图片
   handleChange = (info) => {
+    let fileList = info.fileList;
+    this.setState({ fileList });
     console.log('info',info)
     const isJPG = info.file.type === 'image/jpeg';
     const isPNG = info.file.type === 'image/png';
@@ -268,9 +267,24 @@ class Adding extends React.Component {
     return false
   }
 
+  handleCancel = () => this.setState({ previewVisible: false })
+
+  handlePreview = (file) => {
+    this.setState({
+      previewImage: file.url || file.thumbUrl,
+      previewVisible: true,
+    });
+  }
 
   render() {
-    const { tags, labels, fileList } = this.state;
+    const { previewVisible, previewImage, tags, labels, fileList } = this.state;
+    const uploadButton = (
+      <div>
+        <Icon type={this.state.loading ? 'loading' : 'plus'} />
+        <div className="ant-upload-text">Upload</div>
+      </div>
+    );
+
 
     const controls = [
       'undo', 'redo', 'separator',
@@ -316,16 +330,22 @@ class Adding extends React.Component {
                 <div>
                   <Upload
                     name="image"
-                    showUploadList={false}
+                    listType="picture-card"
+                    fileList={fileList}
                     beforeUpload={this.beforeUpload}
+                    onPreview={this.handlePreview}
                     onChange={this.handleChange}
                     accept="image/*"
                   >
-                    <Button>
-                      <Icon type="upload" /> Click to upload
-                    </Button><br/>
-                    <p style={{marginTop: 10}}>（大小426 * 240像素，图片限制1M以下，仅支持JPG，JPEG，PNG）</p>
+                    {fileList.length >= 1 ? null : uploadButton}
+                    {/* <Button>
+                      <Icon type="upload" /> 上传图片
+                    </Button><br/> */}
+                    {/* <p style={{marginTop: 10}}>（大小426 * 240像素，图片限制1M以下，仅支持JPG，JPEG，PNG）</p> */}
                   </Upload>
+                  <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
+                    <img alt="image" style={{ width: '100%' }} src={previewImage} />
+                  </Modal>
                 </div>
             )}
           </FormItem>
