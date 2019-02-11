@@ -1,4 +1,4 @@
-import { queryRule, removeRule, addRule, updateRule, getText } from "@/services/api";
+import { queryRule, removeRule, addRule, updateRule, getText, queryFakeList } from "@/services/api";
 
 export default {
   namespace: "rule",
@@ -29,10 +29,15 @@ export default {
     },
     *remove({ payload, callback }, { call, put }) {
       const response = yield call(removeRule, payload);
-      yield put({
-        type: "save",
-        payload: response
-      });
+      console.log(response,'8')
+      //更新删除后数据
+      if (response.status === 200) {
+        const response = yield call(queryRule, payload);
+        yield put({
+          type: "save",
+          payload: response.data
+        });
+      }
       if (callback) callback();
     },
     *update({ payload, callback }, { call, put }) {
@@ -54,11 +59,11 @@ export default {
   },
 
   reducers: {
-    save(state, action) {
-      console.log(action.payload)
+    save(state, { payload }) {
+      console.log('删除后', payload)
       return {
         ...state,
-        data: action.payload
+        data: payload
       };
     },
     addRule(state, { payload }) {

@@ -81,14 +81,20 @@ export async function queryTags() {
 //   return request("/api/profile/advanced");
 // }
 
-export async function queryFakeList(params) {
-  return request("/api/v1/article/getlist", {
-    method: "POST",
-    body: {
-      ...params,
-    }
-  });
+export async function queryFakeList() {
+  let resp = await request("/api/v1/article/getlist",
+  );
+  return resp
 }
+
+// export async function queryFakeList(params) {
+//   return request("/api/v1/article/getlist", {
+//     method: "POST",
+//     body: {
+//       ...params,
+//     }
+//   });
+// }
 
 export async function queryPictureList(params) {
   return request("/api/v1/banner/list", {
@@ -105,7 +111,7 @@ export async function removeList(params) {
     method: "POST",
     body: {
       ...params,
-      method: "post"
+      method: "delete"
     }
   });
 }
@@ -134,7 +140,7 @@ export async function addPictureList(params) {
 
 export async function updateFakeList(params) {
   //const { count = 5, ...restParams } = params;
-  return request("/api/v1/article/update", {
+  return request("/api/v1/article/getlist", {
     method: "POST",
     body: {
       ...params,

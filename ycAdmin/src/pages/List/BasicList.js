@@ -22,6 +22,7 @@ import {
   Popconfirm,
   Cascader,
   Pagination,
+  message
 } from "antd";
 
 import Highlighter from 'react-highlight-words';
@@ -200,14 +201,17 @@ class BasicList extends PureComponent {
     this.setState({ searchText: '' });
   }
 
-  deleteConfirm = (aid) => {
+  deleteConfirm = aid => {
+    console.log(aid,'6')
     const { dispatch } = this.props;
     dispatch({
-      type: 'list/removeList',
+      type: 'rule/remove',
       payload: {
         aid
       },
-    })
+    });
+
+    message.success('删除成功');
   }
 
   editText = (aid) => {
@@ -265,10 +269,7 @@ class BasicList extends PureComponent {
             </Popconfirm>
             <Divider type="vertical" />
             <a 
-              onClick={e => {
-                e.preventDefault();
-                this.showEditModal(aid);
-              }}
+              href={'#/list/adding-list'+record.aid}
               //href="adding-list"
             >
               编辑

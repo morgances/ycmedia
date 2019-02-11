@@ -75,10 +75,12 @@ export default {
       }
     },
     *removeList({ payload }, { call,put }) {
+      console.log(payload,'4')
+      console.log(Object.keys(payload).length,'5')
       const response = yield call(removeList, payload);
-      if (response.status === 200) {
-        const response = yield call(updateFakeList, payload);
-        if (response.status !== 200) {
+      if (response.status === 0) {
+        const response = yield call(queryFakeList, payload);
+        if (response.status !== 0) {
           return
         }
         yield put({
@@ -87,7 +89,7 @@ export default {
         });
       } else {
         return false
-      }
+      };
     },
   },
 

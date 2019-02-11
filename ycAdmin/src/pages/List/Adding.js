@@ -140,7 +140,7 @@ class Adding extends React.Component {
   componentDidMount() {
     setTimeout(() => {
       this.props.form.setFieldsValue({
-        text: BraftEditor.createEditorState('<p>Hello <b>World!</b></p>')
+        text: BraftEditor.createEditorState('<p></p>')
       })
     }, 1000)
   }
@@ -186,7 +186,7 @@ class Adding extends React.Component {
     });
   };
 
-  handleCancel = () => {
+  handleButtonCancel = () => {
     setTimeout(() => this.addBtn.blur(), 0);
     this.setState({
       visible: false
@@ -305,7 +305,7 @@ class Adding extends React.Component {
       : {
           okText: "发布",
           onOk: this.handleSubmit,
-          onCancel: this.handleCancel
+          onCancel: this.handleButtonCancel
         };
     const getModalContent = () => {
       if (done) {
@@ -338,10 +338,6 @@ class Adding extends React.Component {
                     accept="image/*"
                   >
                     {fileList.length >= 1 ? null : uploadButton}
-                    {/* <Button>
-                      <Icon type="upload" /> 上传图片
-                    </Button><br/> */}
-                    {/* <p style={{marginTop: 10}}>（大小426 * 240像素，图片限制1M以下，仅支持JPG，JPEG，PNG）</p> */}
                   </Upload>
                   <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
                     <img alt="image" style={{ width: '100%' }} src={previewImage} />

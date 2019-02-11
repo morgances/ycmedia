@@ -6,10 +6,16 @@ import PageHeaderWrapper from "@/components/PageHeaderWrapper";
 import Result from "@/components/Result";
 import styles from "./DynamicPost.less";
 import moment from 'moment';
+import Axios from 'axios';
+import ImageGallery from 'react-image-gallery';
 
 const FormItem = Form.Item;
 const dateFormat = 'YYYY/MM/DD';
-
+@connect(({ list, rule, loading }) => ({
+  list,
+  rule,
+  loading: loading.models.list,
+}))
 @Form.create()
 class DynamicPost extends Component {
   constructor(props) {
@@ -19,6 +25,9 @@ class DynamicPost extends Component {
   state = {
     modalVisible: false,
     fileList: [],
+    previewVisible: false,
+    previewImage: '',
+    loading: false,
   };
 
   deleteConfirm = (aid) => {
@@ -90,20 +99,64 @@ class DynamicPost extends Component {
       current: undefined
     });
   };
-
-  normFile = (e) => {
-    console.log('Upload event:', e);
-    if (Array.isArray(e)) {
-      return e;
+  //上传图片
+  handleChange = (info) => {
+    let fileList = info.fileList;
+    this.setState({ fileList });
+    console.log('info',info)
+    const isJPG = info.file.type === 'image/jpeg';
+    const isPNG = info.file.type === 'image/png';
+    if(!isJPG && !isPNG) {
+      message.error('仅支持JPG，JPEG，PNG');
     }
-    return e && e.fileList;
+    const isLt1M = info.file.size / 1024 / 1024 < 1;
+    if(!isLt1M) {
+      message.error('图片限制1M以下');
+    }
+    if(!((isJPG || isPNG) && isLt1M)) {
+      return false;
+    }
+    let formData = new window.FormData()
+    formData.append('file',info.file,info.file.name)
+    Axios({
+      headers: {
+        'Content-Type':'multipart/form-data'
+      },
+      method: 'post',
+      data: formData,
+      url: 'http://39.98.162.91:9573/api/v1/upload'
+    }).then(res => {
+      console.log('res',res)
+      console.log('1',this)
+      if(res.data.code === 200) {
+        let imgurl = res.data.result[0].photoBig
+        this.setState({
+          imageUrl: 'http://39.98.162.91:9573/' + imgurl
+        })
+      }
+    },err => {
+      console.log('err',err)
+    })
+  }
+
+  beforeUpload(file) {
+    return false
+  }
+
+  handleCancel = () => this.setState({ previewVisible: false })
+
+  handlePreview = (file) => {
+    this.setState({
+      previewImage: file.url || file.thumbUrl,
+      previewVisible: true,
+    });
   }
 
   render() {
     const {
       form: { getFieldDecorator }
     } = this.props;
-    const { modalVisible, fileList, visible, done, current = {} } = this.state;
+    const { previewVisible, previewImage, modalVisible, fileList, visible, done, current = {} } = this.state;
     const modalFooter = done
       ? { footer: null, onCancel: this.handleDone }
       : {
@@ -111,6 +164,12 @@ class DynamicPost extends Component {
         onOk: this.handleSubmit,
         onCancel: this.handleModalCancel
       };
+    const uploadButton = (
+      <div>
+        <Icon type={this.state.loading ? 'loading' : 'plus'} />
+        <div>Upload</div>
+      </div>
+    )
     const getModalContent = () => {
       if (done) {
         return (
@@ -129,16 +188,24 @@ class DynamicPost extends Component {
       return (
         <Form onSubmit={this.handleSubmit}>
           <FormItem label="上传图片" {...this.formLayout}>
-          {getFieldDecorator("image", {
-            //valuePropName: 'fileList',
-            getValueFromEvent: this.normFile,
+          {getFieldDecorator("path", {
+            rules: [{ required: true, message: "请上传轮播图"}],
           })(
-            <div className="clearfix">
-              <Upload accept="image/*" name="logo" action="http://39.98.162.91:9573/api/v1/upload" listType="picture">
-                <Button>
-                  <Icon type="upload" /> Click to upload
-                </Button>
+            <div>
+              <Upload
+                name="image"
+                listType="picture-card"
+                fileList={fileList}
+                beforeUpload={this.beforeUpload}
+                onPreview={this.handlePreview}
+                onChange={this.handleChange}
+                accept="image/*"
+              >
+                {fileList.length >= 10 ? null : uploadButton}
               </Upload>
+              <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
+                <img alt="image" style={{ width: '100%' }} src={previewImage} />
+              </Modal>
             </div>
           )}
           </FormItem>
@@ -158,16 +225,34 @@ class DynamicPost extends Component {
       )
     }
 
-    const columns = [
+    const images = [
       {
-        title: 'ID',
-        dataIndex: 'id',
-        key: 'id'
+        original: 'http://lorempixel.com/1000/600/nature/1/',
+        thumbnail: 'http://lorempixel.com/250/150/nature/1/',
       },
+      {
+        original: 'http://lorempixel.com/1000/600/nature/2/',
+        thumbnail: 'http://lorempixel.com/250/150/nature/2/'
+      },
+      {
+        original: 'http://lorempixel.com/1000/600/nature/3/',
+        thumbnail: 'http://lorempixel.com/250/150/nature/3/'
+      }
+    ]
+
+    const columns = [
+      // {
+      //   title: 'ID',
+      //   dataIndex: 'id',
+      //   key: 'id'
+      // },
       {
         title: '轮播图',
         dataIndex: 'image',
-        key: 'image'
+        key: 'image',
+        render: () => (
+          <ImageGallery items={images} />
+        )
       },
       {
         title: '轮播开始时间',
@@ -227,7 +312,8 @@ class DynamicPost extends Component {
           />
         </Card>
         <Modal
-          title={done ? null : `轮播图${current ? "添加" : "添加"}`}
+          title="新建轮播图"
+          className={styles.standardListForm}
           width={640}
           bodyStyle={done ? { padding: "72px 0"} : { padding: "28px 0 0"}}
           destroyOnClose
