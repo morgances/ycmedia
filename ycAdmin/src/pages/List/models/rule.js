@@ -48,19 +48,24 @@ export default {
       });
       if (callback) callback();
     },
-    *gettext({ payload, callback }, { call, put }) {
+    *text({ payload }, { call, put }) {
       const response = yield call(getText, payload);
       yield put({
-        type: "save",
-        payload: response
+        type: "edict",
+        payload: response.data
       });
-      if (callback) callback();
     },
   },
 
   reducers: {
     save(state, { payload }) {
-      console.log('删除后', payload)
+      return {
+        ...state,
+        data: payload
+      };
+    },
+    edict(state, { payload }) {
+      console.log(payload,'编辑')
       return {
         ...state,
         data: payload

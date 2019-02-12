@@ -115,9 +115,10 @@ const secondTagData = {
     '老银川': 2
   }
 };
-@connect(({ list, loading }) => ({
+@connect(({ list, rule, loading }) => ({
   list,
-  loading: loading.models.list
+  rule,
+  loading: loading.models.rule,
 }))
 @Form.create()
 class Adding extends React.Component {
@@ -138,9 +139,17 @@ class Adding extends React.Component {
   }
 
   componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: "rule/text",
+      payload: {
+        aid: 123,
+        text: ''
+      }
+    });
     setTimeout(() => {
       this.props.form.setFieldsValue({
-        text: BraftEditor.createEditorState('<p></p>')
+        text: BraftEditor.createEditorState(`<p>${this.props.rule.data[0].text}</p>`)
       })
     }, 1000)
   }
@@ -263,7 +272,7 @@ class Adding extends React.Component {
     })
   }
 
-  beforeUpload(file) {
+  beforeUpload() {
     return false
   }
 
@@ -284,7 +293,9 @@ class Adding extends React.Component {
         <div className="ant-upload-text">Upload</div>
       </div>
     );
-
+    const aid = this.props.match.params.aid;
+    console.log(this.props,'9')
+    console.log(this.props.rule.data[0].text,'10')
 
     const controls = [
       'undo', 'redo', 'separator',

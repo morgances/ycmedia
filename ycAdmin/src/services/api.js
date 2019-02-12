@@ -11,6 +11,7 @@ import { setToken } from "./token";
 // }
 
 export async function queryRule(params) {
+  console.log(params,'')
   return request("/api/v1/article/getlist", {
     method: "POST",
     body: {
@@ -40,10 +41,12 @@ export async function addRule(params) {
 }
 
 export async function getText(params) {
+  console.log(params,'')
   return request("/api/v1/article/gettext",{
     method: "POST",
     body: {
       ...params,
+      method: "post"
     }
   })
 }

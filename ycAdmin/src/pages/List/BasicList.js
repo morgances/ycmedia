@@ -31,6 +31,9 @@ import ArticleListContent from "@/components/ArticleListContent";
 import styles from "./BasicList.less";
 import StandardFormRow from "@/components/StandardFormRow";
 import StandardTable from "@/components/StandardTable";
+import Link from 'umi/link';
+import { routerRedux } from 'dva/router';
+import Adding from "./Adding";
 
 const Search = Input.Search;
 const FormItem = Form.Item;
@@ -76,10 +79,7 @@ class BasicList extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      modalVisible: false,
-      updateModalVisible: false,
       selectedRows: [],
-      stepFormValues: {},
       searchText: '',
       formValues: {},
     };
@@ -145,10 +145,11 @@ class BasicList extends PureComponent {
     dispatch({
       type: "rule/fetch",
       payload: {
-        category: 0,
-        page: 0,
-        tag: 0,
-        label: 0
+        // category: 0,
+        // page: 0,
+        // tag: 0,
+        // label: 0,
+        pageSize: 2
       }
     });
   };
@@ -170,20 +171,6 @@ class BasicList extends PureComponent {
       }
     })
   }
-
-  showEditModal = aid => {
-    this.setState({
-      visible: true,
-      current: aid,
-    });
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'rule/gettext',
-      payload: {
-        aid: 123
-      },
-    })
-  };
 
   handleSelectRows = rows => {
     this.setState({
@@ -214,18 +201,16 @@ class BasicList extends PureComponent {
     message.success('删除成功');
   }
 
-  editText = (aid) => {
+  adding = () => {
     const { dispatch } = this.props;
-    dispatch({
-      type: 'list/addlist',
-      payload: {
-        aid,
-      }
-    })
+    dispatch(routerRedux.push({
+      pathname: '/list/adding-list/',
+    }))
   }
 
   render() {
-    const { category, tag, label } = this.props;
+    const { category, tag, label, rule: { data }, loading, } = this.props;
+    const { selectedRows } = this.state;
     const columns = [
       {
         title: '文章作者',
@@ -268,21 +253,15 @@ class BasicList extends PureComponent {
               <a>删除</a>
             </Popconfirm>
             <Divider type="vertical" />
-            <a 
-              href={'#/list/adding-list'+record.aid}
-              //href="adding-list"
+            <Link
+              to={`/list/adding-list/${record.aid}`}
             >
               编辑
-            </a>
+            </Link>
           </Fragment>
         ),
       },
     ];
-    const {
-      rule: { data },
-      loading,
-    } = this.props;
-    const { selectedRows,modalVisible,updateModalVisible, stepFormValues } = this.state;
 
     return (
       <PageHeaderWrapper title="文章列表">
@@ -291,12 +270,11 @@ class BasicList extends PureComponent {
             type="dashed"
             style={{ width: "100%", marginBottom: 20 }}
             icon="plus"
-            href="adding-list"
+            onClick={this.adding}
           >
             添加文章
           </Button>
           <div className={styles.tableList}>
-            <div className={styles.tableListForm}></div>
             <StandardTable
               selectedRows={selectedRows}
               loading={loading}

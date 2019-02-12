@@ -106,7 +106,7 @@ export default [
             component: "./List/BasicList"
           },
           {
-            path: "/list/adding-list",
+            path: "/list/adding-list/:aid",
             name: "addinglist",
             component: "./List/Adding",
             hideInMenu: true

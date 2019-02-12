@@ -30,6 +30,16 @@ class DynamicPost extends Component {
     loading: false,
   };
 
+  componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: "list/fetch",
+      payload: {
+        unixtime: 0
+      }
+    });
+  };
+
   deleteConfirm = (aid) => {
     const { dispatch } = this.props;
     dispatch({
@@ -284,7 +294,6 @@ class DynamicPost extends Component {
                 e.preventDefault();
                 this.showEditModal(aid);
               }}
-              //href="adding-list"
             >
               编辑
             </a>
