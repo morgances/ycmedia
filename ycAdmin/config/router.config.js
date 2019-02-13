@@ -106,6 +106,12 @@ export default [
             component: "./List/BasicList"
           },
           {
+            path:"/list/adding-list",
+            name: "addinglist",
+            component: "./List/AddText",
+            hideInMenu: true
+          },
+          {
             path: "/list/adding-list/:aid",
             name: "addinglist",
             component: "./List/Adding",

@@ -2,7 +2,7 @@ import React from "react";
 import { findDOMNode } from "react-dom";
 import { DatePicker, TimePicker, Button, Card, Modal, Form, Input, Cascader, Upload, Icon, message, Select } from "antd";
 import Result from "@/components/Result";
-import styles from "./Adding.less";
+import styles from "./AddText.less";
 import { connect } from "dva";
 import PageHeaderWrapper from "@/components/PageHeaderWrapper";
 import moment from 'moment';
@@ -115,17 +115,16 @@ const secondTagData = {
     '老银川': 2
   }
 };
-@connect(({ list, rule, loading }) => ({
+@connect(({ list, loading }) => ({
   list,
-  rule,
-  loading: loading.models.rule,
+  loading: loading.models.list
 }))
 @Form.create()
-class Adding extends React.Component {
+class AddText extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      fileList: [{uid: '0', url: `${this.props.rule.data[0].image}`}],
+      fileList: [],
       previewVisible: false,
       previewImage: '',
       loading: false,
@@ -139,16 +138,9 @@ class Adding extends React.Component {
   }
 
   componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch({
-      type: "rule/text",
-      payload: {
-        aid: this.props.match.params.aid
-      }
-    });
     setTimeout(() => {
       this.props.form.setFieldsValue({
-        text: BraftEditor.createEditorState(`<p>${this.props.rule.data[0].text}</p>`)
+        text: BraftEditor.createEditorState('<p></p>')
       })
     }, 1000)
   }
@@ -271,7 +263,7 @@ class Adding extends React.Component {
     })
   }
 
-  beforeUpload() {
+  beforeUpload(file) {
     return false
   }
 
@@ -292,9 +284,7 @@ class Adding extends React.Component {
         <div className="ant-upload-text">Upload</div>
       </div>
     );
-    const aid = this.props.match.params.aid;
-    console.log(this.props,'9')
-    //console.log(this.props.rule.data[0].text,'10')
+
 
     const controls = [
       'undo', 'redo', 'separator',
@@ -357,19 +347,19 @@ class Adding extends React.Component {
           </FormItem>
           <FormItem label="文章标题" {...this.formLayout}>
             {getFieldDecorator("title", {
-              //initialValue: this.props.rule.data[0].title,
+              initialValue: "标题",
               rules: [{ required: true, message: "请输入文章标题" }],
             })(<Input placeholder="请输入" />)}
           </FormItem>
           <FormItem label="文章作者" {...this.formLayout}>
             {getFieldDecorator("author", {
-              initialValue: this.props.rule.data[0].author,
+              initialValue: "作者",
               rules: [{ required: true, message: "请输入文章作者" }],
             })(<Input placeholder="请输入" />)}
           </FormItem>
           <FormItem label="文章分类" {...this.formLayout} >
             {getFieldDecorator("category", {
-              initialValue: this.props.rule.data[0].category,
+              initialValue: Object.values(categoryData)[0],
               onChange: this.handleCategoryChange,
               rules: [{ required: true, message: "请选择文章分类" }],
             })(
@@ -382,7 +372,7 @@ class Adding extends React.Component {
           </FormItem>
           <FormItem label="文章标签" {...this.formLayout} >
             {getFieldDecorator("tag", {
-              initialValue: this.props.rule.data[0].tag,
+              initialValue: this.state.secondTag,
               onChange: this.onSecondTagChange
             })(
                 <Select
@@ -394,7 +384,7 @@ class Adding extends React.Component {
           </FormItem>
           <FormItem label="文章label" {...this.formLayout}>
             {getFieldDecorator("label", {
-              initialValue: this.props.rule.data[0].label,
+              initialValue: this.state.thirdLabel,
               onChange: this.onThirdLabelChange
             })(
                 <Select
@@ -406,7 +396,7 @@ class Adding extends React.Component {
           </FormItem>
           <FormItem {...this.formLayout} >
             {getFieldDecorator("date",{
-              initialValue: this.props.rule.data[0].date
+              initialValue: date
             })(
               <div></div>
             )}
@@ -467,4 +457,4 @@ class Adding extends React.Component {
   }
 }
 
-export default Adding;
+export default AddText;
