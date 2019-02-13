@@ -139,16 +139,19 @@ class Adding extends React.Component {
   }
 
   componentDidMount() {
+    const aid = Number(this.props.match.params.aid);
+    console.log(this.props.match.params.aid)
     const { dispatch } = this.props;
     dispatch({
       type: "rule/text",
       payload: {
-        aid: this.props.match.params.aid
+        aid
       }
     });
+    console.log(aid)
     setTimeout(() => {
       this.props.form.setFieldsValue({
-        text: BraftEditor.createEditorState(`<p>${this.props.rule.data[0].text}</p>`)
+      text: BraftEditor.createEditorState(`${this.props.rule.data[0].text}`)
       })
     }, 1000)
   }
@@ -292,9 +295,9 @@ class Adding extends React.Component {
         <div className="ant-upload-text">Upload</div>
       </div>
     );
-    const aid = this.props.match.params.aid;
+    //const aid = this.props.match.params.aid;
     console.log(this.props,'9')
-    //console.log(this.props.rule.data[0].text,'10')
+    console.log(this.props.rule.data[0].date,'10')
 
     const controls = [
       'undo', 'redo', 'separator',
@@ -357,7 +360,7 @@ class Adding extends React.Component {
           </FormItem>
           <FormItem label="文章标题" {...this.formLayout}>
             {getFieldDecorator("title", {
-              //initialValue: this.props.rule.data[0].title,
+              initialValue: this.props.rule.data[0].title,
               rules: [{ required: true, message: "请输入文章标题" }],
             })(<Input placeholder="请输入" />)}
           </FormItem>

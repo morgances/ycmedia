@@ -41,7 +41,7 @@ export async function addRule(params) {
 }
 
 export async function getText(params) {
-  console.log(params,'')
+  console.log(params,"获取参数")
   return request("/api/v1/article/gettext",{
     method: "POST",
     body: {
