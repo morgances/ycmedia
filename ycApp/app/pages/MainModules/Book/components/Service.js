@@ -25,7 +25,7 @@ class Service extends React.Component {
     dispatch({
       type: `book_service/get`,
       payload: {
-        category: 0,
+        category: 1,
         tag: 0,
         page: 0,
         nameSpace: 'book_service'
@@ -72,7 +72,7 @@ class Service extends React.Component {
       const { data } = await dispatch({
         type: `book_service/loadMore`,
         payload: {
-          category: 0,
+          category: 1,
           tag: 0,
           nameSpace: 'book_service'
         }

@@ -50,10 +50,10 @@ export default class Main extends Component<{}> {
           tabBarInactiveTextColor={Colors.black}
           tabBarUnderlineStyle={{backgroundColor: Colors.white}}>
           <View>
-            <Smriti navigation={this.props.navigation}></Smriti>
+            <Culture navigation={this.props.navigation}></Culture> 
           </View>
           <View>
-            <Culture navigation={this.props.navigation}></Culture>
+            <Smriti navigation={this.props.navigation}></Smriti>
           </View>
         </Tabs>
       </View>

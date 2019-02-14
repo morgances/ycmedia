@@ -25,8 +25,8 @@ class Books extends React.Component {
     dispatch({
       type: `book_books/get`,
       payload: {
-        category: 0,
-        tag: 0,
+        category: 1,
+        tag: 2,
         page: 0,
         nameSpace: 'book_books'
       }
@@ -72,8 +72,8 @@ class Books extends React.Component {
       const { data } = await dispatch({
         type: `book_books/loadMore`,
         payload: {
-          category: 0,
-          tag: 0,
+          category: 1,
+          tag: 2,
           nameSpace: 'book_books'
         }
       })

@@ -10,8 +10,8 @@ export default {
     *refresh({ payload }, { put, select }) {
       const { articleList } = yield select(state => state[`${payload.nameSpace}`])
       const { data, status } = yield getMore({
-        category: 0,
-        tag: 0,
+        category: 1,
+        tag: 2,
         date: articleList[0].date
       })
       if (status == 200 && data.data.length > 0) {
@@ -70,7 +70,7 @@ export default {
       return {
         ...state,
         page: state.page + 1,
-        articleList: state.articleList.concat(action.payload)
+        articleList: state.articleList.concat([...action.payload.data])
       }
     }
   }

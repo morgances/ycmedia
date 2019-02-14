@@ -1,12 +1,13 @@
 import request from '../utils/request'
 
-export function getList({ category, tag, page }) {
+export function getList({ category, tag, page, lable = 0 }) {
   return request({
     url: '/getlist',
     method: 'POST',
     data: {
       category,
       tag,
+      lable,
       page
     }
   })
@@ -30,14 +31,15 @@ export function getText({ aid }) {
   })
 }
 
-export function getMore({ category, tag, date }) {
+export function getMore({ category, tag, date, lable }) {
   return request({
     url: '/getmore',
     method: 'POST',
     data: {
       category,
       tag,
-      date
+      date,
+      lable
     }
   })
 }

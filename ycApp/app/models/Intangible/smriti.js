@@ -7,50 +7,56 @@ export default {
       {
         title: '项目名录',
         listName: 'directorise',
-        tag: 0,
+        tag: 1,
         page: 0,
-        category: 0,
-        isLoad: 0
+        category: 2,
+        isLoad: 0,
+        lable: 0
       },
       {
         title: '传承保护',
         listName: 'protect',
         tag: 1,
         page: 0,
-        category: 0,
-        isLoad: 0
+        category: 2,
+        isLoad: 0,
+        lable: 1
       },
       {
         title: '非遗展馆',
         listName: 'hall',
-        tag: 0,
+        tag: 1,
         page: 0,
-        category: 0,
-        isLoad: 0
+        category: 2,
+        isLoad: 0,
+        lable: 2
       },
       {
         title: '民俗活动',
         listName: 'activity',
         tag: 1,
         page: 0,
-        category: 0,
-        isLoad: 0
+        category: 2,
+        isLoad: 0,
+        lable: 3
       },
       {
         title: '传承基地',
         listName: 'base',
-        tag: 0,
+        tag: 1,
         page: 0,
-        category: 0,
-        isLoad: 0
+        category: 2,
+        isLoad: 0,
+        lable: 4
       },
       {
         title: '传承人',
         listName: 'person',
         tag: 1,
         page: 0,
-        category: 0,
-        isLoad: 0
+        category: 2,
+        isLoad: 0,
+        lable: 5
       }
     ],
     focus: 0,
@@ -88,7 +94,8 @@ export default {
       const { data, status } = yield getList({
         category: requestPayload.category,
         page: 0,
-        tag: requestPayload.tag
+        tag: requestPayload.tag,
+        lable: requestPayload.lable
       })
       data.data.map((item) => {
         item.time = item.date.slice(0, 10)
@@ -114,7 +121,8 @@ export default {
         const { data } = yield getList({
           category: focus.category,
           tag: focus.tag,
-          page: 0
+          page: 0,
+          lable: focus.lable
         })
         data.data.map((item) => {
           item.time = item.date.slice(0, 10)

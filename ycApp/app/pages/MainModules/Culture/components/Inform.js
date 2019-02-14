@@ -25,9 +25,10 @@ class Inform extends React.Component {
     dispatch({
       type: `culture_inform/get`,
       payload: {
-        category: 1,
+        category: 0,
         tag: 1,
         page: 0,
+        lable: 0,
         nameSpace: 'culture_inform'
       }
     })
@@ -72,7 +73,7 @@ class Inform extends React.Component {
       const { data } = await dispatch({
         type: `culture_inform/loadMore`,
         payload: {
-          category: 1,
+          category: 0,
           tag: 1,
           nameSpace: 'culture_inform'
         }

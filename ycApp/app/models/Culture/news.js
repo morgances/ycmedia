@@ -42,7 +42,7 @@ export default {
         tag: payload.category,
         page: page + 1
       })
-      if (status == 200 && data.data.length != 0) {
+      if (status == 200 && data.data.length > 0) {
         yield put({
           type: 'LoadMore',
           payload: {
@@ -70,7 +70,7 @@ export default {
       return {
         ...state,
         page: state.page + 1,
-        articleList: state.articleList.concat(action.payload)
+        articleList: state.articleList.concat([...action.payload.data])
       }
     }
   }

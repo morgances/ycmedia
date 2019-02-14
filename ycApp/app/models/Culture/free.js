@@ -11,7 +11,7 @@ export default {
       const { articleList } = yield select(state => state[`${payload.nameSpace}`])
       const { data, status } = yield getMore({
         category: 0,
-        tag: 0,
+        tag: 3,
         date: articleList[0].date
       })
       if (status == 200 && data.data.length > 0) {
@@ -42,7 +42,7 @@ export default {
         tag: payload.category,
         page: page + 1
       })
-      if (status == 200 && data.data.length != 0) {
+      if (status == 200 && data.data.length > 0) {
         yield put({
           type: 'LoadMore',
           payload: {
@@ -57,7 +57,7 @@ export default {
     Refresh(state, action) {
       return {
         ...state,
-        articleList: action.payload.concat(state.articleList)
+        articleList: action.payload.concat([...state.articleList])
       }
     },
     Get(state, action) {
@@ -70,7 +70,7 @@ export default {
       return {
         ...state,
         page: state.page + 1,
-        articleList: state.articleList.concat(action.payload)
+        articleList: state.articleList.concat([...action.payload.data])
       }
     }
   }
