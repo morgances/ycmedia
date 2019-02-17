@@ -1,4 +1,4 @@
-import { queryRule, removeRule, addRule, updateRule, getText, queryFakeList } from "@/services/api";
+import { queryRule, removeRule, addRule, updateRule, getText, queryFakeList, queryPictureList } from "@/services/api";
 
 export default {
   namespace: "rule",
@@ -13,6 +13,14 @@ export default {
   effects: {
     *fetch({ payload }, { call, put }) {
       const response = yield call(queryRule, payload);
+      console.log(response, 'response')
+      yield put({
+        type: "save",
+        payload: response.data
+      });
+    },
+    *fetchPicture({ payload }, { call, put }) {
+      const response = yield call(queryPictureList, payload);
       console.log(response, 'response')
       yield put({
         type: "save",

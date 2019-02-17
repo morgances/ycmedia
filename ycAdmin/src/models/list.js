@@ -11,13 +11,16 @@ export default {
   namespace: "list",
 
   state: {
-    list: []
+    list: [],
   },
 
   effects: {
     *fetch({ payload }, { call, put }) {
       const response = yield call(queryPictureList, payload);
-      console.log(response, 'response')
+      console.log(response, 'response');
+      if (response.status !== 0) {
+        return
+      }
       yield put({
         type: "queryList",
         payload: response.data
@@ -61,18 +64,18 @@ export default {
     },
     *addPictureList({ payload }, { call, put }) {
       const response = yield call(addPictureList, payload);
+      console.log(response,'5')
       if(response.status !== 0) {
         return false
-      } else {
-        const addResponse = yield call(queryPictureList, payload);
-        if (addResponse.status !== 0) {
-          return
-        }
-        yield put({
-          type: 'addList',
-          payload: addResponse.data,
-        });
       }
+        // const addResponse = yield call(queryPictureList, payload);
+        // if (addResponse.status !== 0) {
+        //   return
+        // }
+      yield put({
+        type: 'addPictureList',
+        payload: response.data,
+      });      
     },
     *removeList({ payload }, { call,put }) {
       console.log(payload,'4')
@@ -91,17 +94,41 @@ export default {
         return false
       };
     },
+    *updateList({ payload }, { call, put }) {
+      const response = yield call(updateFakeList, payload);
+      if (response.status !== 0) {
+        return
+      }
+      yield put({
+        type: "updateList",
+        payload: response.data
+      })
+    },
   },
 
   reducers: {
-    queryList(state, action) {
-      console.log(action.payload)
+    queryList(state, { payload }) {
+      console.log(payload,'图片')
       return {
         ...state,
-        list: action.payload
+        list: payload
+      };
+    },
+    updateList(state, { payload }) {
+      console.log('更新后', payload)
+      return {
+        ...state,
+        list: payload,
       };
     },
     addList(state, { payload }) {
+      console.log('添加后', payload)
+      return {
+        ...state,
+        list: payload,
+      };
+    },
+    addPictureList(state, { payload }) {
       console.log('添加后', payload)
       return {
         ...state,

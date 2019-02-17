@@ -139,9 +139,19 @@ class Adding extends React.Component {
   }
 
   componentDidMount() {
-    const aid = Number(this.props.match.params.aid);
-    console.log(this.props.match.params.aid)
-    const { dispatch } = this.props;
+    const { dispatch, match } = this.props;
+    // let reParam;
+    // if(match.params) {
+    //   reParam = match.params;
+    //   sessionStorage.setItem('aid',reParam);
+    // } else {
+    //   reParam = sessionStorage.getItem('aid');
+    // }
+    // console.log(sessionStorage.setItem('aid',reParam),'12')
+    // this.setState ({
+    //   reParam
+    // })
+    const aid = Number(match.params.aid);
     dispatch({
       type: "rule/text",
       payload: {
@@ -206,7 +216,8 @@ class Adding extends React.Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    const { dispatch, form } = this.props;
+    const { dispatch, form, match } = this.props;
+    const aid = Number(match.params.aid);
     setTimeout(() => this.addBtn.blur(), 0);
     form.validateFields((err, fieldsValue) => {
       if (!err) {
@@ -218,9 +229,10 @@ class Adding extends React.Component {
           done: true,
         });
         dispatch({
-          type: "list/addList",
+          type: "list/updateList",
           payload: {
             ...fieldsValue,
+            aid,
             text: fieldsValue.text.toHTML()
           }
         });
@@ -295,9 +307,7 @@ class Adding extends React.Component {
         <div className="ant-upload-text">Upload</div>
       </div>
     );
-    //const aid = this.props.match.params.aid;
     console.log(this.props,'9')
-    console.log(this.props.rule.data[0].date,'10')
 
     const controls = [
       'undo', 'redo', 'separator',
@@ -325,7 +335,7 @@ class Adding extends React.Component {
         return (
           <Result
             type="success"
-            title="发布成功"
+            title="操作成功"
             actions={
               <Button type="primary" onClick={this.handleDone}>
                 知道了
@@ -409,7 +419,7 @@ class Adding extends React.Component {
           </FormItem>
           <FormItem {...this.formLayout} >
             {getFieldDecorator("date",{
-              initialValue: this.props.rule.data[0].date
+              initialValue: date
             })(
               <div></div>
             )}
@@ -418,7 +428,7 @@ class Adding extends React.Component {
       );
     };
     return (
-      <PageHeaderWrapper title="添加文章">
+      <PageHeaderWrapper title="编辑文章">
         <Card bordered={false}>
           <div className="editor-wrapper">
             <Form onSubmit={this.handleSubmit}>

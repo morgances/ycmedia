@@ -1,6 +1,6 @@
 import React from "react";
 import { findDOMNode } from "react-dom";
-import { DatePicker, TimePicker, Button, Card, Modal, Form, Input, Cascader, Upload, Icon, message, Select } from "antd";
+import { Button, Card, Modal, Form, Input, Cascader, Upload, Icon, message, Select } from "antd";
 import Result from "@/components/Result";
 import styles from "./AddText.less";
 import { connect } from "dva";
@@ -11,6 +11,7 @@ import 'braft-editor/dist/index.css';
 import Axios from 'axios';
 
 const date = new Date();
+console.log(date)
 const Option = Select.Option;
 const FormItem = Form.Item;
 
@@ -312,7 +313,7 @@ class AddText extends React.Component {
         return (
           <Result
             type="success"
-            title="发布成功"
+            title="操作成功"
             actions={
               <Button type="primary" onClick={this.handleDone}>
                 知道了

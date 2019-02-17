@@ -8,9 +8,7 @@ import styles from "./DynamicPost.less";
 import moment from 'moment';
 import Axios from 'axios';
 import ImageGallery from 'react-image-gallery';
-
 const FormItem = Form.Item;
-const dateFormat = 'YYYY/MM/DD';
 @connect(({ list, rule, loading }) => ({
   list,
   rule,
@@ -32,10 +30,11 @@ class DynamicPost extends Component {
 
   componentDidMount() {
     const { dispatch } = this.props;
+    console.log(this.props.list)
     dispatch({
       type: "list/fetch",
       payload: {
-        unixtime: 0
+        unixtime: 1,
       }
     });
   };
@@ -91,7 +90,9 @@ class DynamicPost extends Component {
         dispatch({
           type: "list/addPictureList",
           payload: {
-            ...fieldsValue
+            ...fieldsValue,
+            start: fieldsValue['start'].format(),
+            end: fieldsValue['end'].format(),
           }
         });
       }
@@ -149,7 +150,7 @@ class DynamicPost extends Component {
     })
   }
 
-  beforeUpload(file) {
+  beforeUpload() {
     return false
   }
 
@@ -197,6 +198,12 @@ class DynamicPost extends Component {
       }
       return (
         <Form onSubmit={this.handleSubmit}>
+          <FormItem label="轮播图名称" {...this.formLayout}>
+            {getFieldDecorator("name", {
+              rules: [{ required: true, message: '请输入轮播图名称' }],
+              validateTrigger: 'onBlur',
+            })(<Input placeholder="请输入" />)}
+          </FormItem>
           <FormItem label="上传图片" {...this.formLayout}>
           {getFieldDecorator("path", {
             rules: [{ required: true, message: "请上传轮播图"}],
@@ -221,15 +228,27 @@ class DynamicPost extends Component {
           </FormItem>
           <FormItem label="开始时间" {...this.formLayout}>
             {getFieldDecorator("start", {
-              initialValue: moment(),
-              rules: [{ required: true, message: "请选择轮播开始时间" }],
-            })(<DatePicker format={dateFormat} />)}
+              rules: [{ type: 'object', required: true, message: "请选择轮播开始时间" }],
+            })(
+              <DatePicker
+                showTime
+                placeholder="请选择"
+                format="YYYY-MM-DD HH:mm:ss"
+                style={{ width: '100%' }}
+              />
+            )}
           </FormItem>
           <FormItem label="结束时间" {...this.formLayout}>
             {getFieldDecorator("end", {
-              initialValue: moment(),
-              rules: [{ required: true, message: "请选择轮播结束时间" }],
-            })(<DatePicker format={dateFormat} />)}
+              rules: [{ type: 'object', required: true, message: "请选择轮播结束时间" }],
+            })(
+              <DatePicker 
+                showTime
+                placeholder="请选择"
+                format="YYYY-MM-DD HH:mm:ss"
+                style={{ width: '100%'}}
+              />
+            )}
           </FormItem>
         </Form>
       )
@@ -251,29 +270,34 @@ class DynamicPost extends Component {
     ]
 
     const columns = [
-      // {
-      //   title: 'ID',
-      //   dataIndex: 'id',
-      //   key: 'id'
-      // },
+      {
+        title: 'ID',
+        dataIndex: 'BannerId',
+        key: 'BannerId'
+      },
+      {
+        title: '轮播图名称',
+        dataIndex: 'Name',
+        key: 'Name'
+      },
       {
         title: '轮播图',
-        dataIndex: 'image',
-        key: 'image',
-        render: () => (
-          <ImageGallery items={images} />
-        )
+        dataIndex: 'ImagePath',
+        key: 'ImagePath',
+        // render: () => (
+        //   <ImageGallery items={images} />
+        // )
       },
       {
         title: '轮播开始时间',
-        dataIndex: 'start',
-        key: 'start',
+        dataIndex: 'StartDate',
+        key: 'StartDate',
         render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>
       },
       {
         title: '轮播结束时间',
-        dataIndex: 'end',
-        key: 'end',
+        dataIndex: 'EndDate',
+        key: 'EndDate',
         render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>
       },
       {
@@ -317,6 +341,7 @@ class DynamicPost extends Component {
             添加
           </Button>
           <Table
+            //dataSource={this.props.list}
             columns={columns}
           />
         </Card>
