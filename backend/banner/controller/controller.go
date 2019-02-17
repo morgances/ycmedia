@@ -152,3 +152,29 @@ func (con *Controller) ListBanner(c *server.Context) error {
 
 	return base.WriteStatusAndDataJSON(c, constants.ErrSucceed, banners)
 }
+
+func (con *Controller) ListPage(c *server.Context) error {
+	if c.Request().Method != "POST" {
+		logrus.Error("Error In Request: NotPost")
+		return c.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, "only post"))
+	}
+
+	var (
+		req struct {
+			Page int `json:"page"`
+		}
+	)
+
+	if err := c.JSONBody(&req); err != nil {
+		logrus.Error(err)
+		return base.WriteStatusAndDataJSON(c, constants.ErrInvalidParam, "InvalidParam")
+	}
+
+	banners, err := con.service.ListPage(req.Page)
+	if err != nil {
+		logrus.Error(err)
+		return base.WriteStatusAndDataJSON(c, http.StatusBadRequest, err)
+	}
+
+	return base.WriteStatusAndDataJSON(c, constants.ErrSucceed, banners)
+}
