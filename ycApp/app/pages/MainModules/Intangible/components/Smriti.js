@@ -28,8 +28,10 @@ class Smriti extends React.Component {
     const { focusModel } = await dispatch({
       type: `intangible_smriti/get`,
       payload: {
-        category: 0,
+        category: 2,
         index: 0,
+        tag: 1,
+        lable: 0,
         nameSpace: 'intangible_smriti',
       }
     })
@@ -42,6 +44,11 @@ class Smriti extends React.Component {
   }
 
   _onChildChanged(index, data) {
+    this.setState(() => {
+      return {
+        isLoading: true,
+      }
+    })
     const focusModel = data.title[index]
     this.setState(() => {
       return {
@@ -126,7 +133,7 @@ class Smriti extends React.Component {
               <Lists callbackParent={this._onChildChanged.bind(this)} data={this.props} name={'intangible_smriti'}></Lists>
             </Flex>
             { 
-              this.state.isLoadingMore == true ? 
+              this.state.isLoading == true ? 
                 <Image source= { require('../../../../assets/images/th.gif') } style={{ height: Styles.Height(400), width: Styles.Width() }}></Image>
                 :
                 null

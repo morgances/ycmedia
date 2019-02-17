@@ -12,7 +12,8 @@ export default {
       const { data, status } = yield getMore({
         category: 0,
         tag: 0,
-        date: articleList[0].date
+        date: articleList[0].date,
+        lable: 0
       })
       if (status == 200 && data.data.length > 0) {
         yield put({

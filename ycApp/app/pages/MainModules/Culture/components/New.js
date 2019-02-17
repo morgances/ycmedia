@@ -28,6 +28,7 @@ class News extends React.Component {
         category: 0,
         tag: 0,
         page: 0,
+        lable: 0,
         nameSpace: 'culture_news'
       }
     })

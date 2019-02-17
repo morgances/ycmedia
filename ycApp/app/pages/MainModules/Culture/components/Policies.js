@@ -26,8 +26,9 @@ class Policies extends React.Component {
       type: `culture_policies/get`,
       payload: {
         category: 0,
-        tag: 0,
+        tag: 2,
         page: 0,
+        lable: 0,
         nameSpace: 'culture_policies'
       }
     })
@@ -73,7 +74,7 @@ class Policies extends React.Component {
         type: `culture_policies/loadMore`,
         payload: {
           category: 0,
-          tag: 0,
+          tag: 2,
           nameSpace: 'culture_policies'
         }
       })

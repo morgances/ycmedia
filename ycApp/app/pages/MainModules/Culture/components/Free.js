@@ -26,7 +26,8 @@ class Free extends React.Component {
       type: `culture_free/get`,
       payload: {
         category: 0,
-        tag: 0,
+        tag: 3,
+        lable: 0,
         page: 0,
         nameSpace: 'culture_free'
       }
@@ -73,7 +74,7 @@ class Free extends React.Component {
         type: `culture_free/loadMore`,
         payload: {
           category: 0,
-          tag: 0,
+          tag: 3,
           nameSpace: 'culture_free'
         }
       })

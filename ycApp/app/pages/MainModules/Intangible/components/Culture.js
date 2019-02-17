@@ -28,8 +28,10 @@ class Culture extends React.Component {
     const { focusModel } = await dispatch({
       type: `intangible_culture/get`,
       payload: {
-        category: 0,
+        category: 2,
         index: 0,
+        tag: 0,
+        lable: 0,
         nameSpace: 'intangible_culture',
       }
     })
@@ -43,6 +45,7 @@ class Culture extends React.Component {
 
   _onChildChanged(index, data) {
     const focusModel = data.title[index]
+    console.log(this.props.articleList, 'article')
     this.setState(() => {
       return {
         focusModel: {
@@ -132,7 +135,7 @@ class Culture extends React.Component {
                 null
             }
             {
-              this.props.articleList.length > 0 ? 
+              this.props.articleList.length > 0 && this.state.isLoading === false ? 
                 <Item data={this.props} navigation={this.props.navigation}></Item>
                 : 
                 <NoData></NoData>

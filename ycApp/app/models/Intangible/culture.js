@@ -9,24 +9,27 @@ export default {
         listName: 'culture',
         tag: 0,
         page: 0,
-        category: 0,
-        isLoad: 0
+        category: 2,
+        isLoad: 0,
+        lable: 0
       },
       {
         title: '文物鉴赏',
         listName: 'relics',
         tag: 0,
         page: 0,
-        category: 0,
-        isLoad: 0
+        category: 2,
+        isLoad: 0,
+        lable: 1
       },
       {
         title: '文物保护',
         listName: 'portect',
         tag: 0,
         page: 0,
-        category: 0,
-        isLoad: 0
+        category: 2,
+        isLoad: 0,
+        lable: 2
       }
     ],
     focus: 0,
@@ -61,7 +64,8 @@ export default {
       const { data, status } = yield getList({
         category: requestPayload.category,
         page: 0,
-        tag: requestPayload.tag
+        tag: requestPayload.tag,
+        lable: requestPayload.lable
       })
       data.data.map((item) => {
         item.time = item.date.slice(0, 10)
@@ -82,11 +86,13 @@ export default {
     *change({ payload }, { put, select }) { // 切换子版块
       const { title } = yield select(state => state[`${payload.name}`])
       const focus = title[payload.index]
+      console.log(focus, 'effect Focus')
       const focusList = yield select(state => state[`${payload.name}`][`${focus.listName}`])
       if (focusList.length == 0) {
         const { data } = yield getList({
           category: focus.category,
           tag: focus.tag,
+          lable: focus.lable,
           page: 0
         })
         data.data.map((item) => {
@@ -158,8 +164,10 @@ export default {
     Get(state, action) { // 获取数据
       const { focus, data } = action.payload
       state.focus = focus
+      console.log(state.focus, 'focus')
       state[`${state.title[focus].listName}`] = [...data]
       state.articleList = [...state[`${state.title[focus].listName}`]]
+      console.log(state.articleList, 'List')
       return {
         ...state,
       }
@@ -180,7 +188,6 @@ export default {
     },
     OnLoading(state, action) { // 切换加载状态
       const { focus } = action.payload
-      console.log('change')
       state.title[focus].isLoad = 1
       return {
         ...state

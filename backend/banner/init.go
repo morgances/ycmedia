@@ -37,11 +37,13 @@ func Register(r *server.Router, db *sql.DB, tokenKey string) error {
 	filter.URLMap["/api/v1/banner/list"] = struct{}{}
 	filter.URLMap["/api/v1/banner/delete"] = struct{}{}
 	filter.URLMap["/api/v1/banner/create"] = struct{}{}
+	filter.URLMap["/api/v1/banner/all"] = struct{}{}
 
 	r.Post("/api/v1/banner/create", c.Insert, jwt.Check, active.Isactive)
 	r.Post("/api/v1/banner/delete", c.DeleteById, jwt.Check, active.Isactive)
 	r.Post("/api/v1/banner/detail", c.InfoById)
 	r.Post("/api/v1/banner/list", c.LisitValidBannerByUnixDate)
+	r.Get("/api/v1/banner/all", c.ListBanner)
 
 	return nil
 }

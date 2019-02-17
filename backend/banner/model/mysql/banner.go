@@ -49,6 +49,44 @@ func InsertBanner(db *sql.DB, insert string, name string, imagepath string, even
 	return int(bannerId), nil
 }
 
+//return banner list
+func ListBanner(db *sql.DB, query string) ([]*Banner, error) {
+	var (
+		bans []*Banner
+
+		bannerId  int
+		name      string
+		imagepath string
+		eventpath string
+		sdate     time.Time
+		edate     time.Time
+	)
+
+	rows, err := db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		if err := rows.Scan(&bannerId, &name, &imagepath, &eventpath, &sdate, &edate); err != nil {
+			return nil, err
+		}
+
+		ban := &Banner{
+			BannerId:  bannerId,
+			Name:      name,
+			ImagePath: imagepath,
+			Event:     eventpath,
+			StartDate: sdate,
+			EndDate:   edate,
+		}
+		bans = append(bans, ban)
+	}
+
+	return bans, nil
+}
+
 //return banner list which have valid date
 func LisitValidBannerByUnixDate(db *sql.DB, query string, unixtime int64) ([]*Banner, error) {
 	var (
