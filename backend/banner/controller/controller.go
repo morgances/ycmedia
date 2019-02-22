@@ -183,7 +183,7 @@ func (con *Controller) ListPage(c *server.Context) error {
 		return base.WriteStatusAndDataJSON(c, http.StatusBadRequest, err)
 	}
 
-	if total%10 == 0 {
+	if total%10 != 0 {
 		pages = total/10 + 1
 	} else {
 		pages = total / 10
