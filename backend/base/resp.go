@@ -29,3 +29,17 @@ func WriteStatusAndDataJSON(ctx *server.Context, status int, data interface{}) e
 		constants.RespKeyData:   data,
 	})
 }
+
+func WriteStatusAndPageJSON(ctx *server.Context, status int, data, data1, data2, pages interface{}) error {
+	if data == nil || data1 == nil || data2 == nil {
+		return ctx.ServeJSON(map[string]interface{}{constants.RespKeyStatus: status})
+	}
+
+	return ctx.ServeJSON(map[string]interface{}{
+		"Current":               data1,
+		"Pages":                 pages,
+		"Total":                 data2,
+		constants.RespKeyStatus: status,
+		constants.RespKeyData:   data,
+	})
+}

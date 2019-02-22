@@ -163,6 +163,7 @@ func (con *Controller) ListPage(c *server.Context) error {
 		req struct {
 			Page int `json:"page"`
 		}
+		pages int
 	)
 
 	if err := c.JSONBody(&req); err != nil {
@@ -176,5 +177,17 @@ func (con *Controller) ListPage(c *server.Context) error {
 		return base.WriteStatusAndDataJSON(c, http.StatusBadRequest, err)
 	}
 
-	return base.WriteStatusAndDataJSON(c, constants.ErrSucceed, banners)
+	total, err := con.service.Total()
+	if err != nil {
+		logrus.Error(err)
+		return base.WriteStatusAndDataJSON(c, http.StatusBadRequest, err)
+	}
+
+	if total%10 == 0 {
+		pages = total/10 + 1
+	} else {
+		pages = total / 10
+	}
+
+	return base.WriteStatusAndPageJSON(c, constants.ErrSucceed, banners, req.Page, total, pages)
 }

@@ -86,6 +86,23 @@ func ListBanner(db *sql.DB, query string) ([]*Banner, error) {
 
 	return bans, nil
 }
+func All(db *sql.DB, query string) (int, error) {
+	var total int
+
+	rows, err := db.Query(query)
+	if err != nil {
+		return 0, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		if err := rows.Scan(&total); err != nil {
+			return 0, err
+		}
+	}
+
+	return total, nil
+}
 
 //return page banner
 func ListPage(db *sql.DB, query string, page int) ([]*Banner, error) {

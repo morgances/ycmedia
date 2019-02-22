@@ -33,6 +33,7 @@ func NewBannerService(db *sql.DB) *BannerService {
 			`DELETE FROM ` + database + ` WHERE bannerid = ? LIMIT 1`,
 			`SELECT * FROM ` + database + ` LOCK IN SHARE MODE`,
 			`SELECT * FROM ` + database + ` LIMIT ?,10 LOCK IN SHARE MODE`,
+			`SELECT FOUND_ROWS() LOCK IN SHARE MODE`,
 		},
 	}
 	return bs
@@ -91,4 +92,13 @@ func (bs *BannerService) ListPage(page int) ([]*mysql.Banner, error) {
 	}
 
 	return bans, nil
+}
+
+func (bs *BannerService) Total() (int, error){
+	total , err := mysql.All(bs.db, bs.SQLS[8])
+	if err != nil{
+		return 0, err
+	}
+
+	return total,nil
 }
