@@ -171,7 +171,7 @@ func (con *Controller) ListPage(c *server.Context) error {
 		return base.WriteStatusAndDataJSON(c, constants.ErrInvalidParam, "InvalidParam")
 	}
 
-	banners, err := con.service.ListPage(req.Page)
+	banners, err := con.service.ListPage(req.Page - 1)
 	if err != nil {
 		logrus.Error(err)
 		return base.WriteStatusAndDataJSON(c, http.StatusBadRequest, err)
