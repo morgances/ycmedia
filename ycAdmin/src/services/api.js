@@ -115,7 +115,7 @@ export async function removeList(params) {
 }
 
 export async function addList(params) {
-  //const { count = 5, ...restParams } = params;
+  console.log(params,'请求参数')
   return request("/api/v1/article/add", {
     method: "POST",
     body: {

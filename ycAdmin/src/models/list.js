@@ -64,7 +64,6 @@ export default {
     },
     *addPictureList({ payload }, { call, put }) {
       const response = yield call(addPictureList, payload);
-      console.log(response,'5')
       if(response.status !== 0) {
         return false
       }

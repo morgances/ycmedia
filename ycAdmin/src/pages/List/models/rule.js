@@ -4,10 +4,7 @@ export default {
   namespace: "rule",
 
   state: {
-    data: {
-      list: [],
-      pagination: {}
-    }
+    data: {}
   },
 
   effects: {
@@ -67,6 +64,7 @@ export default {
 
   reducers: {
     save(state, { payload }) {
+      console.log(payload,'获取列表')
       return {
         ...state,
         data: payload

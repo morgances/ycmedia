@@ -20,7 +20,6 @@ import {
   Divider,
   Select,
   Popconfirm,
-  Cascader,
   Pagination,
   message
 } from "antd";
@@ -82,6 +81,19 @@ class BasicList extends PureComponent {
       selectedRows: [],
       searchText: '',
       formValues: {},
+      page: 0,
+      pageNum: 10,
+      // category: 0,
+      // tag: 0,
+      // label: 0,
+      data: {
+        list: [],
+        pagination: {
+          current: 0,
+          pageSize: 10,
+          total: 0,
+        },
+      },
     };
   };
 
@@ -141,35 +153,57 @@ class BasicList extends PureComponent {
   };
 
   componentDidMount() {
+    const { page, category, tag, label, pageNum } = this.state;
     const { dispatch } = this.props;
-    dispatch({
+    const later = dispatch({
       type: "rule/fetch",
       payload: {
-        // category: 0,
-        // page: 0,
-        // tag: 0,
-        // label: 0,
-        pageSize: 2
+        // category,
+        page
+        // tag,
+        // label,
       }
+    });
+    later.then(() => {
+      const {
+        rule: { data },
+      } = this.props;
+      console.log(data)
+      this.setState({
+        data: {
+          list: data.lists,
+          pagination: {
+            current: page,
+            pageSize: pageNum,
+            total: data.total,
+          },
+        },
+      });
+      console.log(data)
     });
   };
 
-  handleStandardTableChange = (Pagination) => {
+  handleStandardTableChange = (pagination) => {
     const { dispatch } = this.props;
     const { formValues } = this.state;
 
     const params = {
-      currentPage: Pagination.current,
-      pageSize: Pagination.pageSize,
+      currentPage: pagination.current,
+      // currentCategory: pagination.current,
+      // currentTag: pagination.current,
+      // currentLabel: pagination.current,
+      pageSize: pagination.pageSize,
       ...formValues
     }
-
-    dispatch({
-      type: 'rule/fetch',
-      payload: {
-        params,
+    this.setState(
+      {
+        page: pagination.current,
+        pageNum: pagination.pageSize,
+      },
+      () => {
+        this.componentDidMount();
       }
-    })
+    );
   }
 
   handleSelectRows = rows => {
@@ -228,7 +262,7 @@ class BasicList extends PureComponent {
         title: '文章类别',
         dataIndex: 'category',
         key: 'category',
-        ...this.getColumnSearchProps('category','tag','label'),
+        ...this.getColumnSearchProps('category'),
         render: category => 
           <span>
             <Tag color="blue" key={category}>{category}</Tag>
@@ -281,7 +315,7 @@ class BasicList extends PureComponent {
               data={data}
               columns={columns}
               onSelectRow={this.handleSelectRows}
-              onChange={this.handleStandardTableChange}
+              //onChange={this.handleStandardTableChange}
             />
           </div>
         </Card>

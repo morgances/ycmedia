@@ -14,57 +14,21 @@ const date = new Date();
 const Option = Select.Option;
 const FormItem = Form.Item;
 
-const categoryData = {
-  '文化资讯': 0,
-  '书香银川': 1,
-  '遗脉相承': 2,
-  '银川旅游': 3,
-  '艺术空间': 4,
-  '文化消费': 5,
-  '文化品牌': 6,
-  '凤城演绎': 7
-};
-const tagData = {
-  0: {
-    '文化动态': 0,
-    '通知公告': 1,
-    '政策法规': 2,
-    '免费开放': 3
-  },
-  1: {
-    '图书借阅': 4,
-    '服务指南': 5,
-    '数字资源': 6,
-    '好书推荐': 7
-  },
-  2: {
-    '文化遗产': 8,
-    '非遗传承': 9
-  },
+const provinceData = ['文化资讯','书香银川','遗脉相承','银川旅游','艺术空间','文化消费','文化品牌','凤城演绎'];
+console.log(provinceData.indexOf('文化资讯'))
+const cityData = {
+  0: ['文化动态','通知公告','政策法规','免费开放'],
+  1: [,,,,'图书借阅','服务指南','数字资源','好书推荐'],
+  2: [,,,,,,,,'文化遗产','非遗传承'],
   3: [],
-  4: {
-    '艺术资讯': 10,
-    '名家介绍': 11,
-    '艺术展示': 12,
-    '艺术场馆': 13
-  },
-  5: {
-    '银川影院': 14,
-    '艺术剧院': 15
-  },
-  6: {
-    '公益性文化产品': 16,
-    '公益性文化活动': 17,
-    '中华优秀传统文化与民族文化': 18
-  },
-  7: {
-    '群众文化': 19,
-    '银川记忆': 20
-  }
+  4: [,,,,,,,,,,'艺术资讯','名家介绍','艺术展示','艺术场馆'],
+  5: [,,,,,,,,,,,,,,'银川影院','艺术剧院'],
+  6: [,,,,,,,,,,,,,,,,'公益性文化产品','公益性文化活动','中华优秀传统文化与民族文化'],
+  7: [,,,,,,,,,,,,,,,,,,,'群众文化','银川记忆']
 };
-console.log(Object.values(Object.values(tagData)[2])[0],'0')
-console.log(Object.values(Object.values(tagData)[Object.values(categoryData)[0]]),'1')
-const secondTagData = {
+console.log([provinceData[0]][0])
+console.log(cityData[provinceData[0]],'0')
+const secondCityData = {
   0: [],
   1: [],
   2: [],
@@ -73,48 +37,21 @@ const secondTagData = {
   5: [],
   6: [],
   7: [],
-  8: {
-    '文化遗址': 0,
-    '文物鉴赏': 1,
-    '文物保护': 2
-  },
-  9: {
-    '项目名单': 0,
-    '传承保护': 1,
-    '非遗展馆': 2,
-    '民俗活动': 3,
-    '传承基地': 4,
-    '传承人': 5
-  },
+  8: ['文化遗址','文物鉴赏','文物保护'],
+  9: ['项目名单','传承保护','非遗展馆','民俗活动','传承基地','传承人'],
   10: [],
   11: [],
-  12: {
-    '绘画': 0,
-    '书法': 1,
-    '音乐': 2,
-    '展览': 3
-  },
+  12: ['绘画','书法','音乐','展览'],
   13: [],
   14: [],
-  15: {
-    '院团介绍': 0,
-    '剧目介绍': 1,
-    '商业演出': 2
-  },
+  15: ['院团介绍','剧目介绍','商业演出'],
   16: [],
   17: [],
   18: [],
-  19: {
-    '群文活动': 0,
-    '民间团队': 1,
-    '公益培训': 2
-  },
-  20: {
-    '西夏古都': 0,
-    '民间传说': 1,
-    '老银川': 2
-  }
+  19: ['群文活动','民间团队','公益培训'],
+  20: ['西夏古都','民间传说','老银川']
 };
+
 @connect(({ list, rule, loading }) => ({
   list,
   rule,
@@ -125,32 +62,21 @@ class Adding extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      fileList: [{uid: '0', url: `${this.props.rule.data[0].image}`}],
+      cities: cityData[provinceData.indexOf(provinceData[0])],
+      secondCity: cityData[provinceData.indexOf(provinceData[0])][0],
+      cities1: secondCityData[cityData[provinceData.indexOf(provinceData[0])].indexOf(cityData[provinceData.indexOf(provinceData[0])][0])],
+      thirdCity: secondCityData[cityData[provinceData.indexOf(provinceData[0])].indexOf(cityData[provinceData.indexOf(provinceData[0])][0])][0],
       previewVisible: false,
       previewImage: '',
       loading: false,
       file_name:"",
       imageUrl: '',
-      tags: Object.keys(Object.values(tagData)[Object.values(categoryData)[0]]),
-      secondTag: Object.values(Object.values(tagData)[Object.values(categoryData)[0]])[0],
-      labels: Object.keys(Object.values(secondTagData)[Object.values(Object.values(tagData)[Object.values(categoryData)[0]])[0]]),
-      thirdLabel: Object.keys(Object.values(secondTagData)[Object.values(Object.values(tagData)[Object.values(categoryData)[0]])[0]])[0],
     }
+    console.log(this.props.rule,'100')
   }
 
   componentDidMount() {
     const { dispatch, match } = this.props;
-    // let reParam;
-    // if(match.params) {
-    //   reParam = match.params;
-    //   sessionStorage.setItem('aid',reParam);
-    // } else {
-    //   reParam = sessionStorage.getItem('aid');
-    // }
-    // console.log(sessionStorage.setItem('aid',reParam),'12')
-    // this.setState ({
-    //   reParam
-    // })
     const aid = Number(match.params.aid);
     dispatch({
       type: "rule/text",
@@ -166,26 +92,30 @@ class Adding extends React.Component {
     }, 1000)
   }
 //联动
-  handleCategoryChange = (value) => {
-    this.setState({
-      tags: Object.keys(Object.values(tagData)[value]),
-      secondTag: Object.values(Object.values(tagData)[value])[0],
-    });
-  }
+handleProvinceChange = (value) => {
+  console.log(value)
+  this.setState({
+    cities: cityData[value],
+    secondCity: cityData[value][0],
+  });
+}
 
-  onSecondTagChange = (value) => {
-    this.setState({
-      secondTag: value,
-      labels: Object.keys(Object.values(secondTagData)[value]),
-      thirdLabel: Object.keys(Object.values(secondTagData)[value])[0],
-    }); 
-  }
+onSecondCityChange = (value) => {
+  console.log(value)
+  console.log(secondCityData[value])
+  this.setState({
+    secondCity: value,
+    cities1: secondCityData[value],
+    thirdCity: secondCityData[value][0],
+  });
+}
 
-  onThirdLabelChange = (value) => {
-    this.setState({
-      thirdLabel: value,
-    })
-  }
+onThirdCityChange = (value) => {
+  console.log(value)
+  this.setState({
+    thirdCity: value,
+  })
+}
 
   formLayout = {
     labelCol: { span: 7 },
@@ -216,6 +146,7 @@ class Adding extends React.Component {
 
   handleSubmit = e => {
     e.preventDefault();
+    const { imageUrl } = this.state;
     const { dispatch, form, match } = this.props;
     const aid = Number(match.params.aid);
     setTimeout(() => this.addBtn.blur(), 0);
@@ -233,7 +164,8 @@ class Adding extends React.Component {
           payload: {
             ...fieldsValue,
             aid,
-            text: fieldsValue.text.toHTML()
+            text: fieldsValue.text.toHTML(),
+            image: imageUrl
           }
         });
       }
@@ -275,10 +207,10 @@ class Adding extends React.Component {
     }).then(res => {
       console.log('res',res)
       console.log('1',this)
-      if(res.data.code === 200) {
-        let imgurl = res.data.result[0].photoBig
+      if(res.data.status === 200) {
+        let imgurl = res.data.data
         this.setState({
-          imageUrl: 'http://39.98.162.91:9573/' + imgurl
+          imageUrl: imgurl
         })
       }
     },err => {
@@ -300,7 +232,9 @@ class Adding extends React.Component {
   }
 
   render() {
-    const { previewVisible, previewImage, tags, labels, fileList } = this.state;
+    console.log(this.props.rule,'100')
+    const fileList = [{ uid: this.props.match.params.aid, url: `${this.props.rule.data[0].image}` }];
+    const { previewVisible, previewImage, cities, cities1 } = this.state;
     const uploadButton = (
       <div>
         <Icon type={this.state.loading ? 'loading' : 'plus'} />
@@ -383,37 +317,37 @@ class Adding extends React.Component {
           <FormItem label="文章分类" {...this.formLayout} >
             {getFieldDecorator("category", {
               initialValue: this.props.rule.data[0].category,
-              onChange: this.handleCategoryChange,
               rules: [{ required: true, message: "请选择文章分类" }],
             })(
                 <Select
+                  onChange={this.handleProvinceChange}
                   getPopupContainer={triggerNode => triggerNode.parentNode}
                 >
-                  {Object.keys(categoryData).map((category, index) => <Option key={category} value={index}>{category}</Option>)}
+                  {provinceData.map(province => <Option value={provinceData.indexOf(province)} key={province}>{province}</Option>)}
                 </Select>
             )}
           </FormItem>
           <FormItem label="文章标签" {...this.formLayout} >
             {getFieldDecorator("tag", {
               initialValue: this.props.rule.data[0].tag,
-              onChange: this.onSecondTagChange
             })(
                 <Select
+                  onChange={this.onSecondCityChange}
                   getPopupContainer={triggerNode => triggerNode.parentNode}
                 >
-                  {tags.map((tag, index) => <Option key={tag} value={index}>{tag}</Option>)}
+                  {cities.map(city => <Option value={cities.indexOf(city)} key={city}>{city}</Option>)}
                 </Select>
             )}
           </FormItem>
           <FormItem label="文章label" {...this.formLayout}>
             {getFieldDecorator("label", {
               initialValue: this.props.rule.data[0].label,
-              onChange: this.onThirdLabelChange
             })(
                 <Select
+                  onChange={this.onThirdCityChange}
                   getPopupContainer={triggerNode => triggerNode.parentNode}
                 >
-                  {labels.map((label, index) => <Option key={label} value={index}>{label}</Option>)}
+                  {cities1.map(city1 => <Option value={cities1.indexOf(city1)} key={city1}>{city1}</Option>)}
                 </Select>
             )}
           </FormItem>

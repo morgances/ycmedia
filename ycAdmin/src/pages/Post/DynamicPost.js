@@ -24,7 +24,7 @@ class DynamicPost extends Component {
     modalVisible: false,
     fileList: [],
     previewVisible: false,
-    previewImage: '',
+    imageUrl: '',
     loading: false,
   };
 
@@ -80,6 +80,7 @@ class DynamicPost extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
+    const { imageUrl }= this.state;
     const { dispatch, form } = this.props;
     setTimeout(() => this.addBtn.blur(), 0);
     form.validateFields((err, fieldsValue) => {
@@ -91,6 +92,7 @@ class DynamicPost extends Component {
           type: "list/addPictureList",
           payload: {
             ...fieldsValue,
+            path: imageUrl,
             start: fieldsValue['start'].format(),
             end: fieldsValue['end'].format(),
           }
@@ -139,10 +141,10 @@ class DynamicPost extends Component {
     }).then(res => {
       console.log('res',res)
       console.log('1',this)
-      if(res.data.code === 200) {
-        let imgurl = res.data.result[0].photoBig
+      if(res.data.status === 200) {
+        let imgurl = res.data.data
         this.setState({
-          imageUrl: 'http://39.98.162.91:9573/' + imgurl
+          imageUrl: imgurl
         })
       }
     },err => {
@@ -167,7 +169,7 @@ class DynamicPost extends Component {
     const {
       form: { getFieldDecorator }
     } = this.props;
-    const { previewVisible, previewImage, modalVisible, fileList, visible, done, current = {} } = this.state;
+    const { previewVisible, modalVisible, fileList, visible, done, current = {}, imageUrl } = this.state;
     const modalFooter = done
       ? { footer: null, onCancel: this.handleDone }
       : {
@@ -181,6 +183,7 @@ class DynamicPost extends Component {
         <div>Upload</div>
       </div>
     )
+
     const getModalContent = () => {
       if (done) {
         return (
@@ -206,7 +209,7 @@ class DynamicPost extends Component {
           </FormItem>
           <FormItem label="上传图片" {...this.formLayout}>
           {getFieldDecorator("path", {
-            rules: [{ required: true, message: "请上传轮播图"}],
+            rules: [{ required: true, message: "请上传轮播图"}]
           })(
             <div>
               <Upload
@@ -221,7 +224,7 @@ class DynamicPost extends Component {
                 {fileList.length >= 10 ? null : uploadButton}
               </Upload>
               <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
-                <img alt="image" style={{ width: '100%' }} src={previewImage} />
+                <img alt="image" style={{ width: '100%' }} src={imageUrl} />
               </Modal>
             </div>
           )}
