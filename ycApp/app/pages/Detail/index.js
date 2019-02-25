@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, ScrollView, Text, StyleSheet, Image } from 'react-native';
 import { connect } from 'react-redux';
 import { WingBlank, Flex } from 'antd-mobile-rn';
+import HTMLView from 'react-native-htmlview';
 
 import Colors from '../../res/Colors'
 import Styles from '../../res/Styles'
@@ -66,7 +67,7 @@ class Detail extends Component<{}> {
                   <Text style={{ textAlign: 'right' }}>{ this.props.article.time }</Text>
                 </Flex.Item>
               </Flex>
-              <Text style={ styles.article }>{ this.props.article.text }</Text>
+              <HTMLView style={ styles.article } value={ `${this.props.article.text}` }></HTMLView>
             </View>
           </WingBlank> : 
           <Image source= { require('../../assets/images/th.gif') } style={ styles.gif }></Image>

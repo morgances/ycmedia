@@ -4,6 +4,8 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/morgances/ycmedia/backend/base/constants"
+
 	"github.com/TechCatsLab/apix/http/server"
 	log "github.com/TechCatsLab/logging/logrus"
 	"github.com/morgances/ycmedia/backend/base"
@@ -38,7 +40,7 @@ func (con Controller) GetArticleList(ctx *server.Context) error {
 
 	log.Infof("In GetArticleList: Category=%d, Tag=%d, Label=%d, Page=%d\n", x.Category, x.Tag, x.Label, x.Page)
 
-	if x.Category < 0 || x.Tag < 0 || x.Label < 0 || x.Page < 0 {
+	if x.Category < 0 || x.Tag < -1 || x.Label < -1 || x.Page < 0 {
 		log.Error("Error In Data:", BadData)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, BadData))
 	}
@@ -53,7 +55,18 @@ func (con Controller) GetArticleList(ctx *server.Context) error {
 		e.Text = ""
 	}
 
-	return ctx.ServeJSON(base.RespStatusAndData(http.StatusOK, articles))
+	articleCount, pageCount, err := con.db.GetArticleAndPageCount(x.Category, x.Tag, x.Label)
+	if err != nil {
+		log.Error("Error In Mysql.GetArticleList:", err)
+		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
+	}
+
+	return ctx.ServeJSON(map[string]interface{}{
+		constants.RespKeyStatus: http.StatusOK,
+		constants.RespKeyData:   articles,
+		"articleCount":          articleCount,
+		"pageCount":             pageCount,
+	})
 }
 
 /*

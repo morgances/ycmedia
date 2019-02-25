@@ -3,6 +3,7 @@ package controller
 import (
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/TechCatsLab/apix/http/server"
 	log "github.com/TechCatsLab/logging/logrus"
@@ -37,7 +38,17 @@ func (con Controller) Update(ctx *server.Context) error {
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, BadData))
 	}
 
-	err = con.db.UpdateArticle(int(v.(float64)), toKeyValStr(mp))
+	kvs := toKeyValStr(mp)
+	log.Info("In UpdateArticle:" + kvs)
+
+	t, ok := mp["date"]
+	if !ok {
+		err = con.db.UpdateArticle(int(v.(float64)), kvs, nil)
+	} else {
+		tm, _ := time.Parse("2006-01-02T15:04:05Z", t.(string))
+		err = con.db.UpdateArticle(int(v.(float64)), kvs, &tm)
+	}
+
 	if err != nil {
 		log.Error("Error In Mysql UpdateArticle:", err)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
@@ -49,7 +60,19 @@ func (con Controller) Update(ctx *server.Context) error {
 func toKeyValStr(mp map[string]interface{}) string {
 	str := ""
 	for k, v := range mp {
-		str += fmt.Sprintf(", %s=%v", k, v)
+		if k == "aid" {
+			continue
+		}
+		if k == "date" {
+			str += ", date=?"
+			continue
+		}
+		switch v.(type) {
+		case float64:
+			str += fmt.Sprintf(", %s=%v", k, v)
+		default:
+			str += fmt.Sprintf(", %s='%v'", k, v)
+		}
 	}
 
 	if len(str) > 0 {
