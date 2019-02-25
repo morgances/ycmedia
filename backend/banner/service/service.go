@@ -2,7 +2,6 @@ package service
 
 import (
 	"database/sql"
-	"time"
 
 	"github.com/morgances/ycmedia/backend/banner/model/mysql"
 )
@@ -13,27 +12,23 @@ type BannerService struct {
 }
 
 func NewBannerService(db *sql.DB) *BannerService {
-	database := "banner.banner"
+	database := "yc.banner"
 	bs := &BannerService{
 		db: db,
 		SQLS: []string{
-			`CREATE DATABASE IF NOT EXISTS banner`,
+			`CREATE DATABASE IF NOT EXISTS yc`,
 			`CREATE TABLE IF NOT EXISTS ` + database + `(
 				bannerId INT(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
-				name VARCHAR(512) UNIQUE DEFAULT NULL COMMENT 'sign',
+				name VARCHAR(512)  DEFAULT NULL COMMENT 'sign',
 				imagePath VARCHAR(512) DEFAULT NULL ,
 				event VARCHAR(512) DEFAULT NULL COMMENT 'what to trigger',
-				startDate DATETIME DEFAULT current_timestamp COMMENT 'time to display',
-				endDate DATETIME DEFAULT current_timestamp COMMENT 'deadline',
 				PRIMARY KEY (bannerId)
 			)ENGINE=InnoDB AUTO_INCREMENT=1000000 DEFAULT CHARSET=utf8mb4`,
-			`INSERT INTO ` + database + ` (name,imagePath,event,startDate,endDate) VALUES (?,?,?,?,?)`,
-			`SELECT * FROM ` + database + ` WHERE unix_timestamp(startDate) <= ? AND unix_timestamp(endDate) >= ? LOCK IN SHARE MODE`,
+			`INSERT INTO ` + database + ` (name,imagePath,event) VALUES (?,?,?)`,
 			`SELECT * FROM ` + database + ` WHERE bannerid = ? LIMIT 1 LOCK IN SHARE MODE`,
 			`DELETE FROM ` + database + ` WHERE bannerid = ? LIMIT 1`,
 			`SELECT * FROM ` + database + ` LOCK IN SHARE MODE`,
-			`SELECT * FROM ` + database + ` LIMIT ?,10 LOCK IN SHARE MODE`,
-			`SELECT FOUND_ROWS() LOCK IN SHARE MODE`,
+			`UPDATE ` + database + ` SET name = ? ,imagePath = ?, event = ? WHERE bannerid = ?`,
 		},
 	}
 	return bs
@@ -48,22 +43,12 @@ func (bs *BannerService) CreateTable() error {
 }
 
 //return bannerid
-func (bs *BannerService) Insert(name string, imagePath string, event string, startDate, endDate time.Time) (int, error) {
-	return mysql.InsertBanner(bs.db, bs.SQLS[2], name, imagePath, event, startDate, endDate)
-}
-
-//bannerlist which have valid unixtime to display
-func (bs *BannerService) LisitValidBannerByUnixDate(unixdate int64) ([]*mysql.Banner, error) {
-	bans, err := mysql.LisitValidBannerByUnixDate(bs.db, bs.SQLS[3], unixdate)
-	if err != nil {
-		return nil, err
-	}
-
-	return bans, nil
+func (bs *BannerService) Insert(name string, imagePath string, event string) (int, error) {
+	return mysql.InsertBanner(bs.db, bs.SQLS[2], name, imagePath, event)
 }
 
 func (bs *BannerService) InfoById(id int) (*mysql.Banner, error) {
-	ban, err := mysql.InfoById(bs.db, bs.SQLS[4], id)
+	ban, err := mysql.InfoById(bs.db, bs.SQLS[3], id)
 	if err != nil {
 		return nil, err
 	}
@@ -72,12 +57,12 @@ func (bs *BannerService) InfoById(id int) (*mysql.Banner, error) {
 }
 
 func (bs *BannerService) DeleteById(id int) error {
-	err := mysql.DeleteById(bs.db, bs.SQLS[5], id)
+	err := mysql.DeleteById(bs.db, bs.SQLS[4], id)
 	return err
 }
 
 func (bs *BannerService) ListBanner() ([]*mysql.Banner, error) {
-	bans, err := mysql.ListBanner(bs.db, bs.SQLS[6])
+	bans, err := mysql.ListBanner(bs.db, bs.SQLS[5])
 	if err != nil {
 		return nil, err
 	}
@@ -85,20 +70,6 @@ func (bs *BannerService) ListBanner() ([]*mysql.Banner, error) {
 	return bans, nil
 }
 
-func (bs *BannerService) ListPage(page int) ([]*mysql.Banner, error) {
-	bans, err := mysql.ListPage(bs.db, bs.SQLS[7], page*10)
-	if err != nil {
-		return nil, err
-	}
-
-	return bans, nil
-}
-
-func (bs *BannerService) Total() (int, error){
-	total , err := mysql.All(bs.db, bs.SQLS[8])
-	if err != nil{
-		return 0, err
-	}
-
-	return total,nil
+func (bs *BannerService) Update(name string, imagePath string, event string, id int) (int, error) {
+	return mysql.UpdateByID(bs.db, bs.SQLS[6], name, imagePath, event, id)
 }

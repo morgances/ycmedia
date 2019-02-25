@@ -3,7 +3,6 @@ package mysql
 import (
 	"database/sql"
 	"errors"
-	"time"
 )
 
 var (
@@ -15,8 +14,6 @@ type Banner struct {
 	Name      string
 	ImagePath string
 	Event     string
-	StartDate time.Time
-	EndDate   time.Time
 }
 
 func CreateDB(db *sql.DB, createDB string) error {
@@ -31,8 +28,8 @@ func CreateTable(db *sql.DB, createTable string) error {
 
 //return  id
 //have default value like nowtime and deadline
-func InsertBanner(db *sql.DB, insert string, name string, imagepath string, event string, StartDate time.Time, EndDate time.Time) (int, error) {
-	result, err := db.Exec(insert, name, imagepath, event, StartDate, EndDate)
+func InsertBanner(db *sql.DB, insert string, name string, imagepath string, event string) (int, error) {
+	result, err := db.Exec(insert, name, imagepath, event)
 	if err != nil {
 		return 0, err
 	}
@@ -58,8 +55,6 @@ func ListBanner(db *sql.DB, query string) ([]*Banner, error) {
 		name      string
 		imagepath string
 		eventpath string
-		sdate     time.Time
-		edate     time.Time
 	)
 
 	rows, err := db.Query(query)
@@ -69,7 +64,7 @@ func ListBanner(db *sql.DB, query string) ([]*Banner, error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		if err := rows.Scan(&bannerId, &name, &imagepath, &eventpath, &sdate, &edate); err != nil {
+		if err := rows.Scan(&bannerId, &name, &imagepath, &eventpath); err != nil {
 			return nil, err
 		}
 
@@ -78,101 +73,6 @@ func ListBanner(db *sql.DB, query string) ([]*Banner, error) {
 			Name:      name,
 			ImagePath: imagepath,
 			Event:     eventpath,
-			StartDate: sdate,
-			EndDate:   edate,
-		}
-		bans = append(bans, ban)
-	}
-
-	return bans, nil
-}
-func All(db *sql.DB, query string) (int, error) {
-	var total int
-
-	rows, err := db.Query(query)
-	if err != nil {
-		return 0, err
-	}
-	defer rows.Close()
-
-	for rows.Next() {
-		if err := rows.Scan(&total); err != nil {
-			return 0, err
-		}
-	}
-
-	return total, nil
-}
-
-//return page banner
-func ListPage(db *sql.DB, query string, page int) ([]*Banner, error) {
-	var (
-		bans []*Banner
-
-		bannerId  int
-		name      string
-		imagepath string
-		eventpath string
-		sdate     time.Time
-		edate     time.Time
-	)
-
-	rows, err := db.Query(query, page)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-
-	for rows.Next() {
-		if err := rows.Scan(&bannerId, &name, &imagepath, &eventpath, &sdate, &edate); err != nil {
-			return nil, err
-		}
-
-		ban := &Banner{
-			BannerId:  bannerId,
-			Name:      name,
-			ImagePath: imagepath,
-			Event:     eventpath,
-			StartDate: sdate,
-			EndDate:   edate,
-		}
-		bans = append(bans, ban)
-	}
-
-	return bans, nil
-}
-
-//return banner list which have valid date
-func LisitValidBannerByUnixDate(db *sql.DB, query string, unixtime int64) ([]*Banner, error) {
-	var (
-		bans []*Banner
-
-		bannerId  int
-		name      string
-		imagepath string
-		eventpath string
-		sdate     time.Time
-		edate     time.Time
-	)
-
-	rows, err := db.Query(query, unixtime, unixtime)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-
-	for rows.Next() {
-		if err := rows.Scan(&bannerId, &name, &imagepath, &eventpath, &sdate, &edate); err != nil {
-			return nil, err
-		}
-
-		ban := &Banner{
-			BannerId:  bannerId,
-			Name:      name,
-			ImagePath: imagepath,
-			Event:     eventpath,
-			StartDate: sdate,
-			EndDate:   edate,
 		}
 		bans = append(bans, ban)
 	}
@@ -190,7 +90,7 @@ func InfoById(db *sql.DB, query string, id int) (*Banner, error) {
 	}
 	defer rows.Close()
 	for rows.Next() {
-		if err := rows.Scan(&ban.BannerId, &ban.Name, &ban.ImagePath, &ban.Event, &ban.StartDate, &ban.EndDate); err != nil {
+		if err := rows.Scan(&ban.BannerId, &ban.Name, &ban.ImagePath, &ban.Event); err != nil {
 			return nil, err
 		}
 	}
@@ -201,4 +101,18 @@ func InfoById(db *sql.DB, query string, id int) (*Banner, error) {
 func DeleteById(db *sql.DB, delete string, id int) error {
 	_, err := db.Exec(delete, id)
 	return err
+}
+
+func UpdateByID(db *sql.DB, update string, name, imagePath, event string, id int) (int, error) {
+	result, err := db.Exec(update, name, imagePath, event, id)
+	if err != nil {
+		return 0, err
+	}
+
+	bannerId, err := result.LastInsertId()
+	if err != nil {
+		return 0, err
+	}
+
+	return int(bannerId), nil
 }
