@@ -14,15 +14,30 @@ export default (props) => {
     const listItems = list.map((item, index) => 
       <TouchableOpacity key={`${item.title}${index}`} onPress={() => dispatch(Navigator.navigate('Detail', { aid: item.aid }))}>
         <Flex style={styles.news_content}  wrap='wrap' justify="center">
-          <Flex.Item style={[{ flex: 2 }]}>
-            <Image style={styles.news_content_image} source={{ uri: `${item.image}`, cache: 'force-cache' }}></Image>
-          </Flex.Item>
-          <Flex.Item style={{ flex: 3.5, paddingLeft: 10 }}>
-            <Text style={{ fontSize: FontSize.medium, color: Colors.black }}>{item.title}</Text>
-            <View style={ styles.news_content_time_view}>
-              <Text style={ styles.news_content_time }>{item.time}</Text>
-            </View>
-          </Flex.Item>
+          { 
+            item.image != '' ? 
+              <Flex.Item style={[{ flex: 2 }]}>
+                <Image style={styles.news_content_image} source={{ uri: `${item.image}`, cache: 'force-cache' }}></Image>
+              </Flex.Item>
+              :
+              null
+          }
+          {
+            item.image != '' ? 
+              <Flex.Item style={{ flex: 3.5, paddingLeft: 10 }}>
+                <Text style={{ fontSize: FontSize.medium, color: Colors.black }}>{item.title}</Text>
+                <View style={ styles.news_content_time_view}>
+                  <Text style={ styles.news_content_time }>{item.time}</Text>
+                </View>
+              </Flex.Item>
+              :
+              <Flex.Item style={{ flex: 3.5, paddingLeft: 10, height: Styles.Height(90) }}>
+                <Text style={{ fontSize: FontSize.medium, color: Colors.black }}>{item.title}</Text>
+                <View style={ styles.news_content_time_view}>
+                  <Text style={ styles.news_content_time }>{item.time}</Text>
+                </View>
+              </Flex.Item>
+          }
         </Flex>
       </TouchableOpacity>
     )
