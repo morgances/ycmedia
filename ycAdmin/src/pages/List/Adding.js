@@ -9,13 +9,12 @@ import moment from 'moment';
 import BraftEditor from 'braft-editor';
 import 'braft-editor/dist/index.css';
 import Axios from 'axios';
+import { routerRedux } from 'dva/router';
 
-const date = new Date();
 const Option = Select.Option;
 const FormItem = Form.Item;
 
 const provinceData = ['文化资讯','书香银川','遗脉相承','银川旅游','艺术空间','文化消费','文化品牌','凤城演绎'];
-console.log(provinceData.indexOf('文化资讯'))
 const cityData = {
   0: ['文化动态','通知公告','政策法规','免费开放'],
   1: [,,,,'图书借阅','服务指南','数字资源','好书推荐'],
@@ -26,8 +25,6 @@ const cityData = {
   6: [,,,,,,,,,,,,,,,,'公益性文化产品','公益性文化活动','中华优秀传统文化与民族文化'],
   7: [,,,,,,,,,,,,,,,,,,,'群众文化','银川记忆']
 };
-console.log([provinceData[0]][0])
-console.log(cityData[provinceData[0]],'0')
 const secondCityData = {
   0: [],
   1: [],
@@ -63,16 +60,16 @@ class Adding extends React.Component {
     super(props);
     this.state = {
       cities: cityData[provinceData.indexOf(provinceData[0])],
-      secondCity: cityData[provinceData.indexOf(provinceData[0])][0],
+      secondCity: cityData[provinceData.indexOf(provinceData[0])].indexOf(cityData[provinceData.indexOf(provinceData[0])][0]),
       cities1: secondCityData[cityData[provinceData.indexOf(provinceData[0])].indexOf(cityData[provinceData.indexOf(provinceData[0])][0])],
-      thirdCity: secondCityData[cityData[provinceData.indexOf(provinceData[0])].indexOf(cityData[provinceData.indexOf(provinceData[0])][0])][0],
+      thirdCity: secondCityData[cityData[provinceData.indexOf(provinceData[0])].indexOf(cityData[provinceData.indexOf(provinceData[0])][0])].indexOf(secondCityData[cityData[provinceData.indexOf(provinceData[0])].indexOf(cityData[provinceData.indexOf(provinceData[0])][0])][0]),
       previewVisible: false,
       previewImage: '',
       loading: false,
       file_name:"",
-      imageUrl: '',
+      fileList: this.props.list.list.image === undefined ? [] : [{ uid: this.props.match.params.aid, url: `${this.props.list.list.image}`}],
+      imageUrl: ""
     }
-    console.log(this.props.rule,'100')
   }
 
   componentDidMount() {
@@ -206,8 +203,13 @@ onThirdCityChange = (value) => {
       url: 'http://39.98.162.91:9573/api/v1/upload'
     }).then(res => {
       console.log('res',res)
-      console.log('1',this)
-      if(res.data.status === 200) {
+      if(fileList.length === 1) {
+        let imgurl = res.data.data
+        this.setState({
+          imageUrl: imgurl
+        })
+      }
+      else {
         let imgurl = res.data.data
         this.setState({
           imageUrl: imgurl
@@ -231,10 +233,16 @@ onThirdCityChange = (value) => {
     });
   }
 
+  articlelist = () => {
+    const { dispatch } = this.props;
+    dispatch(routerRedux.push({
+      pathname: '/list/basic-list/',
+    }))
+  }
+
   render() {
-    console.log(this.props.rule,'100')
-    const fileList = [{ uid: this.props.match.params.aid, url: `${this.props.rule.data[0].image}` }];
-    const { previewVisible, previewImage, cities, cities1 } = this.state;
+    console.log(this.props.rule.data[0].image)
+    const { previewVisible, previewImage, cities, cities1,fileList } = this.state;
     const uploadButton = (
       <div>
         <Icon type={this.state.loading ? 'loading' : 'plus'} />
@@ -271,7 +279,7 @@ onThirdCityChange = (value) => {
             type="success"
             title="操作成功"
             actions={
-              <Button type="primary" onClick={this.handleDone}>
+              <Button type="primary" onClick={this.articlelist}>
                 知道了
               </Button>
             }
@@ -279,6 +287,9 @@ onThirdCityChange = (value) => {
           />
         );
       }
+      const categoryData = provinceData.map(province => <Option value={provinceData.indexOf(province)} key={province}>{province}</Option>)
+      const tagData = cities.map(city => <Option value={cities.indexOf(city)} key={city}>{city}</Option>)
+      const labelData = cities1.map(city1 => <Option value={cities1.indexOf(city1)} key={city1}>{city1}</Option>)
       return (
         <Form onSubmit={this.handleSubmit}>
           <FormItem label="文章封面" {...this.formLayout}>
@@ -323,7 +334,7 @@ onThirdCityChange = (value) => {
                   onChange={this.handleProvinceChange}
                   getPopupContainer={triggerNode => triggerNode.parentNode}
                 >
-                  {provinceData.map(province => <Option value={provinceData.indexOf(province)} key={province}>{province}</Option>)}
+                  {categoryData}
                 </Select>
             )}
           </FormItem>
@@ -335,7 +346,7 @@ onThirdCityChange = (value) => {
                   onChange={this.onSecondCityChange}
                   getPopupContainer={triggerNode => triggerNode.parentNode}
                 >
-                  {cities.map(city => <Option value={cities.indexOf(city)} key={city}>{city}</Option>)}
+                  {tagData}
                 </Select>
             )}
           </FormItem>
@@ -347,13 +358,13 @@ onThirdCityChange = (value) => {
                   onChange={this.onThirdCityChange}
                   getPopupContainer={triggerNode => triggerNode.parentNode}
                 >
-                  {cities1.map(city1 => <Option value={cities1.indexOf(city1)} key={city1}>{city1}</Option>)}
+                  {labelData}
                 </Select>
             )}
           </FormItem>
           <FormItem {...this.formLayout} >
             {getFieldDecorator("date",{
-              initialValue: date
+              initialValue: new Date()
             })(
               <div></div>
             )}

@@ -262,10 +262,10 @@ class BasicList extends PureComponent {
         title: '文章类别',
         dataIndex: 'category',
         key: 'category',
-        ...this.getColumnSearchProps('category'),
+        //...this.getColumnSearchProps('category'),
         render: category => 
           <span>
-            <Tag color="blue" key={category}>{category}</Tag>
+            <Tag color="blue" key={category}>文化资讯</Tag>
           </span>
       },
       {

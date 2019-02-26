@@ -10,7 +10,7 @@ export default {
   effects: {
     *fetch({ payload }, { call, put }) {
       const response = yield call(queryRule, payload);
-      console.log(response, 'response')
+      console.log(response, '啦啦啦')
       yield put({
         type: "save",
         payload: response.data

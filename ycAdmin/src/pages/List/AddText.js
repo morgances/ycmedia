@@ -9,8 +9,8 @@ import moment from 'moment';
 import BraftEditor from 'braft-editor';
 import 'braft-editor/dist/index.css';
 import Axios from 'axios';
+import { routerRedux } from 'dva/router';
 
-const date = new Date();
 const Option = Select.Option;
 const FormItem = Form.Item;
 const provinceData = ['文化资讯','书香银川','遗脉相承','银川旅游','艺术空间','文化消费','文化品牌','凤城演绎'];
@@ -50,6 +50,7 @@ const secondCityData = {
   19: ['群文活动','民间团队','公益培训'],
   20: ['西夏古都','民间传说','老银川']
 };
+console.log(cityData[provinceData.indexOf(provinceData[0])].indexOf(cityData[provinceData.indexOf(provinceData[0])][0]))
 @connect(({ list, loading }) => ({
   list,
   loading: loading.models.list
@@ -60,15 +61,16 @@ class AddText extends React.Component {
     super(props);
     this.state = {
       cities: cityData[provinceData.indexOf(provinceData[0])],
-      secondCity: cityData[provinceData.indexOf(provinceData[0])][0],
+      secondCity: cityData[provinceData.indexOf(provinceData[0])].indexOf(cityData[provinceData.indexOf(provinceData[0])][0]),
       cities1: secondCityData[cityData[provinceData.indexOf(provinceData[0])].indexOf(cityData[provinceData.indexOf(provinceData[0])][0])],
-      thirdCity: secondCityData[cityData[provinceData.indexOf(provinceData[0])].indexOf(cityData[provinceData.indexOf(provinceData[0])][0])][0],
+      thirdCity: secondCityData[cityData[provinceData.indexOf(provinceData[0])].indexOf(cityData[provinceData.indexOf(provinceData[0])][0])].indexOf(secondCityData[cityData[provinceData.indexOf(provinceData[0])].indexOf(cityData[provinceData.indexOf(provinceData[0])][0])][0]),
       fileList: [],
       previewVisible: false,
       previewImage: '',
       loading: false,
       file_name:"",
       imageUrl: '',
+      visible: false,
     }
   }
 
@@ -81,25 +83,27 @@ class AddText extends React.Component {
   }
 
   handleProvinceChange = (value) => {
-    console.log(value)
     this.setState({
       cities: cityData[value],
       secondCity: cityData[value][0],
     });
+    this.props.form.setFields({
+      tag: null
+    })
   }
 
   onSecondCityChange = (value) => {
-    console.log(value)
-    console.log(secondCityData[value])
     this.setState({
       secondCity: value,
       cities1: secondCityData[value],
       thirdCity: secondCityData[value][0],
-    });
+    })
+    this.props.form.setFields({
+      label: null
+    })
   }
 
   onThirdCityChange = (value) => {
-    console.log(value)
     this.setState({
       thirdCity: value,
     })
@@ -136,14 +140,13 @@ class AddText extends React.Component {
     e.preventDefault();
     const { dispatch, form } = this.props;
     const { imageUrl } = this.state;
+    console.log(imageUrl,"submitimageUrl")
     setTimeout(() => this.addBtn.blur(), 0);
     form.validateFields((err, fieldsValue) => {
-      console.log(fieldsValue.image,'传给后台到数据')
       if (!err) {
         const submitData = {
           text: fieldsValue.text.toHTML()
         }
-        console.log(submitData)
         this.setState({
           done: true,
         });
@@ -193,7 +196,13 @@ class AddText extends React.Component {
       data: formData,
       url: 'http://39.98.162.91:9573/api/v1/upload'
     }).then(res => {
-      if(res.data.status === 200) {
+      if(fileList.length === 1) {
+        let imgurl = res.data.data
+        this.setState({
+          imageUrl: imgurl
+        })
+      }
+      else {
         let imgurl = res.data.data
         this.setState({
           imageUrl: imgurl
@@ -217,6 +226,13 @@ class AddText extends React.Component {
     });
   }
 
+  articlelist = () => {
+    const { dispatch } = this.props;
+    dispatch(routerRedux.push({
+      pathname: '/list/basic-list/',
+    }))
+  }
+
   render() {
     const { cities, cities1 } = this.state;
     console.log(cities)
@@ -228,8 +244,6 @@ class AddText extends React.Component {
         <div className="ant-upload-text">Upload</div>
       </div>
     );
-
-
     const controls = [
       'undo', 'redo', 'separator',
       'font-size', 'separator',
@@ -239,7 +253,6 @@ class AddText extends React.Component {
       'link', 'media', 'hr', 'separator',
       'clear', 'separator'
     ]
-
     const {
       form: { getFieldDecorator, setFieldsValue }
     } = this.props;
@@ -258,7 +271,7 @@ class AddText extends React.Component {
             type="success"
             title="操作成功"
             actions={
-              <Button type="primary" onClick={this.handleDone}>
+              <Button type="primary" onClick={this.articlelist}>
                 知道了
               </Button>
             }
@@ -266,6 +279,9 @@ class AddText extends React.Component {
           />
         );
       }
+      const categoryData = provinceData.map(province => <Option value={provinceData.indexOf(province)} key={province}>{province}</Option>)
+      const tagData = cities.map(city => <Option value={cities.indexOf(city)} key={city}>{city}</Option>)
+      const labelData = cities1.map(city1 => <Option value={cities1.indexOf(city1) === undefined ? -1 : cities1.indexOf(city1)} key={city1}>{city1}</Option>)
       return (
         <Form onSubmit={this.handleSubmit}>
           <FormItem label="文章封面" {...this.formLayout}>
@@ -303,46 +319,44 @@ class AddText extends React.Component {
           </FormItem>
           <FormItem label="文章分类" {...this.formLayout} >
             {getFieldDecorator("category", {
-              initialValue: provinceData[0],
               rules: [{ required: true, message: "请选择文章类别" }]
             })(
-                <Select
+                <Select 
+                  placeholder="请选择" 
                   onChange={this.handleProvinceChange}
                   getPopupContainer={triggerNode => triggerNode.parentNode}
                 >
-                  {provinceData.map(province => <Option value={provinceData.indexOf(province)} key={province}>{province}</Option>)}
+                  {categoryData}
                 </Select>
               )}
           </FormItem>
           <FormItem label="文章标签" {...this.formLayout} >
             {getFieldDecorator("tag", {
-              initialValue: this.state.secondCity,
             })(
-                <Select
+                <Select 
+                  placeholder="请选择" 
                   onChange={this.onSecondCityChange}
                   getPopupContainer={triggerNode => triggerNode.parentNode}
-                  notFoundContent
                 >
-                  {cities.map(city => <Option value={cities.indexOf(city)} key={city}>{city}</Option>)}
+                  {tagData}
                 </Select>
               )}
           </FormItem>
           <FormItem label="文章label" {...this.formLayout}>
             {getFieldDecorator("label", {
-              initialValue: this.state.thirdCity,
             })(
-                <Select
+                <Select 
+                  placeholder="请选择" 
                   onChange={this.onThirdCityChange}
                   getPopupContainer={triggerNode => triggerNode.parentNode}
-                  notFoundContent
                 >
-                  {cities1.map(city1 => <Option value={cities1.indexOf(city1)} key={city1}>{city1}</Option>)}
+                  {labelData}
                 </Select>
               )}
           </FormItem>
           <FormItem {...this.formLayout} >
             {getFieldDecorator("date",{
-              initialValue: date
+              initialValue: new Date()
             })(
               <div></div>
             )}
