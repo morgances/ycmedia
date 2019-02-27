@@ -13,44 +13,23 @@ import { routerRedux } from 'dva/router';
 
 const Option = Select.Option;
 const FormItem = Form.Item;
+const Data = {
+  '文化资讯': {'文化动态': [],'通知公告': [],'政策法规': [],'免费开放': []},
+  '书香银川': {'图书借阅': [],'服务指南': [],'数字资源': [],'好书推荐': []},
+  '遗脉相承': {'文化遗产': ['文化遗址','文物鉴赏','文物保护'],'非遗传承': ['项目名单','传承保护','非遗展馆','民俗活动','传承基地','传承人']},
+  '银川旅游': [],
+  '艺术空间': {'艺术资讯': [],'名家介绍': [],'艺术展示': ['绘画','书法','音乐','展览'],'艺术场馆': []},
+  '文化消费': {'银川影院': [],'艺术剧院': ['院团介绍','剧目介绍','商业演出']},
+  '文化品牌': {'公益性文化产品': [],'公益性文化活动': [],'中华优秀传统文化与民族文化': []},
+  '凤城演绎': {'群众文化': ['群文活动','民间团队','公益培训'],'银川记忆': ['西夏古都','民间传说','老银川']}
+}
+console.log(Object.keys(Data),"category")
+console.log(Object.values(Data)[0],"tagData")
+console.log(Object.keys(Object.values(Data)[0]),"tag")
+console.log(Object.values(Object.values(Data)[0])[0],"label")
 const provinceData = ['文化资讯','书香银川','遗脉相承','银川旅游','艺术空间','文化消费','文化品牌','凤城演绎'];
 console.log(provinceData.indexOf('文化资讯'))
-const cityData = {
-  0: ['文化动态','通知公告','政策法规','免费开放'],
-  1: [,,,,'图书借阅','服务指南','数字资源','好书推荐'],
-  2: [,,,,,,,,'文化遗产','非遗传承'],
-  3: [],
-  4: [,,,,,,,,,,'艺术资讯','名家介绍','艺术展示','艺术场馆'],
-  5: [,,,,,,,,,,,,,,'银川影院','艺术剧院'],
-  6: [,,,,,,,,,,,,,,,,'公益性文化产品','公益性文化活动','中华优秀传统文化与民族文化'],
-  7: [,,,,,,,,,,,,,,,,,,,'群众文化','银川记忆']
-};
-console.log([provinceData[0]][0])
-console.log(cityData[provinceData[0]],'0')
-const secondCityData = {
-  0: [],
-  1: [],
-  2: [],
-  3: [],
-  4: [],
-  5: [],
-  6: [],
-  7: [],
-  8: ['文化遗址','文物鉴赏','文物保护'],
-  9: ['项目名单','传承保护','非遗展馆','民俗活动','传承基地','传承人'],
-  10: [],
-  11: [],
-  12: ['绘画','书法','音乐','展览'],
-  13: [],
-  14: [],
-  15: ['院团介绍','剧目介绍','商业演出'],
-  16: [],
-  17: [],
-  18: [],
-  19: ['群文活动','民间团队','公益培训'],
-  20: ['西夏古都','民间传说','老银川']
-};
-console.log(cityData[provinceData.indexOf(provinceData[0])].indexOf(cityData[provinceData.indexOf(provinceData[0])][0]))
+
 @connect(({ list, loading }) => ({
   list,
   loading: loading.models.list
@@ -60,10 +39,11 @@ class AddText extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      cities: cityData[provinceData.indexOf(provinceData[0])],
-      secondCity: cityData[provinceData.indexOf(provinceData[0])].indexOf(cityData[provinceData.indexOf(provinceData[0])][0]),
-      cities1: secondCityData[cityData[provinceData.indexOf(provinceData[0])].indexOf(cityData[provinceData.indexOf(provinceData[0])][0])],
-      thirdCity: secondCityData[cityData[provinceData.indexOf(provinceData[0])].indexOf(cityData[provinceData.indexOf(provinceData[0])][0])].indexOf(secondCityData[cityData[provinceData.indexOf(provinceData[0])].indexOf(cityData[provinceData.indexOf(provinceData[0])][0])][0]),
+      tag: Object.keys(Object.values(Data)[0]),
+      tagData: Object.values(Data)[0],
+      secondTag: Object.keys(Object.values(Data)[0])[0],
+      label: Object.values(Object.values(Data)[0])[0],
+      thirdLabel: Object.values(Object.values(Data)[0])[0][0],
       fileList: [],
       previewVisible: false,
       previewImage: '',
@@ -82,30 +62,34 @@ class AddText extends React.Component {
     }, 1000)
   }
 
-  handleProvinceChange = (value) => {
+  handleCategoryChange = (value) => {
+    console.log(value,"联动category")
     this.setState({
-      cities: cityData[value],
-      secondCity: cityData[value][0],
+      tag: Object.keys(Object.values(Data)[value]),
+      tagData: Object.values(Data)[value],
+      secondTag: Object.keys(Object.values(Data)[value])[0]
     });
     this.props.form.setFields({
       tag: null
     })
   }
 
-  onSecondCityChange = (value) => {
+  handleTagChange = (value) => {
+    console.log(value,"联动tag")
     this.setState({
-      secondCity: value,
-      cities1: secondCityData[value],
-      thirdCity: secondCityData[value][0],
-    })
+      secondTag: value,
+      label: Object.values(this.state.tagData)[value],
+      thirdLabel: Object.values(this.state.tagData)[value][0],
+    });
     this.props.form.setFields({
       label: null
     })
   }
 
-  onThirdCityChange = (value) => {
+  handleLabelChange = (value) => {
+    console.log(value,"联动label")
     this.setState({
-      thirdCity: value,
+      thirdLabel: value
     })
   }
 
@@ -234,9 +218,7 @@ class AddText extends React.Component {
   }
 
   render() {
-    const { cities, cities1 } = this.state;
-    console.log(cities)
-    console.log(cities1)
+    const { tag, label } = this.state;
     const { previewVisible, previewImage, fileList } = this.state;
     const uploadButton = (
       <div>
@@ -279,9 +261,9 @@ class AddText extends React.Component {
           />
         );
       }
-      const categoryData = provinceData.map(province => <Option value={provinceData.indexOf(province)} key={province}>{province}</Option>)
-      const tagData = cities.map(city => <Option value={cities.indexOf(city)} key={city}>{city}</Option>)
-      const labelData = cities1.map(city1 => <Option value={cities1.indexOf(city1) === undefined ? -1 : cities1.indexOf(city1)} key={city1}>{city1}</Option>)
+      const categoryData = Object.keys(Data).map(category => <Option value={Object.keys(Data).indexOf(category)} key={category}>{category}</Option>)
+      const tagData = tag.map(tags => <Option value={tag.indexOf(tags)} key={tags}>{tags}</Option>)
+      const labelData = label.map(labels => <Option value={label.indexOf(labels)} key={labels}>{labels}</Option>)
       return (
         <Form onSubmit={this.handleSubmit}>
           <FormItem label="文章封面" {...this.formLayout}>
@@ -323,7 +305,7 @@ class AddText extends React.Component {
             })(
                 <Select 
                   placeholder="请选择" 
-                  onChange={this.handleProvinceChange}
+                  onChange={this.handleCategoryChange}
                   getPopupContainer={triggerNode => triggerNode.parentNode}
                 >
                   {categoryData}
@@ -332,10 +314,11 @@ class AddText extends React.Component {
           </FormItem>
           <FormItem label="文章标签" {...this.formLayout} >
             {getFieldDecorator("tag", {
+              initialValue: -1
             })(
                 <Select 
                   placeholder="请选择" 
-                  onChange={this.onSecondCityChange}
+                  onChange={this.handleTagChange}
                   getPopupContainer={triggerNode => triggerNode.parentNode}
                 >
                   {tagData}
@@ -344,10 +327,11 @@ class AddText extends React.Component {
           </FormItem>
           <FormItem label="文章label" {...this.formLayout}>
             {getFieldDecorator("label", {
+              initialValue: -1
             })(
                 <Select 
                   placeholder="请选择" 
-                  onChange={this.onThirdCityChange}
+                  onChange={this.handleLabelChange}
                   getPopupContainer={triggerNode => triggerNode.parentNode}
                 >
                   {labelData}

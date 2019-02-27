@@ -33,22 +33,9 @@ export default {
         payload: Array.isArray(response) ? response : []
       });
     },
-    // *submit({ payload }, { call, put }) {
-    //   let callback;
-    //   if (payload.id) {
-    //     callback =
-    //       Object.keys(payload).length === 1 ? removeFakeList : updateFakeList;
-    //   } else {
-    //     callback = addFakeList;
-    //   }
-    //   const response = yield call(callback, payload); // post
-    //   yield put({
-    //     type: "queryList",
-    //     payload: response
-    //   });
-    // },
     *addList({ payload }, { call, put }) {
       const response = yield call(addList, payload);
+      console.log(response,"addList")
       if(response.status !== 0) {
         return false
       } else {
@@ -64,16 +51,19 @@ export default {
     },
     *addPictureList({ payload }, { call, put }) {
       const response = yield call(addPictureList, payload);
+      // console.log(payload,"图片payload")
+      // console.log(addPictureList,"add")
+      console.log(response, '图片添加成功')
       if(response.status !== 0) {
         return false
       }
-        // const addResponse = yield call(queryPictureList, payload);
-        // if (addResponse.status !== 0) {
-        //   return
-        // }
+      const addResponse = yield call(queryPictureList, payload);
+      if (addResponse.status !== 0) {
+        return
+      }
       yield put({
         type: 'addPictureList',
-        payload: response.data,
+        payload: addResponse.data,
       });      
     },
     *removeList({ payload }, { call,put }) {
@@ -121,14 +111,14 @@ export default {
       };
     },
     addList(state, { payload }) {
-      console.log('添加后', payload)
+      console.log('文章添加后', payload)
       return {
         ...state,
         list: payload,
       };
     },
     addPictureList(state, { payload }) {
-      console.log('添加后', payload)
+      console.log('图片添加后', payload)
       return {
         ...state,
         list: payload,

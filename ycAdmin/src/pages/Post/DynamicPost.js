@@ -18,15 +18,14 @@ const FormItem = Form.Item;
 class DynamicPost extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      modalVisible: false,
+      fileList: [],
+      previewVisible: false,
+      imageUrl: '',
+      loading: false,
+    };
   }
-
-  state = {
-    modalVisible: false,
-    fileList: [],
-    previewVisible: false,
-    imageUrl: '',
-    loading: false,
-  };
 
   componentDidMount() {
     const { dispatch } = this.props;
@@ -93,8 +92,6 @@ class DynamicPost extends Component {
           payload: {
             ...fieldsValue,
             path: imageUrl,
-            start: fieldsValue['start'].format(),
-            end: fieldsValue['end'].format(),
           }
         });
       }
@@ -139,9 +136,13 @@ class DynamicPost extends Component {
       data: formData,
       url: 'http://39.98.162.91:9573/api/v1/upload'
     }).then(res => {
-      console.log('res',res)
-      console.log('1',this)
-      if(res.data.status === 200) {
+      if(fileList.length === 1) {
+        let imgurl = res.data.data
+        this.setState({
+          imageUrl: imgurl
+        })
+      }
+      else {
         let imgurl = res.data.data
         this.setState({
           imageUrl: imgurl
@@ -221,7 +222,7 @@ class DynamicPost extends Component {
                 onChange={this.handleChange}
                 accept="image/*"
               >
-                {fileList.length >= 10 ? null : uploadButton}
+                {fileList.length >= 1 ? null : uploadButton}
               </Upload>
               <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
                 <img alt="image" style={{ width: '100%' }} src={imageUrl} />
@@ -229,55 +230,11 @@ class DynamicPost extends Component {
             </div>
           )}
           </FormItem>
-          <FormItem label="开始时间" {...this.formLayout}>
-            {getFieldDecorator("start", {
-              rules: [{ type: 'object', required: true, message: "请选择轮播开始时间" }],
-            })(
-              <DatePicker
-                showTime
-                placeholder="请选择"
-                format="YYYY-MM-DD HH:mm:ss"
-                style={{ width: '100%' }}
-              />
-            )}
-          </FormItem>
-          <FormItem label="结束时间" {...this.formLayout}>
-            {getFieldDecorator("end", {
-              rules: [{ type: 'object', required: true, message: "请选择轮播结束时间" }],
-            })(
-              <DatePicker 
-                showTime
-                placeholder="请选择"
-                format="YYYY-MM-DD HH:mm:ss"
-                style={{ width: '100%'}}
-              />
-            )}
-          </FormItem>
         </Form>
       )
     }
 
-    const images = [
-      {
-        original: 'http://lorempixel.com/1000/600/nature/1/',
-        thumbnail: 'http://lorempixel.com/250/150/nature/1/',
-      },
-      {
-        original: 'http://lorempixel.com/1000/600/nature/2/',
-        thumbnail: 'http://lorempixel.com/250/150/nature/2/'
-      },
-      {
-        original: 'http://lorempixel.com/1000/600/nature/3/',
-        thumbnail: 'http://lorempixel.com/250/150/nature/3/'
-      }
-    ]
-
     const columns = [
-      {
-        title: 'ID',
-        dataIndex: 'BannerId',
-        key: 'BannerId'
-      },
       {
         title: '轮播图名称',
         dataIndex: 'Name',
@@ -287,21 +244,9 @@ class DynamicPost extends Component {
         title: '轮播图',
         dataIndex: 'ImagePath',
         key: 'ImagePath',
-        // render: () => (
-        //   <ImageGallery items={images} />
+        // render: (text, record) => (
+        //   <img src={ImagePath} alt="图片" style={{ width: 30, height: 30 }} />
         // )
-      },
-      {
-        title: '轮播开始时间',
-        dataIndex: 'StartDate',
-        key: 'StartDate',
-        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>
-      },
-      {
-        title: '轮播结束时间',
-        dataIndex: 'EndDate',
-        key: 'EndDate',
-        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>
       },
       {
         title: '操作',

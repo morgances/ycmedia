@@ -3,6 +3,7 @@ import { notification } from "antd";
 import router from "umi/router";
 import hash from "hash.js";
 import { isAntdPro } from "./utils";
+import { getText } from "@/services/api";
 
 const codeMessage = {
   200: "服务器成功返回请求的数据。",
@@ -128,8 +129,7 @@ export default function request(url, option) {
       if (newOptions.method === "DELETE" || response.status === 204) {
         return response.text();
       }
-      console.log(response, 'response')
-      return response.json();
+      return response.json()
     })
     .catch(e => {
       const status = e.name;

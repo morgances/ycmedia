@@ -94,7 +94,7 @@ export async function queryFakeList(params) {
 }
 
 export async function queryPictureList(params) {
-  console.log(params)
+  console.log(params,'请求图片列表参数')
   return request("/api/v1/banner/list", {
     method: "POST",
     body: {
@@ -115,7 +115,7 @@ export async function removeList(params) {
 }
 
 export async function addList(params) {
-  console.log(params,'请求参数')
+  console.log(params,'请求添加文章参数')
   return request("/api/v1/article/add", {
     method: "POST",
     body: {
@@ -126,7 +126,6 @@ export async function addList(params) {
 }
 
 export async function addPictureList(params) {
-  console.log(params)
   return request("/api/v1/banner/create", {
     method: "POST",
     body: {
