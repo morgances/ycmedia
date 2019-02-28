@@ -43,7 +43,7 @@ func Register(r *server.Router, db *sql.DB, tokenKey string) error {
 	r.Post("/api/v1/banner/delete", c.DeleteById, jwt.Check, active.Isactive)
 	r.Post("/api/v1/banner/update", c.Update, jwt.Check, active.Isactive)
 	r.Post("/api/v1/banner/detail", c.InfoById)
-	r.Get("/api/v1/banner/all", c.ListBanner)
+	r.Post("/api/v1/banner/all", c.ListBanner)
 
 	return nil
 }
