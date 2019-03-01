@@ -45,7 +45,7 @@ func (con Controller) GetArticleList(ctx *server.Context) error {
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, BadData))
 	}
 
-	articles, err := con.db.GetArticleListDesc(x.Category, x.Tag, x.Label, x.Page*10, 10, "date")
+	articles, err := con.db.GetArticleListDesc(x.Category, x.Tag, x.Label, x.Page*10-10, 10, "date")
 	if err != nil {
 		log.Error("Error In Mysql.GetArticleList:", err)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))

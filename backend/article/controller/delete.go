@@ -29,7 +29,7 @@ func (con Controller) Delete(ctx *server.Context) error {
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
 	}
 
-	log.Infof("In Delete: aid = %d\n", x.Aid)
+	log.Infof("In DeleteArticle: aid = %d\n", x.Aid)
 
 	if x.Aid < 0 {
 		log.Error("Error In JSONBody:", BadData)
