@@ -16,12 +16,12 @@ func NewBannerService(db *sql.DB) *BannerService {
 	bs := &BannerService{
 		db: db,
 		SQLS: []string{
-			`CREATE DATABASE IF NOT EXISTS yc`,
+			`CREATE DATABASE IF NOT EXISTS banner`,
 			`CREATE TABLE IF NOT EXISTS ` + database + `(
-				bannerId INT(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
-				name VARCHAR(512)  DEFAULT NULL COMMENT 'sign',
+				bannerId INT(11) NOT NULL AUTO_INCREMENT COMMENT ,
+				name VARCHAR(512)  DEFAULT NULL COMMENT ,
 				imagePath VARCHAR(512) DEFAULT NULL ,
-				event VARCHAR(512) DEFAULT NULL COMMENT 'what to trigger',
+				event VARCHAR(512) DEFAULT NULL COMMENT ,
 				PRIMARY KEY (bannerId)
 			)ENGINE=InnoDB AUTO_INCREMENT=1000000 DEFAULT CHARSET=utf8mb4`,
 			`INSERT INTO ` + database + ` (name,imagePath,event) VALUES (?,?,?)`,
