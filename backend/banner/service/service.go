@@ -12,7 +12,7 @@ type BannerService struct {
 }
 
 func NewBannerService(db *sql.DB) *BannerService {
-	database := "yc.banner"
+	database := "banner.banner"
 	bs := &BannerService{
 		db: db,
 		SQLS: []string{
