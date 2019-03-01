@@ -18,10 +18,10 @@ func NewBannerService(db *sql.DB) *BannerService {
 		SQLS: []string{
 			`CREATE DATABASE IF NOT EXISTS banner`,
 			`CREATE TABLE IF NOT EXISTS ` + database + `(
-				bannerId INT(11) NOT NULL AUTO_INCREMENT COMMENT ,
-				name VARCHAR(512)  DEFAULT NULL COMMENT ,
+				bannerId INT(11) NOT NULL AUTO_INCREMENT ,
+				name VARCHAR(512)  DEFAULT NULL ,
 				imagePath VARCHAR(512) DEFAULT NULL ,
-				event VARCHAR(512) DEFAULT NULL COMMENT ,
+				event VARCHAR(512) DEFAULT NULL ,
 				PRIMARY KEY (bannerId)
 			)ENGINE=InnoDB AUTO_INCREMENT=1000000 DEFAULT CHARSET=utf8mb4`,
 			`INSERT INTO ` + database + ` (name,imagePath,event) VALUES (?,?,?)`,
