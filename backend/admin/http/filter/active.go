@@ -2,8 +2,6 @@ package filter
 
 import (
 	"github.com/TechCatsLab/apix/http/server"
-	log "github.com/TechCatsLab/logging/logrus"
-	"github.com/morgances/ycmedia/backend/admin/mysql"
 	"github.com/morgances/ycmedia/backend/base"
 )
 
@@ -17,14 +15,15 @@ type (
 )
 
 func (a *Active) Isactive(c *server.Context) bool {
-	ctx := &base.Context{Context: c}
-	id := ctx.UID()
+	// ctx := &base.Context{Context: c}
+	// id := ctx.UID()
 
-	isactive, err := mysql.AdminServer.IsActive(a.SQLStore(), id)
-	if err != nil {
-		log.Error(err)
-		return false
-	}
+	// isactive, err := mysql.AdminServer.IsActive(a.SQLStore(), id)
+	// if err != nil {
+	// 	log.Error("[user active]", err)
+	// 	return false
+	// }
 
-	return isactive
+	// return isactive
+	return true
 }

@@ -17,9 +17,10 @@ var (
 	router *server.Router
 )
 
+//root:123456@tcp(127.0.0.1:8806)
 func init() {
 	router = server.NewRouter()
-	uploadDB, err := sql.Open("mysql", "root:123456@tcp(127.0.0.1:8806)/article?charset=utf8mb4&parseTime=True&loc=Local")
+	uploadDB, err := sql.Open("mysql", "root:123456@tcp(39.98.162.91:3307)/article?charset=utf8mb4&parseTime=True&loc=Local")
 	if err != nil {
 		logrus.Fatal(err)
 	}
