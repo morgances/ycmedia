@@ -32,9 +32,9 @@ func (con *Controller) CreateTable() error {
 func (con *Controller) Insert(c *server.Context) error {
 	var (
 		req struct {
-			Name      string `json:"name"`
-			ImagePath string `json:"path"`
-			Event     string `json:"event"`
+			Name      string `json:"Name"`
+			ImagePath string `json:"ImagePath"`
+			Event     string `json:"Event"`
 		}
 	)
 
@@ -57,7 +57,7 @@ func (con *Controller) Insert(c *server.Context) error {
 func (con *Controller) InfoById(c *server.Context) error {
 	var (
 		req struct {
-			Id int `json:"id"`
+			Id int `json:"BannerId"`
 		}
 	)
 	if err := c.JSONBody(&req); err != nil {
@@ -77,7 +77,7 @@ func (con *Controller) InfoById(c *server.Context) error {
 func (con *Controller) DeleteById(c *server.Context) error {
 	var (
 		req struct {
-			Id int `json:"id"`
+			Id int `json:"BannerId"`
 		}
 	)
 
@@ -109,10 +109,10 @@ func (con *Controller) ListBanner(c *server.Context) error {
 func (con *Controller) Update(c *server.Context) error {
 	var (
 		req struct {
-			Id        int    `json:"id"`
-			Name      string `json:"name"`
-			ImagePath string `json:"path"`
-			Event     string `json:"event"`
+			Id        int    `json:"BannerId"`
+			Name      string `json:"Name"`
+			ImagePath string `json:"ImagePath"`
+			Event     string `json:"Event"`
 		}
 	)
 
