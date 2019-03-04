@@ -1,17 +1,20 @@
 import {
-  queryFakeList,
-  removeList,
-  addList,
-  updateFakeList,
+  queryArticleList,
+  removeArticleList,
+  addArticleList,
+  updateAritcleList,
   addPictureList,
-  queryPictureList
+  queryPictureList,
+  removeBanner,
+  getPictureList,
+  getPicture,
+  updatePicture
 } from "@/services/api";
 
 export default {
   namespace: "list",
-
   state: {
-    list: [],
+    list: []
   },
 
   effects: {
@@ -22,56 +25,70 @@ export default {
         return
       }
       yield put({
-        type: "queryList",
-        payload: response.data
+        type: "queryPictureList",
+        payload: response
       });
     },
-    *appendFetch({ payload }, { call, put }) {
-      const response = yield call(queryFakeList, payload);
-      yield put({
-        type: "appendList",
-        payload: Array.isArray(response) ? response : []
-      });
-    },
-    *addList({ payload }, { call, put }) {
-      const response = yield call(addList, payload);
-      console.log(response,"addList")
-      if(response.status !== 0) {
-        return false
-      } else {
-        const addResponse = yield call(queryFakeList, payload);
-        if (addResponse.status !== 0) {
-          return
-        }
-        yield put({
-          type: 'addList',
-          payload: addResponse.data,
-        });
-      }
+    // *appendFetch({ payload }, { call, put }) {
+    //   const response = yield call(queryFakeList, payload);
+    //   yield put({
+    //     type: "appendList",
+    //     payload: Array.isArray(response) ? response : []
+    //   });
+    // },
+    *addArticle({ payload }, { call, put }) {
+      const response = yield call(addArticleList, payload);
+      console.log(response.status,"addList")
+      // if(response.status !== 0) {
+      //   return false
+      // } else {
+      //   const addResponse = yield call(queryArticleList, payload);
+      //   if (addResponse.status !== 0) {
+      //     return false
+      //   }
+      //   yield put({
+      //     type: 'queryPictureList',
+      //     payload: addResponse.data,
+      //   });
+      // }
     },
     *addPictureList({ payload }, { call, put }) {
-      const response = yield call(addPictureList, payload);
-      // console.log(payload,"图片payload")
-      // console.log(addPictureList,"add")
-      console.log(response, '图片添加成功')
-      if(response.status !== 0) {
-        return false
+      let callback;
+      console.log(payload)
+      if(payload.BannerId) {
+        callback = updatePicture;
+      } else {
+        callback = addPictureList;
       }
-      const addResponse = yield call(queryPictureList, payload);
-      if (addResponse.status !== 0) {
-        return
-      }
+      const response = yield call(callback, payload);
       yield put({
-        type: 'addPictureList',
-        payload: addResponse.data,
-      });      
+        type: 'queryPictureList',
+        payload: response,
+      })
+      // const response = yield call(addPictureList, payload);
+      // console.log(payload,"图片payload")
+      // console.log(response, '图片添加成功')
+      // if(response.status !== 0) {
+      //   return false
+      // } else {
+      //   const addResponse = yield call(queryPictureList, payload);
+      //   console.log(addResponse,"addResponse")
+      //   if (addResponse.status !== 0) {
+      //     return false
+      //   } else {
+      //     yield put({
+      //       type: 'queryPictureList',
+      //       payload: addResponse.data,
+      //     });
+      //   }
+      // }
     },
     *removeList({ payload }, { call,put }) {
       console.log(payload,'4')
       console.log(Object.keys(payload).length,'5')
-      const response = yield call(removeList, payload);
+      const response = yield call(removeArticleList, payload);
       if (response.status === 0) {
-        const response = yield call(queryFakeList, payload);
+        const response = yield call(queryArticleList, payload);
         if (response.status !== 0) {
           return
         }
@@ -83,34 +100,69 @@ export default {
         return false
       };
     },
-    *updateList({ payload }, { call, put }) {
-      const response = yield call(updateFakeList, payload);
+    *updateArticle({ payload }, { call, put }) {
+      const response = yield call(updateAritcleList, payload);
       if (response.status !== 0) {
         return
       }
       yield put({
-        type: "updateList",
+        type: "updateArticle",
         payload: response.data
       })
     },
+    *removePicture({ payload, callback }, { call, put }) {
+      const response = yield call(removeBanner, payload);
+      console.log(response,"删除response")
+      //更新删除后数据
+      // if (response.status === 0) {
+      //   const response = yield call(queryPictureList, payload);
+      //   console.log(response)
+      //   yield put({
+      //     type: "savePicture",
+      //     payload: response.data
+      //   });
+      // }
+      // if (callback) callback();
+    },
+    *picture({ payload }, { call, put }) {
+      console.log(payload)
+      const response = yield call(getPicture, payload);
+      yield put({
+        type: "edictPicture",
+        payload: response.data
+      })
+    }
   },
 
   reducers: {
-    queryList(state, { payload }) {
+    edictPicture(state, { payload }) {
+      console.log(payload,"编辑图片")
+      return {
+        ...state,
+        data: payload
+      };
+    },
+    savePicture(state, { payload }) {
+      return {
+        ...state,
+        data: payload
+      };
+    },
+    queryPictureList(state, { payload }) {
       console.log(payload,'图片')
       return {
         ...state,
         list: payload
       };
     },
-    updateList(state, { payload }) {
+    updateArticle(state, { payload }) {
       console.log('更新后', payload)
       return {
         ...state,
         list: payload,
       };
     },
-    addList(state, { payload }) {
+    addArticle(state, { payload }) {
       console.log('文章添加后', payload)
       return {
         ...state,

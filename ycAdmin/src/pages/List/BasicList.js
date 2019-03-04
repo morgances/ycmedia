@@ -38,35 +38,6 @@ const Search = Input.Search;
 const FormItem = Form.Item;
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
-// const data = [{
-//   key: '0',
-//   name: '文化资讯',
-// },{
-//   key: '1',
-//   name: '书香银川',
-// },{
-//   key: '2',
-//   name: '遗脉相承',
-// },{
-//   key: '3',
-//   name: '银川旅游',
-// },{
-//   key: '4',
-//   name: '艺术空间',
-// },{
-//   key: '5',
-//   name: '凤城演绎',
-// },{
-//   key: '6',
-//   name: '文化消费',
-// },{
-//   key: '7',
-//   name: '文化品牌',
-// }];
-
-function filter(inputValue, path) {
-  return (path.some(option => (option.label).toLowerCase().indexOf(inputValue.toLowerCase()) > -1));
-};
 
 @connect(({ list, rule, loading }) => ({
   list,
@@ -81,19 +52,7 @@ class BasicList extends PureComponent {
       selectedRows: [],
       searchText: '',
       formValues: {},
-      page: 0,
-      pageNum: 10,
-      // category: 0,
-      // tag: 0,
-      // label: 0,
-      data: {
-        list: [],
-        pagination: {
-          current: 0,
-          pageSize: 10,
-          total: 0,
-        },
-      },
+      category: '文化资讯',
     };
   };
 
@@ -153,57 +112,28 @@ class BasicList extends PureComponent {
   };
 
   componentDidMount() {
-    const { page, category, tag, label, pageNum } = this.state;
+    const { category, formValues } = this.state;
     const { dispatch } = this.props;
-    const later = dispatch({
+    dispatch({
       type: "rule/fetch",
       payload: {
-        // category,
-        page
-        // tag,
-        // label,
+        category
       }
-    });
-    later.then(() => {
-      const {
-        rule: { data },
-      } = this.props;
-      console.log(data)
-      this.setState({
-        data: {
-          list: data.lists,
-          pagination: {
-            current: page,
-            pageSize: pageNum,
-            total: data.total,
-          },
-        },
-      });
-      console.log(data)
     });
   };
 
-  handleStandardTableChange = (pagination) => {
+  handleChange = (e) => {
+    this.setState({
+      category: e.target.value
+    })
     const { dispatch } = this.props;
-    const { formValues } = this.state;
-
-    const params = {
-      currentPage: pagination.current,
-      // currentCategory: pagination.current,
-      // currentTag: pagination.current,
-      // currentLabel: pagination.current,
-      pageSize: pagination.pageSize,
-      ...formValues
-    }
-    this.setState(
-      {
-        page: pagination.current,
-        pageNum: pagination.pageSize,
-      },
-      () => {
-        this.componentDidMount();
+    const { category } = this.state;
+    dispatch({
+      type: "rule/fetch",
+      payload: {
+        category: e.target.value
       }
-    );
+    })
   }
 
   handleSelectRows = rows => {
@@ -223,16 +153,19 @@ class BasicList extends PureComponent {
   }
 
   deleteConfirm = aid => {
-    console.log(aid,'6')
+    console.log(aid)
     const { dispatch } = this.props;
     dispatch({
-      type: 'rule/remove',
+      type: 'rule/removeText',
       payload: {
         aid
       },
     });
-
     message.success('删除成功');
+    console.log(this.props.loading)
+    if(this.props.loading === false) {
+      this.componentDidMount()
+    }
   }
 
   adding = () => {
@@ -243,8 +176,9 @@ class BasicList extends PureComponent {
   }
 
   render() {
-    const { category, tag, label, rule: { data }, loading, } = this.props;
+    const { tag, label, rule: { data }, loading } = this.props;
     const { selectedRows } = this.state;
+    const category = this.state.category;
     const columns = [
       {
         title: '文章作者',
@@ -260,13 +194,25 @@ class BasicList extends PureComponent {
       },
       {
         title: '文章类别',
-        dataIndex: 'category',
-        key: 'category',
-        //...this.getColumnSearchProps('category'),
-        render: category => 
-          <span>
-            <Tag color="blue" key={category}>文化资讯</Tag>
-          </span>
+        children: [{
+          title: '文章Tag',
+          dataIndex: 'tag',
+          key: 'tag',
+          ...this.getColumnSearchProps('tag'),
+          render: tag => 
+            <span>
+              {tag === "" ? "" : <Tag color="blue" key={tag}>{tag}</Tag>}
+            </span>
+        },{
+          title: '文章label',
+          dataIndex: 'label',
+          key: 'label',
+          ...this.getColumnSearchProps('label'),
+          render: label =>
+            <span>
+              {label === "" ? "" : <Tag color="blue" key={label}>{label}</Tag>}
+            </span>
+        }]
       },
       {
         title: '更新时间',
@@ -308,6 +254,17 @@ class BasicList extends PureComponent {
           >
             添加文章
           </Button>
+          <Radio.Group value={category} style={{ marginBottom: 20 }} onChange={this.handleChange}>
+            <h4 style={{ marginRight: 8, display: 'inline' }}>文章分类：</h4>
+            <Radio.Button value={'文化资讯'}>文化资讯</Radio.Button>
+            <Radio.Button value={'书香银川'}>书香银川</Radio.Button>
+            <Radio.Button value={'遗脉相承'}>遗脉相承</Radio.Button>
+            <Radio.Button value={'银川旅游'}>银川旅游</Radio.Button>
+            <Radio.Button value={'艺术空间'}>艺术空间</Radio.Button>
+            <Radio.Button value={'文化消费'}>文化消费</Radio.Button>
+            <Radio.Button value={'文化品牌'}>文化品牌</Radio.Button>
+            <Radio.Button value={'凤城演绎'}>凤城演绎</Radio.Button>
+          </Radio.Group>
           <div className={styles.tableList}>
             <StandardTable
               selectedRows={selectedRows}
@@ -315,7 +272,6 @@ class BasicList extends PureComponent {
               data={data}
               columns={columns}
               onSelectRow={this.handleSelectRows}
-              //onChange={this.handleStandardTableChange}
             />
           </div>
         </Card>

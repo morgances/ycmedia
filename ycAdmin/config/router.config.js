@@ -113,7 +113,7 @@ export default [
           },
           {
             path: "/list/adding-list/:aid",
-            name: "addinglist",
+            name: "addinglistaid",
             component: "./List/Adding",
             hideInMenu: true
           }

@@ -1,6 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import { Table, Alert } from 'antd';
 import styles from './index.less';
+import rule from '@/pages/List/models/rule';
 
 function initTotalList(columns) {
   const totalList = [];
@@ -21,6 +22,8 @@ class StandardTable extends PureComponent {
     this.state = {
       selectedRowKeys: [],
       needTotalList,
+      pagination: {},
+      formValues: {}
     };
   }
 
@@ -50,29 +53,14 @@ class StandardTable extends PureComponent {
     this.setState({ selectedRowKeys, needTotalList });
   };
 
-  handleTableChange = (pagination, filters, sorter) => {
-    const { onChange } = this.props;
-    if (onChange) {
-      onChange(pagination, filters, sorter);
-    }
-  };
-
   cleanSelectedKeys = () => {
     this.handleRowSelectChange([], []);
   };
 
   render() {
+    console.log(this.props,"this.props")
     const { selectedRowKeys, needTotalList } = this.state;
     const { data = {}, rowKey, ...rest } = this.props;
-    const { pagination } = data;
-    const list = Array.from(data);
-    console.log(data, '2')
-
-    const paginationProps = {
-      showSizeChanger: true,
-      showQuickJumper: true,
-      ...pagination,
-    };
 
     const rowSelection = {
       selectedRowKeys,
@@ -85,10 +73,10 @@ class StandardTable extends PureComponent {
     return (
       <div className={styles.standardTable}>
         <Table
+          bordered
           rowKey={rowKey || 'aid'}
-          dataSource={list}
-          pagination={paginationProps}
-          onChange={this.handleTableChange}
+          dataSource={data.data}
+          pagination={{ pageSize: 10 }}
           {...rest}
         />
       </div>

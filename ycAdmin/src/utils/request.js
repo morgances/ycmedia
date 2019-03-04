@@ -129,6 +129,7 @@ export default function request(url, option) {
       if (newOptions.method === "DELETE" || response.status === 204) {
         return response.text();
       }
+      console.log(response, 'response')
       return response.json()
     })
     .catch(e => {

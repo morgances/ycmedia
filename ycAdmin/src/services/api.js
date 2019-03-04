@@ -1,6 +1,7 @@
 //import { stringify } from "qs";
 import request from "@/utils/request";
 import { setToken } from "./token";
+import { async } from "q";
 
 // export async function queryProjectNotice() {
 //   return request("/api/project/notice");
@@ -10,9 +11,9 @@ import { setToken } from "./token";
 //   return request("/api/activities");
 // }
 
-export async function queryRule(params) {
-  console.log(params,'')
-  return request("/api/v1/article/getlist", {
+export async function getArticleList(params) {
+  console.log(params,'请求文章列表参数')
+  return request("/api/v1/article/getall", {
     method: "POST",
     body: {
       ...params,
@@ -20,7 +21,7 @@ export async function queryRule(params) {
   });
 }
 
-export async function removeRule(params) {
+export async function removeArticle(params) {
   return request("/api/v1/article/delete", {
     method: "POST",
     body: {
@@ -30,7 +31,18 @@ export async function removeRule(params) {
   });
 }
 
-export async function addRule(params) {
+export async function removeBanner(params) {
+  console.log(params,"delectpicture")
+  return request("/api/v1/banner/delete", {
+    method: "POST",
+    body: {
+      ...params,
+      method: "delete"
+    }
+  });
+}
+
+export async function addArticle(params) {
   return request("/api/v1/article/add", {
     method: "POST",
     body: {
@@ -43,6 +55,17 @@ export async function addRule(params) {
 export async function getText(params) {
   console.log(params,"获取参数")
   return request("/api/v1/article/gettext",{
+    method: "POST",
+    body: {
+      ...params,
+      method: "post"
+    }
+  })
+}
+
+export async function getPicture(params) {
+  console.log(params,"获取参数")
+  return request("/api/v1/banner/detail", {
     method: "POST",
     body: {
       ...params,
@@ -84,8 +107,8 @@ export async function queryTags() {
 //   return request("/api/profile/advanced");
 // }
 
-export async function queryFakeList(params) {
-  return request("/api/v1/article/getlist", {
+export async function queryArticleList(params) {
+  return request("/api/v1/article/getall", {
     method: "POST",
     body: {
       ...params,
@@ -95,7 +118,7 @@ export async function queryFakeList(params) {
 
 export async function queryPictureList(params) {
   console.log(params,'请求图片列表参数')
-  return request("/api/v1/banner/list", {
+  return request("/api/v1/banner/all", {
     method: "POST",
     body: {
       ...params,
@@ -103,8 +126,17 @@ export async function queryPictureList(params) {
   });
 }
 
-export async function removeList(params) {
-  //const { count = 5, ...restParams } = params;
+export async function getPictureList(params) {
+  console.log(params,'请求图片列表参数')
+  return request("/api/v1/banner/all", {
+    method: "POST",
+    body: {
+      ...params,
+    }
+  });
+}
+
+export async function removeArticleList(params) {
   return await request(`/api/v1/article/delete`, {
     method: "POST",
     body: {
@@ -114,7 +146,7 @@ export async function removeList(params) {
   });
 }
 
-export async function addList(params) {
+export async function addArticleList(params) {
   console.log(params,'请求添加文章参数')
   return request("/api/v1/article/add", {
     method: "POST",
@@ -126,6 +158,7 @@ export async function addList(params) {
 }
 
 export async function addPictureList(params) {
+  console.log(params,"请求添加图片参数")
   return request("/api/v1/banner/create", {
     method: "POST",
     body: {
@@ -135,9 +168,19 @@ export async function addPictureList(params) {
   });
 }
 
-export async function updateFakeList(params) {
+export async function updateAritcleList(params) {
   console.log(params)
   return request("/api/v1/article/update", {
+    method: "POST",
+    body: {
+      ...params
+    }
+  });
+}
+
+export async function updatePicture(params) {
+  console.log(params)
+  return request("/api/v1/banner/update", {
     method: "POST",
     body: {
       ...params

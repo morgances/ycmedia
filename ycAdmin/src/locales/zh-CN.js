@@ -10,6 +10,7 @@ export default {
   // 'menu.list.searchtable': '查询表格',
   "menu.list.basiclist": "文章列表",
   "menu.list.addinglist": "添加文章",
+  "menu.list.addinglistaid": "编辑文章",
   // 'menu.list.cardlist': '卡片列表',
   // 'menu.list.searchlist': '搜索列表',
   // 'menu.list.searchlist.articles': '搜索列表（文章）',

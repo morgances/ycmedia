@@ -16,37 +16,37 @@ const FormItem = Form.Item;
 
 const provinceData = ['文化资讯','书香银川','遗脉相承','银川旅游','艺术空间','文化消费','文化品牌','凤城演绎'];
 const cityData = {
-  0: ['文化动态','通知公告','政策法规','免费开放'],
-  1: [,,,,'图书借阅','服务指南','数字资源','好书推荐'],
-  2: [,,,,,,,,'文化遗产','非遗传承'],
-  3: [],
-  4: [,,,,,,,,,,'艺术资讯','名家介绍','艺术展示','艺术场馆'],
-  5: [,,,,,,,,,,,,,,'银川影院','艺术剧院'],
-  6: [,,,,,,,,,,,,,,,,'公益性文化产品','公益性文化活动','中华优秀传统文化与民族文化'],
-  7: [,,,,,,,,,,,,,,,,,,,'群众文化','银川记忆']
+  文化资讯: ['文化动态','通知公告','政策法规','免费开放'],
+  书香银川: ['图书借阅','服务指南','数字资源','好书推荐'],
+  遗脉相承: ['文化遗产','非遗传承'],
+  银川旅游: [],
+  艺术空间: ['艺术资讯','名家介绍','艺术展示','艺术场馆'],
+  文化消费: ['银川影院','艺术剧院'],
+  文化品牌: ['公益性文化产品','公益性文化活动','中华优秀传统文化与民族文化'],
+  凤城演绎: ['群众文化','银川记忆']
 };
 const secondCityData = {
-  0: [],
-  1: [],
-  2: [],
-  3: [],
-  4: [],
-  5: [],
-  6: [],
-  7: [],
-  8: ['文化遗址','文物鉴赏','文物保护'],
-  9: ['项目名单','传承保护','非遗展馆','民俗活动','传承基地','传承人'],
-  10: [],
-  11: [],
-  12: ['绘画','书法','音乐','展览'],
-  13: [],
-  14: [],
-  15: ['院团介绍','剧目介绍','商业演出'],
-  16: [],
-  17: [],
-  18: [],
-  19: ['群文活动','民间团队','公益培训'],
-  20: ['西夏古都','民间传说','老银川']
+  文化动态: [],
+  通知公告: [],
+  政策法规: [],
+  免费开放: [],
+  图书借阅: [],
+  服务指南: [],
+  数字资源: [],
+  好书推荐: [],
+  文化遗产: ['文化遗址','文物鉴赏','文物保护'],
+  非遗传承: ['项目名单','传承保护','非遗展馆','民俗活动','传承基地','传承人'],
+  艺术资讯: [],
+  名家介绍: [],
+  艺术展示: ['绘画','书法','音乐','展览'],
+  艺术场馆: [],
+  银川影院: [],
+  艺术剧院: ['院团介绍','剧目介绍','商业演出'],
+  公益性文化产品: [],
+  公益性文化活动: [],
+  中华优秀传统文化与民族文化: [],
+  群众文化: ['群文活动','民间团队','公益培训'],
+  银川记忆: ['西夏古都','民间传说','老银川']
 };
 
 @connect(({ list, rule, loading }) => ({
@@ -59,21 +59,45 @@ class Adding extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      cities: cityData[provinceData.indexOf(provinceData[0])],
-      secondCity: cityData[provinceData.indexOf(provinceData[0])].indexOf(cityData[provinceData.indexOf(provinceData[0])][0]),
-      cities1: secondCityData[cityData[provinceData.indexOf(provinceData[0])].indexOf(cityData[provinceData.indexOf(provinceData[0])][0])],
-      thirdCity: secondCityData[cityData[provinceData.indexOf(provinceData[0])].indexOf(cityData[provinceData.indexOf(provinceData[0])][0])].indexOf(secondCityData[cityData[provinceData.indexOf(provinceData[0])].indexOf(cityData[provinceData.indexOf(provinceData[0])][0])][0]),
+      cities: cityData[provinceData[0]],
+      secondCity: cityData[provinceData[0]][0],
+      cities1: secondCityData[cityData[provinceData[0]][0]],
+      thirdCity: secondCityData[cityData[provinceData[0]][0]][0],
       previewVisible: false,
       previewImage: '',
       loading: false,
       file_name:"",
-      fileList: this.props.list.list.image === undefined ? [] : [{ uid: this.props.match.params.aid, url: `${this.props.list.list.image}`}],
+      fileList: this.props.loading === false ? [{ uid: this.props.match.params.aid, url: `${this.props.list.list.image}`}] : [],
       imageUrl: ""
     }
   }
 
+  // componentWillMount() {
+  //   const { dispatch, match } = this.props;
+  //   const aid = Number(match.params.aid);
+  //   dispatch({
+  //     type: "rule/text",
+  //     payload: {
+  //       aid
+  //     }
+  //   });
+  //   if(this.props.rule.data === {}) {
+  //     this.props.loading === true
+  //   }
+  //   else {
+  //     this.props.loading === false
+  //   }
+  //   console.log(this.props,"请求数据")
+  //   console.log(aid)
+  // }
   componentDidMount() {
-    const { dispatch, match } = this.props;
+    const { dispatch, match, loading } = this.props;
+    if(this.props.rule.data === {}) {
+      loading === true
+    }
+    else {
+      loading === false
+    }
     const aid = Number(match.params.aid);
     dispatch({
       type: "rule/text",
@@ -81,34 +105,43 @@ class Adding extends React.Component {
         aid
       }
     });
-    console.log(aid)
+    console.log(this.props)
+    console.log(loading)
     setTimeout(() => {
       this.props.form.setFieldsValue({
-      text: BraftEditor.createEditorState(`${this.props.rule.data[0].text}`)
+      text: BraftEditor.createEditorState(`${this.props.rule.data[0].text}`),
+      author: this.props.rule.data[0].author,
+      category: this.props.rule.data[0].category,
+      tag: this.props.rule.data[0].tag,
+      label: this.props.rule.data[0].label,
+      title: this.props.rule.data[0].title,
+      image: this.props.rule.data[0].image
       })
-    }, 1000)
+    }, 500)
   }
 //联动
 handleProvinceChange = (value) => {
-  console.log(value)
   this.setState({
     cities: cityData[value],
     secondCity: cityData[value][0],
   });
+  this.props.form.setFields({
+    tag: null
+  })
 }
 
 onSecondCityChange = (value) => {
-  console.log(value)
-  console.log(secondCityData[value])
   this.setState({
     secondCity: value,
     cities1: secondCityData[value],
     thirdCity: secondCityData[value][0],
   });
+  this.props.form.setFields({
+    label: null
+  })
 }
 
 onThirdCityChange = (value) => {
-  console.log(value)
   this.setState({
     thirdCity: value,
   })
@@ -157,7 +190,7 @@ onThirdCityChange = (value) => {
           done: true,
         });
         dispatch({
-          type: "list/updateList",
+          type: "list/updateArticle",
           payload: {
             ...fieldsValue,
             aid,
@@ -241,15 +274,15 @@ onThirdCityChange = (value) => {
   }
 
   render() {
-    console.log(this.props.rule.data[0].image)
-    const { previewVisible, previewImage, cities, cities1,fileList } = this.state;
+    console.log(this.props.rule.data)
+    //const fileList = [{ uid: this.props.match.params.aid, url: `${this.props.rule.data[0].image}`}];
+    const { previewVisible, previewImage, cities, cities1, fileList } = this.state;
     const uploadButton = (
       <div>
         <Icon type={this.state.loading ? 'loading' : 'plus'} />
         <div className="ant-upload-text">Upload</div>
       </div>
     );
-    console.log(this.props,'9')
 
     const controls = [
       'undo', 'redo', 'separator',
@@ -268,7 +301,7 @@ onThirdCityChange = (value) => {
     const modalFooter = done
       ? { footer: null, onCancel: this.handleDone }
       : {
-          okText: "发布",
+          okText: "保存",
           onOk: this.handleSubmit,
           onCancel: this.handleButtonCancel
         };
@@ -287,9 +320,10 @@ onThirdCityChange = (value) => {
           />
         );
       }
-      const categoryData = provinceData.map(province => <Option value={provinceData.indexOf(province)} key={province}>{province}</Option>)
-      const tagData = cities.map(city => <Option value={cities.indexOf(city)} key={city}>{city}</Option>)
-      const labelData = cities1.map(city1 => <Option value={cities1.indexOf(city1)} key={city1}>{city1}</Option>)
+      const categoryData = provinceData.map(province => <Option key={province}>{province}</Option>)
+      const tagData = cities.map(city => <Option key={city}>{city}</Option>)
+      const labelData = cities1.map(city1 => <Option key={city1}>{city1}</Option>)
+
       return (
         <Form onSubmit={this.handleSubmit}>
           <FormItem label="文章封面" {...this.formLayout}>
@@ -315,19 +349,19 @@ onThirdCityChange = (value) => {
           </FormItem>
           <FormItem label="文章标题" {...this.formLayout}>
             {getFieldDecorator("title", {
-              initialValue: this.props.rule.data[0].title,
+              //initialValue: loading === false ? this.props.rule.data[0].title : "",
               rules: [{ required: true, message: "请输入文章标题" }],
             })(<Input placeholder="请输入" />)}
           </FormItem>
           <FormItem label="文章作者" {...this.formLayout}>
             {getFieldDecorator("author", {
-              initialValue: this.props.rule.data[0].author,
+              //initialValue: this.props.loading === false ? this.props.rule.data[0].author : "",
               rules: [{ required: true, message: "请输入文章作者" }],
             })(<Input placeholder="请输入" />)}
           </FormItem>
           <FormItem label="文章分类" {...this.formLayout} >
             {getFieldDecorator("category", {
-              initialValue: this.props.rule.data[0].category,
+              //initialValue: this.props.loading === false ? this.props.rule.data[0].category : "",
               rules: [{ required: true, message: "请选择文章分类" }],
             })(
                 <Select
@@ -340,7 +374,7 @@ onThirdCityChange = (value) => {
           </FormItem>
           <FormItem label="文章标签" {...this.formLayout} >
             {getFieldDecorator("tag", {
-              initialValue: this.props.rule.data[0].tag,
+              //initialValue: this.props.loading === false ? this.props.rule.data[0].tag : "",
             })(
                 <Select
                   onChange={this.onSecondCityChange}
@@ -352,7 +386,7 @@ onThirdCityChange = (value) => {
           </FormItem>
           <FormItem label="文章label" {...this.formLayout}>
             {getFieldDecorator("label", {
-              initialValue: this.props.rule.data[0].label,
+              //initialValue: this.props.loading === false ? this.props.rule.data[0].label : "",
             })(
                 <Select
                   onChange={this.onThirdCityChange}

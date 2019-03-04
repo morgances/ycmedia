@@ -1,46 +1,46 @@
-import { queryRule, removeRule, addRule, updateRule, getText, queryFakeList, queryPictureList } from "@/services/api";
+import { getArticleList, removeArticle, removeBanner, addArticle, getText, getPicture, getPictureList } from "@/services/api";
+import { routerRedux } from 'dva/router'
 
 export default {
   namespace: "rule",
 
   state: {
-    data: {}
+    data: {},
   },
 
   effects: {
     *fetch({ payload }, { call, put }) {
-      const response = yield call(queryRule, payload);
-      console.log(response, '啦啦啦')
+      const response = yield call(getArticleList, payload);
       yield put({
         type: "save",
-        payload: response.data
+        payload: response
       });
     },
-    *fetchPicture({ payload }, { call, put }) {
-      const response = yield call(queryPictureList, payload);
-      console.log(response, 'response')
-      yield put({
-        type: "save",
-        payload: response.data
-      });
-    },
+    // *fetchPicture({ payload }, { call, put }) {
+    //   const response = yield call(queryPictureList, payload);
+    //   console.log(response, 'response')
+    //   yield put({
+    //     type: "savePicture",
+    //     payload: response.data
+    //   });
+    // },
     *add({ payload, callback }, { call, put }) {
-      const response = yield call(addRule, payload);
+      const response = yield call(addArticle, payload);
       yield put({
         type: "addRule",
         payload: response.data
       });
       if (callback) callback();
     },
-    *remove({ payload, callback }, { call, put }) {
-      const response = yield call(removeRule, payload);
-      console.log(response,'8')
+    *removeText({ payload, callback }, { call, put }) {
+      const response = yield call(removeArticle, payload);
+      console.log(response,"文章response")
       //更新删除后数据
       if (response.status === 200) {
-        const response = yield call(queryRule, payload);
+        const response = yield call(getArticleList, payload);
         yield put({
           type: "save",
-          payload: response.data
+          payload: response
         });
       }
       if (callback) callback();
@@ -60,6 +60,27 @@ export default {
         payload: response.data
       });
     },
+    *picture({ payload }, { call, put }) {
+      console.log(response)
+      const response = yield call(getPicture, payload);
+      yield put({
+        type: "edictPicture",
+        payload: response.data
+      })
+    }
+  },
+  *removePicture({ payload, callback }, { call, put }) {
+    const response = yield call(removeBanner, payload);
+    console.log(response,"删除response")
+    //更新删除后数据
+    if (response.status === 200) {
+      const response = yield call(getPictureList, payload);
+      yield put({
+        type: "savePicture",
+        payload: response
+      });
+    }
+    if (callback) callback();
   },
 
   reducers: {
@@ -70,8 +91,23 @@ export default {
         data: payload
       };
     },
+    savePicture(state, { payload }) {
+      console.log(state,'数据state')
+      console.log(payload,'获取图片列表')
+      return {
+        ...state,
+        data: payload
+      };
+    },
     edict(state, { payload }) {
       console.log(payload,'编辑')
+      return {
+        ...state,
+        data: payload
+      };
+    },
+    edictPicture(state, { payload }) {
+      console.log(payload,"编辑图片")
       return {
         ...state,
         data: payload

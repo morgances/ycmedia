@@ -1,13 +1,14 @@
 import React, { Component, Fragment } from "react";
 import { connect } from "dva";
 import { findDOMNode } from "react-dom";
-import { Upload, Button, message, Icon, Card, Modal, Table, Popconfirm, Divider, Input, Form, DatePicker } from "antd";
+import { Avatar, Upload, Button, message, Icon, Card, Modal, Table, Popconfirm, Divider, Input, Form, DatePicker } from "antd";
 import PageHeaderWrapper from "@/components/PageHeaderWrapper";
 import Result from "@/components/Result";
 import styles from "./DynamicPost.less";
 import moment from 'moment';
 import Axios from 'axios';
 import ImageGallery from 'react-image-gallery';
+import { routerRedux } from "dva/router";
 const FormItem = Form.Item;
 @connect(({ list, rule, loading }) => ({
   list,
@@ -24,43 +25,42 @@ class DynamicPost extends Component {
       previewVisible: false,
       imageUrl: '',
       loading: false,
+      visible: false,
+      name: '',
+      previewImage: '',
     };
   }
 
   componentDidMount() {
-    const { dispatch } = this.props;
-    console.log(this.props.list)
+    const { dispatch, loading, rule } = this.props;
+    console.log(this.props)
+    if(rule.data === {}) {
+      loading === true
+    } else {
+      loading === false
+    }
     dispatch({
       type: "list/fetch",
       payload: {
-        unixtime: 1,
       }
     });
   };
 
-  deleteConfirm = (aid) => {
+  deleteConfirm = BannerId => {
+    console.log(BannerId)
     const { dispatch } = this.props;
     dispatch({
-      type: 'list/removeList',
+      type: 'list/removePicture',
       payload: {
-        aid
+        BannerId
       },
-    })
-  }
-
-  showEditModal = aid => {
-    this.setState({
-      visible: true,
-      current: aid,
     });
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'rule/gettext',
-      payload: {
-        aid: 123
-      },
-    })
-  };
+    message.success('删除成功')
+    console.log(this.props.loading)
+    if(this.props.loading === false) {
+      this.componentDidMount()
+    }
+  }
 
   handleDone = () => {
     setTimeout(() => this.addBtn.blur(), 0);
@@ -70,6 +70,17 @@ class DynamicPost extends Component {
     });
   };
 
+  handlePictureDone = () => {
+    console.log(this.state.done,"done")
+    if(this.state.done === true) {
+      this.componentDidMount()
+    }
+    this.setState({
+      done: false,
+      visible: false
+    })
+  }
+
   handleModalCancel = () => {
     setTimeout(() => this.addBtn.blur(), 0);
     this.setState({
@@ -77,10 +88,37 @@ class DynamicPost extends Component {
     });
   };
 
+  showModal = () => {
+    this.setState({
+      visible: true,
+      current: undefined
+    });
+  };
+
+  showEditModal = (id) => {
+    console.log(id,"pictureID")
+    // const Id = id.BannerId;
+    // const { dispatch } = this.props;
+    // dispatch({
+    //   type: 'list/picture',
+    //   payload: {
+    //     Id
+    //   },
+    // })
+    // console.log(this.props.list.data)
+    this.setState({
+      visible: true,
+      current: id,
+      // fileList: [{ uid: `${id.BannerId}`, url: `${id.ImagePath}`}],
+      // name: id.Name,
+    });
+  };
+
   handleSubmit = e => {
     e.preventDefault();
-    const { imageUrl }= this.state;
-    const { dispatch, form } = this.props;
+    const { imageUrl, current }= this.state;
+    const { dispatch, form, rule } = this.props;
+    const BannerId = current ? current.BannerId : '';
     setTimeout(() => this.addBtn.blur(), 0);
     form.validateFields((err, fieldsValue) => {
       if (!err) {
@@ -90,8 +128,9 @@ class DynamicPost extends Component {
         dispatch({
           type: "list/addPictureList",
           payload: {
+            BannerId,
             ...fieldsValue,
-            path: imageUrl,
+            ImagePath: imageUrl,
           }
         });
       }
@@ -103,29 +142,23 @@ class DynamicPost extends Component {
     wrapperCol: { span: 14 }
   };
 
-  showModal = () => {
-    this.setState({
-      visible: true,
-      current: undefined
-    });
-  };
   //上传图片
   handleChange = (info) => {
     let fileList = info.fileList;
     this.setState({ fileList });
     console.log('info',info)
-    const isJPG = info.file.type === 'image/jpeg';
-    const isPNG = info.file.type === 'image/png';
-    if(!isJPG && !isPNG) {
-      message.error('仅支持JPG，JPEG，PNG');
-    }
-    const isLt1M = info.file.size / 1024 / 1024 < 1;
-    if(!isLt1M) {
-      message.error('图片限制1M以下');
-    }
-    if(!((isJPG || isPNG) && isLt1M)) {
-      return false;
-    }
+    // const isJPG = info.file.type === 'image/jpeg';
+    // const isPNG = info.file.type === 'image/png';
+    // if(!isJPG && !isPNG) {
+    //   message.error('仅支持JPG，JPEG，PNG');
+    // }
+    // const isLt1M = info.file.size / 1024 / 1024 < 1;
+    // if(!isLt1M) {
+    //   message.error('图片限制1M以下');
+    // }
+    // if(!((isJPG || isPNG) && isLt1M)) {
+    //   return false;
+    // }
     let formData = new window.FormData()
     formData.append('file',info.file,info.file.name)
     Axios({
@@ -168,13 +201,16 @@ class DynamicPost extends Component {
 
   render() {
     const {
-      form: { getFieldDecorator }
+      form: { getFieldDecorator },
+      list: { list: { data } },
+      rowKey
     } = this.props;
-    const { previewVisible, modalVisible, fileList, visible, done, current = {}, imageUrl } = this.state;
+    const { previewVisible, modalVisible, visible, done, current = {}, imageUrl, fileList, previewImage } = this.state;
+    //current.BannerId === undefined ? fileList === [] : fileList === [{uid: `${current.BannerId}`, url: `${current.ImagePath}`}]
     const modalFooter = done
       ? { footer: null, onCancel: this.handleDone }
       : {
-        okText: "添加",
+        okText: "保存",
         onOk: this.handleSubmit,
         onCancel: this.handleModalCancel
       };
@@ -191,8 +227,8 @@ class DynamicPost extends Component {
           <Result
             type="success"
             title="添加成功"
-            action={
-              <Button type="primary" onClick={this.handleDone}>
+            actions={
+              <Button loading={this.state.loading} type="primary" onClick={this.handlePictureDone}>
                 知道了
               </Button>
             }
@@ -203,29 +239,31 @@ class DynamicPost extends Component {
       return (
         <Form onSubmit={this.handleSubmit}>
           <FormItem label="轮播图名称" {...this.formLayout}>
-            {getFieldDecorator("name", {
+            {getFieldDecorator("Name", {
+              initialValue: current.Name,
               rules: [{ required: true, message: '请输入轮播图名称' }],
               validateTrigger: 'onBlur',
             })(<Input placeholder="请输入" />)}
           </FormItem>
           <FormItem label="上传图片" {...this.formLayout}>
-          {getFieldDecorator("path", {
+          {getFieldDecorator("ImagePath", {
+            initialValue: current.ImagePath,
             rules: [{ required: true, message: "请上传轮播图"}]
           })(
             <div>
               <Upload
-                name="image"
+                name="ImagePath"
                 listType="picture-card"
-                fileList={fileList}
+                fileList={current.BannerId === undefined ? fileList : [{uid: `${current.BannerId}`, url: `${current.ImagePath}`}]}
                 beforeUpload={this.beforeUpload}
                 onPreview={this.handlePreview}
                 onChange={this.handleChange}
                 accept="image/*"
               >
-                {fileList.length >= 1 ? null : uploadButton}
+                {(current.BannerId === undefined ? fileList.length : (fileList.length + 1) >= 1) ? null : uploadButton}
               </Upload>
               <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
-                <img alt="image" style={{ width: '100%' }} src={imageUrl} />
+                <img alt="image" style={{ width: '100%' }} src={previewImage} />
               </Modal>
             </div>
           )}
@@ -236,17 +274,22 @@ class DynamicPost extends Component {
 
     const columns = [
       {
+        title: '轮播图ID',
+        dataIndex: 'BannerId',
+        key: 'BannerId'
+      },
+      {
         title: '轮播图名称',
         dataIndex: 'Name',
-        key: 'Name'
+        key: 'Name',
       },
       {
         title: '轮播图',
         dataIndex: 'ImagePath',
         key: 'ImagePath',
-        // render: (text, record) => (
-        //   <img src={ImagePath} alt="图片" style={{ width: 30, height: 30 }} />
-        // )
+        render: (text, record) => (
+          <img src={record.ImagePath} alt="logo" height={ 90 } width={ 90 } />
+        )
       },
       {
         title: '操作',
@@ -254,17 +297,17 @@ class DynamicPost extends Component {
           <Fragment>
             <Popconfirm
               title="确定删除？"
-              onConfirm={() => this.deleteConfirm(record.aid)}
+              onConfirm={() => this.deleteConfirm(record.BannerId)}
               okText="确认"
               cancelText="取消"
             >
               <a>删除</a>
             </Popconfirm>
             <Divider type="vertical" />
-            <a 
+            <a
               onClick={e => {
                 e.preventDefault();
-                this.showEditModal(aid);
+                this.showEditModal(record);
               }}
             >
               编辑
@@ -278,23 +321,26 @@ class DynamicPost extends Component {
       <PageHeaderWrapper title="轮播图">
         <Card>
           <Button 
-            style={{ marginBottom: 20 }} 
-            htmlType="submit" 
+            type="dashed"
+            style={{ width: "100%", marginBottom: 20 }}
             icon="plus" 
-            type="primary" 
-            onClick={this.showModal} ref={component => {
+            onClick={this.showModal} 
+            ref={component => {
               this.addBtn = findDOMNode(component);
             }}
           >
-            添加
+            添加轮播图
           </Button>
           <Table
-            //dataSource={this.props.list}
+            bordered
+            rowKey={rowKey || 'BannerId'}
+            dataSource={data}
             columns={columns}
+            pagination={{ pageSize: 5 }}
           />
         </Card>
         <Modal
-          title="新建轮播图"
+          title={done ? null : `任务${current ? '编辑' : '添加轮播图'}`}
           className={styles.standardListForm}
           width={640}
           bodyStyle={done ? { padding: "72px 0"} : { padding: "28px 0 0"}}
