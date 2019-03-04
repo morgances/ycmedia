@@ -12,7 +12,6 @@ import { async } from "q";
 // }
 
 export async function getArticleList(params) {
-  console.log(params,'请求文章列表参数')
   return request("/api/v1/article/getall", {
     method: "POST",
     body: {
@@ -53,7 +52,6 @@ export async function addArticle(params) {
 }
 
 export async function getText(params) {
-  console.log(params,"获取参数")
   return request("/api/v1/article/gettext",{
     method: "POST",
     body: {
@@ -117,7 +115,6 @@ export async function queryArticleList(params) {
 }
 
 export async function queryPictureList(params) {
-  console.log(params,'请求图片列表参数')
   return request("/api/v1/banner/all", {
     method: "POST",
     body: {

@@ -21,7 +21,7 @@ class DynamicPost extends Component {
     super(props);
     this.state = {
       modalVisible: false,
-      fileList: [],
+      fileList: this.props.list.data.ImagePath ? [{ uid: `${this.props.list.data.BannerId}`, url: `${this.props.list.data.ImagePath}`}]: [],
       previewVisible: false,
       imageUrl: '',
       loading: false,
@@ -56,7 +56,6 @@ class DynamicPost extends Component {
       },
     });
     message.success('删除成功')
-    console.log(this.props.loading)
     if(this.props.loading === false) {
       this.componentDidMount()
     }
@@ -71,7 +70,6 @@ class DynamicPost extends Component {
   };
 
   handlePictureDone = () => {
-    console.log(this.state.done,"done")
     if(this.state.done === true) {
       this.componentDidMount()
     }
@@ -96,22 +94,24 @@ class DynamicPost extends Component {
   };
 
   showEditModal = (id) => {
-    console.log(id,"pictureID")
-    // const Id = id.BannerId;
-    // const { dispatch } = this.props;
-    // dispatch({
-    //   type: 'list/picture',
-    //   payload: {
-    //     Id
-    //   },
-    // })
-    // console.log(this.props.list.data)
+    const { BannerId } = id;
+    const { dispatch } = this.props;
+    dispatch ({
+      type: 'list/picture',
+      payload: {
+        BannerId
+      }
+    })
     this.setState({
       visible: true,
-      current: id,
-      // fileList: [{ uid: `${id.BannerId}`, url: `${id.ImagePath}`}],
-      // name: id.Name,
+      current: id
     });
+    console.log(this.props,"为啥不刷第二次")
+    setTimeout(() => {
+      this.props.form.setFieldsValue({
+        ImagePath: this.props.list.data.ImagePath
+      })
+    })
   };
 
   handleSubmit = e => {
@@ -240,27 +240,28 @@ class DynamicPost extends Component {
         <Form onSubmit={this.handleSubmit}>
           <FormItem label="轮播图名称" {...this.formLayout}>
             {getFieldDecorator("Name", {
-              initialValue: current.Name,
+              initialValue: current.Name || '',
               rules: [{ required: true, message: '请输入轮播图名称' }],
               validateTrigger: 'onBlur',
             })(<Input placeholder="请输入" />)}
           </FormItem>
           <FormItem label="上传图片" {...this.formLayout}>
           {getFieldDecorator("ImagePath", {
-            initialValue: current.ImagePath,
+            initialValue: current.ImagePath || '',
             rules: [{ required: true, message: "请上传轮播图"}]
           })(
             <div>
               <Upload
                 name="ImagePath"
                 listType="picture-card"
-                fileList={current.BannerId === undefined ? fileList : [{uid: `${current.BannerId}`, url: `${current.ImagePath}`}]}
+                // fileList={current.BannerId === undefined ? fileList : [{uid: `${current.BannerId}`, url: `${current.ImagePath}`}]}
+                fileList={fileList}
                 beforeUpload={this.beforeUpload}
                 onPreview={this.handlePreview}
                 onChange={this.handleChange}
                 accept="image/*"
               >
-                {(current.BannerId === undefined ? fileList.length : (fileList.length + 1) >= 1) ? null : uploadButton}
+                {fileList.length >= 1 ? null : uploadButton}
               </Upload>
               <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
                 <img alt="image" style={{ width: '100%' }} src={previewImage} />

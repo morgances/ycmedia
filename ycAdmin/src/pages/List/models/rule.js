@@ -103,7 +103,7 @@ export default {
       console.log(payload,'编辑')
       return {
         ...state,
-        data: payload
+        data: payload[0]
       };
     },
     edictPicture(state, { payload }) {

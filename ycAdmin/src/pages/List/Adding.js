@@ -67,29 +67,11 @@ class Adding extends React.Component {
       previewImage: '',
       loading: false,
       file_name:"",
-      fileList: this.props.loading === false ? [{ uid: this.props.match.params.aid, url: `${this.props.list.list.image}`}] : [],
+      fileList: this.props.list.list.image === undefined ? [] : [{ uid: this.props.match.params.aid, url: `${this.props.list.list.image}`}],
       imageUrl: ""
     }
   }
 
-  // componentWillMount() {
-  //   const { dispatch, match } = this.props;
-  //   const aid = Number(match.params.aid);
-  //   dispatch({
-  //     type: "rule/text",
-  //     payload: {
-  //       aid
-  //     }
-  //   });
-  //   if(this.props.rule.data === {}) {
-  //     this.props.loading === true
-  //   }
-  //   else {
-  //     this.props.loading === false
-  //   }
-  //   console.log(this.props,"请求数据")
-  //   console.log(aid)
-  // }
   componentDidMount() {
     const { dispatch, match, loading } = this.props;
     if(this.props.rule.data === {}) {
@@ -105,17 +87,15 @@ class Adding extends React.Component {
         aid
       }
     });
-    console.log(this.props)
-    console.log(loading)
     setTimeout(() => {
       this.props.form.setFieldsValue({
-      text: BraftEditor.createEditorState(`${this.props.rule.data[0].text}`),
-      author: this.props.rule.data[0].author,
-      category: this.props.rule.data[0].category,
-      tag: this.props.rule.data[0].tag,
-      label: this.props.rule.data[0].label,
-      title: this.props.rule.data[0].title,
-      image: this.props.rule.data[0].image
+      text: BraftEditor.createEditorState(`${this.props.rule.data.text}`),
+      author: this.props.rule.data.author,
+      category: this.props.rule.data.category,
+      tag: this.props.rule.data.tag,
+      label: this.props.rule.data.label,
+      title: this.props.rule.data.title,
+      image: this.props.rule.data.image
       })
     }, 500)
   }
@@ -213,18 +193,18 @@ onThirdCityChange = (value) => {
     let fileList = info.fileList;
     this.setState({ fileList });
     console.log('info',info)
-    const isJPG = info.file.type === 'image/jpeg';
-    const isPNG = info.file.type === 'image/png';
-    if(!isJPG && !isPNG) {
-      message.error('仅支持JPG，JPEG，PNG');
-    }
-    const isLt1M = info.file.size / 1024 / 1024 < 1;
-    if(!isLt1M) {
-      message.error('图片限制1M以下');
-    }
-    if(!((isJPG || isPNG) && isLt1M)) {
-      return false;
-    }
+    // const isJPG = info.file.type === 'image/jpeg';
+    // const isPNG = info.file.type === 'image/png';
+    // if(!isJPG && !isPNG) {
+    //   message.error('仅支持JPG，JPEG，PNG');
+    // }
+    // const isLt1M = info.file.size / 1024 / 1024 < 1;
+    // if(!isLt1M) {
+    //   message.error('图片限制1M以下');
+    // }
+    // if(!((isJPG || isPNG) && isLt1M)) {
+    //   return false;
+    // }
     let formData = new window.FormData()
     formData.append('file',info.file,info.file.name)
     Axios({
@@ -274,7 +254,6 @@ onThirdCityChange = (value) => {
   }
 
   render() {
-    console.log(this.props.rule.data)
     //const fileList = [{ uid: this.props.match.params.aid, url: `${this.props.rule.data[0].image}`}];
     const { previewVisible, previewImage, cities, cities1, fileList } = this.state;
     const uploadButton = (
@@ -349,19 +328,19 @@ onThirdCityChange = (value) => {
           </FormItem>
           <FormItem label="文章标题" {...this.formLayout}>
             {getFieldDecorator("title", {
-              //initialValue: loading === false ? this.props.rule.data[0].title : "",
+              initialValue: this.props.rule.data.title || '',
               rules: [{ required: true, message: "请输入文章标题" }],
             })(<Input placeholder="请输入" />)}
           </FormItem>
           <FormItem label="文章作者" {...this.formLayout}>
             {getFieldDecorator("author", {
-              //initialValue: this.props.loading === false ? this.props.rule.data[0].author : "",
+              initialValue: this.props.rule.data.author || '',
               rules: [{ required: true, message: "请输入文章作者" }],
             })(<Input placeholder="请输入" />)}
           </FormItem>
           <FormItem label="文章分类" {...this.formLayout} >
             {getFieldDecorator("category", {
-              //initialValue: this.props.loading === false ? this.props.rule.data[0].category : "",
+              initialValue: this.props.rule.data.category || '',
               rules: [{ required: true, message: "请选择文章分类" }],
             })(
                 <Select
@@ -374,7 +353,7 @@ onThirdCityChange = (value) => {
           </FormItem>
           <FormItem label="文章标签" {...this.formLayout} >
             {getFieldDecorator("tag", {
-              //initialValue: this.props.loading === false ? this.props.rule.data[0].tag : "",
+              initialValue: this.props.rule.data.tag || '',
             })(
                 <Select
                   onChange={this.onSecondCityChange}
@@ -386,7 +365,7 @@ onThirdCityChange = (value) => {
           </FormItem>
           <FormItem label="文章label" {...this.formLayout}>
             {getFieldDecorator("label", {
-              //initialValue: this.props.loading === false ? this.props.rule.data[0].label : "",
+              initialValue: this.props.rule.data.label || '',
             })(
                 <Select
                   onChange={this.onThirdCityChange}

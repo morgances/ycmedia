@@ -307,13 +307,11 @@ class AddText extends React.Component {
           </FormItem>
           <FormItem label="文章标题" {...this.formLayout}>
             {getFieldDecorator("title", {
-              initialValue: "标题",
               rules: [{ required: true, message: "请输入文章标题" }],
             })(<Input placeholder="请输入" />)}
           </FormItem>
           <FormItem label="文章作者" {...this.formLayout}>
             {getFieldDecorator("author", {
-              initialValue: "作者",
               rules: [{ required: true, message: "请输入文章作者" }],
             })(<Input placeholder="请输入" />)}
           </FormItem>
@@ -332,7 +330,6 @@ class AddText extends React.Component {
           </FormItem>
           <FormItem label="文章标签" {...this.formLayout} >
             {getFieldDecorator("tag", {
-              //initialValue: -1
             })(
                 <Select 
                   placeholder="请选择"
@@ -345,7 +342,6 @@ class AddText extends React.Component {
           </FormItem>
           <FormItem label="文章label" {...this.formLayout}>
             {getFieldDecorator("label", {
-              //initialValue: -1
             })(
                 <Select 
                   placeholder="请选择"

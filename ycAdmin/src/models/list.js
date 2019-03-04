@@ -20,7 +20,6 @@ export default {
   effects: {
     *fetch({ payload }, { call, put }) {
       const response = yield call(queryPictureList, payload);
-      console.log(response, 'response');
       if (response.status !== 0) {
         return
       }

@@ -58,7 +58,6 @@ class StandardTable extends PureComponent {
   };
 
   render() {
-    console.log(this.props,"this.props")
     const { selectedRowKeys, needTotalList } = this.state;
     const { data = {}, rowKey, ...rest } = this.props;
 
