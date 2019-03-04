@@ -21,6 +21,22 @@ func (d Database) GetArticleByDate(category, tag, label int, date time.Time) ([]
 	return rowsToArticles(rows)
 }
 
+func (d Database) GetArticleAndPageCount(category, tag, label int) (articleCount int, pageCount int, err error) {
+	rows, err := d.DB.Query("select count(*) from article.article where category=? and tag=? and label=?", category, tag, label)
+	if err != nil {
+		return
+	}
+
+	for rows.Next() {
+		err = rows.Scan(&articleCount)
+		if err != nil {
+			return
+		}
+	}
+	pageCount = (articleCount + 9) / 10
+	return
+}
+
 func (d Database) GetArticleOrderLimits(order string, desc bool, start, nums int) ([]*Article, error) {
 	str := ""
 	if desc {

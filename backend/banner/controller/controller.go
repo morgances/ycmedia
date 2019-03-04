@@ -3,7 +3,6 @@ package controller
 import (
 	"database/sql"
 	"net/http"
-	"time"
 
 	"github.com/TechCatsLab/apix/http/server"
 	"github.com/TechCatsLab/logging/logrus"
@@ -31,18 +30,11 @@ func (con *Controller) CreateTable() error {
 }
 
 func (con *Controller) Insert(c *server.Context) error {
-	if c.Request().Method != "POST" {
-		logrus.Error("Error In Request: NotPost")
-		return c.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, "only post"))
-	}
-
 	var (
 		req struct {
-			Name      string    `json:"name"`
-			ImagePath string    `json:"path"`
-			Event     string    `json:"event"`
-			StartDate time.Time `json:"start"`
-			EndDate   time.Time `json:"end"`
+			Name      string `json:"Name"`
+			ImagePath string `json:"ImagePath"`
+			Event     string `json:"Event"`
 		}
 	)
 
@@ -51,50 +43,21 @@ func (con *Controller) Insert(c *server.Context) error {
 		return c.ServeJSON(base.RespStatusAndData(constants.ErrInvalidParam, "InvalidParam"))
 	}
 
-	id, err := con.service.Insert(req.Name, req.ImagePath, req.Event, req.StartDate, req.EndDate)
+	id, err := con.service.Insert(req.Name, req.ImagePath, req.Event)
 	if err != nil {
 		logrus.Error(err)
 		return c.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
 	}
 
+	logrus.Info("[create] ", req)
+
 	return base.WriteStatusAndIDJSON(c, constants.ErrSucceed, id)
 }
 
-func (con *Controller) LisitValidBannerByUnixDate(c *server.Context) error {
-	if c.Request().Method != "POST" {
-		logrus.Error("Error In Request: NotPost")
-		return c.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, "only post"))
-	}
-
-	var (
-		req struct {
-			Unixtime int64 `json:"unixtime"`
-		}
-	)
-
-	if err := c.JSONBody(&req); err != nil {
-		logrus.Error(err)
-		return base.WriteStatusAndDataJSON(c, constants.ErrInvalidParam, "InvalidParam")
-	}
-
-	banners, err := con.service.LisitValidBannerByUnixDate(req.Unixtime)
-	if err != nil {
-		logrus.Error(err)
-		return base.WriteStatusAndDataJSON(c, http.StatusBadRequest, err)
-	}
-
-	return base.WriteStatusAndDataJSON(c, constants.ErrSucceed, banners)
-}
-
 func (con *Controller) InfoById(c *server.Context) error {
-	if c.Request().Method != "POST" {
-		logrus.Error("Error In Request: NotPost")
-		return c.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, "only post"))
-	}
-
 	var (
 		req struct {
-			Id int `json:"id"`
+			Id int `json:"BannerId"`
 		}
 	)
 	if err := c.JSONBody(&req); err != nil {
@@ -112,14 +75,9 @@ func (con *Controller) InfoById(c *server.Context) error {
 }
 
 func (con *Controller) DeleteById(c *server.Context) error {
-	if c.Request().Method != "POST" {
-		logrus.Error("Error In Request: NotPost")
-		return c.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, "only post"))
-	}
-
 	var (
 		req struct {
-			Id int `json:"id"`
+			Id int `json:"BannerId"`
 		}
 	)
 
@@ -134,16 +92,11 @@ func (con *Controller) DeleteById(c *server.Context) error {
 		return base.WriteStatusAndDataJSON(c, http.StatusBadRequest, nil)
 	}
 
+	logrus.Info("[delete]", req)
 	return base.WriteStatusAndDataJSON(c, constants.ErrSucceed, nil)
-
 }
 
 func (con *Controller) ListBanner(c *server.Context) error {
-	if c.Request().Method != "GET" {
-		logrus.Error("Error In Request: NotGet")
-		return c.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, "only Get"))
-	}
-
 	banners, err := con.service.ListBanner()
 	if err != nil {
 		logrus.Error(err)
@@ -153,28 +106,27 @@ func (con *Controller) ListBanner(c *server.Context) error {
 	return base.WriteStatusAndDataJSON(c, constants.ErrSucceed, banners)
 }
 
-func (con *Controller) ListPage(c *server.Context) error {
-	if c.Request().Method != "POST" {
-		logrus.Error("Error In Request: NotPost")
-		return c.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, "only post"))
-	}
-
+func (con *Controller) Update(c *server.Context) error {
 	var (
 		req struct {
-			Page int `json:"page"`
+			Id        int    `json:"BannerId"`
+			Name      string `json:"Name"`
+			ImagePath string `json:"ImagePath"`
+			Event     string `json:"Event"`
 		}
 	)
 
 	if err := c.JSONBody(&req); err != nil {
 		logrus.Error(err)
-		return base.WriteStatusAndDataJSON(c, constants.ErrInvalidParam, "InvalidParam")
+		return c.ServeJSON(base.RespStatusAndData(constants.ErrInvalidParam, "InvalidParam"))
 	}
 
-	banners, err := con.service.ListPage(req.Page)
+	_, err := con.service.Update(req.Name, req.ImagePath, req.Event, req.Id)
 	if err != nil {
 		logrus.Error(err)
-		return base.WriteStatusAndDataJSON(c, http.StatusBadRequest, err)
+		return c.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
 	}
 
-	return base.WriteStatusAndDataJSON(c, constants.ErrSucceed, banners)
+	logrus.Info("[update]", req)
+	return base.WriteStatusAndIDJSON(c, constants.ErrSucceed, req.Id)
 }

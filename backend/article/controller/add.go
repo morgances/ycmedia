@@ -35,7 +35,7 @@ func (con Controller) Add(ctx *server.Context) error {
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
 	}
 
-	log.Info(x)
+	log.Info("In AddArticle:", x)
 
 	err = con.db.AddArticle(x.Category, x.Tag, x.Label, x.Uid, x.Title, x.Author, x.Image, x.Text, x.Date)
 	if err != nil {

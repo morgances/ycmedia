@@ -1,12 +1,24 @@
 package mysql
 
 import (
+	"database/sql"
 	"errors"
 	"fmt"
+	"time"
 )
 
-func (d Database) UpdateArticle(aid int, keyValStr string) error {
-	res, err := d.DB.Exec(UpdateArticle + keyValStr + fmt.Sprintf(" where aid=%d", aid))
+func (d Database) UpdateArticle(aid int, keyValStr string, date *time.Time) error {
+	var (
+		res sql.Result
+		err error
+	)
+
+	if date == nil {
+		res, err = d.DB.Exec(UpdateArticle + keyValStr + fmt.Sprintf(" where aid=%d", aid))
+	} else {
+		res, err = d.DB.Exec(UpdateArticle+keyValStr+fmt.Sprintf(" where aid=%d", aid), *date)
+	}
+
 	if err != nil {
 		return err
 	}
