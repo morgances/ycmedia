@@ -34,7 +34,6 @@ export default {
     },
     *removeText({ payload, callback }, { call, put }) {
       const response = yield call(removeArticle, payload);
-      console.log(response,"文章response")
       //更新删除后数据
       if (response.status === 200) {
         const response = yield call(getArticleList, payload);
@@ -61,7 +60,6 @@ export default {
       });
     },
     *picture({ payload }, { call, put }) {
-      console.log(response)
       const response = yield call(getPicture, payload);
       yield put({
         type: "edictPicture",
@@ -71,7 +69,6 @@ export default {
   },
   *removePicture({ payload, callback }, { call, put }) {
     const response = yield call(removeBanner, payload);
-    console.log(response,"删除response")
     //更新删除后数据
     if (response.status === 200) {
       const response = yield call(getPictureList, payload);
@@ -85,36 +82,30 @@ export default {
 
   reducers: {
     save(state, { payload }) {
-      console.log(payload,'获取列表')
       return {
         ...state,
         data: payload
       };
     },
     savePicture(state, { payload }) {
-      console.log(state,'数据state')
-      console.log(payload,'获取图片列表')
       return {
         ...state,
         data: payload
       };
     },
     edict(state, { payload }) {
-      console.log(payload,'编辑')
       return {
         ...state,
         data: payload[0]
       };
     },
     edictPicture(state, { payload }) {
-      console.log(payload,"编辑图片")
       return {
         ...state,
         data: payload
       };
     },
     addRule(state, { payload }) {
-      console.log('添加后', payload)
       return {
         ...state,
         data: payload,

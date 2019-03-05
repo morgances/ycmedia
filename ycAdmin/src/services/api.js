@@ -31,7 +31,6 @@ export async function removeArticle(params) {
 }
 
 export async function removeBanner(params) {
-  console.log(params,"delectpicture")
   return request("/api/v1/banner/delete", {
     method: "POST",
     body: {
@@ -62,7 +61,6 @@ export async function getText(params) {
 }
 
 export async function getPicture(params) {
-  console.log(params,"获取参数")
   return request("/api/v1/banner/detail", {
     method: "POST",
     body: {
@@ -124,7 +122,6 @@ export async function queryPictureList(params) {
 }
 
 export async function getPictureList(params) {
-  console.log(params,'请求图片列表参数')
   return request("/api/v1/banner/all", {
     method: "POST",
     body: {
@@ -144,7 +141,6 @@ export async function removeArticleList(params) {
 }
 
 export async function addArticleList(params) {
-  console.log(params,'请求添加文章参数')
   return request("/api/v1/article/add", {
     method: "POST",
     body: {
@@ -155,7 +151,6 @@ export async function addArticleList(params) {
 }
 
 export async function addPictureList(params) {
-  console.log(params,"请求添加图片参数")
   return request("/api/v1/banner/create", {
     method: "POST",
     body: {
@@ -166,7 +161,6 @@ export async function addPictureList(params) {
 }
 
 export async function updateAritcleList(params) {
-  console.log(params)
   return request("/api/v1/article/update", {
     method: "POST",
     body: {
@@ -176,7 +170,6 @@ export async function updateAritcleList(params) {
 }
 
 export async function updatePicture(params) {
-  console.log(params)
   return request("/api/v1/banner/update", {
     method: "POST",
     body: {

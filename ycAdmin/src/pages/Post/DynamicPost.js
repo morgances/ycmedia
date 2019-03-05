@@ -21,7 +21,7 @@ class DynamicPost extends Component {
     super(props);
     this.state = {
       modalVisible: false,
-      fileList: this.props.list.data.ImagePath ? [{ uid: `${this.props.list.data.BannerId}`, url: `${this.props.list.data.ImagePath}`}]: [],
+      fileList: this.props.list.data ? [{ uid: `${this.props.list.data.BannerId}`, url: `${this.props.list.data.ImagePath}`}]: [],
       previewVisible: false,
       imageUrl: '',
       loading: false,
@@ -33,7 +33,6 @@ class DynamicPost extends Component {
 
   componentDidMount() {
     const { dispatch, loading, rule } = this.props;
-    console.log(this.props)
     if(rule.data === {}) {
       loading === true
     } else {
@@ -89,7 +88,8 @@ class DynamicPost extends Component {
   showModal = () => {
     this.setState({
       visible: true,
-      current: undefined
+      current: undefined,
+      fileList: []
     });
   };
 
@@ -104,14 +104,9 @@ class DynamicPost extends Component {
     })
     this.setState({
       visible: true,
-      current: id
+      current: id,
+      fileList: [{uid: 2, url: id.ImagePath}]
     });
-    console.log(this.props,"为啥不刷第二次")
-    setTimeout(() => {
-      this.props.form.setFieldsValue({
-        ImagePath: this.props.list.data.ImagePath
-      })
-    })
   };
 
   handleSubmit = e => {
@@ -182,7 +177,7 @@ class DynamicPost extends Component {
         })
       }
     },err => {
-      console.log('err',err)
+      return false
     })
   }
 
@@ -206,7 +201,6 @@ class DynamicPost extends Component {
       rowKey
     } = this.props;
     const { previewVisible, modalVisible, visible, done, current = {}, imageUrl, fileList, previewImage } = this.state;
-    //current.BannerId === undefined ? fileList === [] : fileList === [{uid: `${current.BannerId}`, url: `${current.ImagePath}`}]
     const modalFooter = done
       ? { footer: null, onCancel: this.handleDone }
       : {
@@ -254,7 +248,6 @@ class DynamicPost extends Component {
               <Upload
                 name="ImagePath"
                 listType="picture-card"
-                // fileList={current.BannerId === undefined ? fileList : [{uid: `${current.BannerId}`, url: `${current.ImagePath}`}]}
                 fileList={fileList}
                 beforeUpload={this.beforeUpload}
                 onPreview={this.handlePreview}

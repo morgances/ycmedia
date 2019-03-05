@@ -67,7 +67,7 @@ class Adding extends React.Component {
       previewImage: '',
       loading: false,
       file_name:"",
-      fileList: this.props.list.list.image === undefined ? [] : [{ uid: this.props.match.params.aid, url: `${this.props.list.list.image}`}],
+      fileList: [],
       imageUrl: ""
     }
   }
@@ -97,35 +97,38 @@ class Adding extends React.Component {
       title: this.props.rule.data.title,
       image: this.props.rule.data.image
       })
+      this.setState({
+        fileList: this.props.rule.data.image === "" ? [] : [{uid: 1, url: this.props.rule.data.image }]
+      })
     }, 500)
   }
 //联动
-handleProvinceChange = (value) => {
-  this.setState({
-    cities: cityData[value],
-    secondCity: cityData[value][0],
-  });
-  this.props.form.setFields({
-    tag: null
-  })
-}
+  handleProvinceChange = (value) => {
+    this.setState({
+      cities: cityData[value],
+      secondCity: cityData[value][0],
+    });
+    this.props.form.setFields({
+      tag: null
+    })
+  }
 
-onSecondCityChange = (value) => {
-  this.setState({
-    secondCity: value,
-    cities1: secondCityData[value],
-    thirdCity: secondCityData[value][0],
-  });
-  this.props.form.setFields({
-    label: null
-  })
-}
+  onSecondCityChange = (value) => {
+    this.setState({
+      secondCity: value,
+      cities1: secondCityData[value],
+      thirdCity: secondCityData[value][0],
+    });
+    this.props.form.setFields({
+      label: null
+    })
+  }
 
-onThirdCityChange = (value) => {
-  this.setState({
-    thirdCity: value,
-  })
-}
+  onThirdCityChange = (value) => {
+    this.setState({
+      thirdCity: value,
+    })
+  }
 
   formLayout = {
     labelCol: { span: 7 },
@@ -165,7 +168,6 @@ onThirdCityChange = (value) => {
         const submitData = {
           text: fieldsValue.text.toHTML()
         }
-        console.log(submitData)
         this.setState({
           done: true,
         });
@@ -190,9 +192,10 @@ onThirdCityChange = (value) => {
 
   //上传图片
   handleChange = (info) => {
+    console.log(123)
+    console.log(info)
     let fileList = info.fileList;
     this.setState({ fileList });
-    console.log('info',info)
     // const isJPG = info.file.type === 'image/jpeg';
     // const isPNG = info.file.type === 'image/png';
     // if(!isJPG && !isPNG) {
@@ -215,7 +218,6 @@ onThirdCityChange = (value) => {
       data: formData,
       url: 'http://39.98.162.91:9573/api/v1/upload'
     }).then(res => {
-      console.log('res',res)
       if(fileList.length === 1) {
         let imgurl = res.data.data
         this.setState({
@@ -228,8 +230,8 @@ onThirdCityChange = (value) => {
           imageUrl: imgurl
         })
       }
-    },err => {
-      console.log('err',err)
+    }, err => {
+      return false
     })
   }
 
@@ -254,7 +256,6 @@ onThirdCityChange = (value) => {
   }
 
   render() {
-    //const fileList = [{ uid: this.props.match.params.aid, url: `${this.props.rule.data[0].image}`}];
     const { previewVisible, previewImage, cities, cities1, fileList } = this.state;
     const uploadButton = (
       <div>
@@ -262,7 +263,6 @@ onThirdCityChange = (value) => {
         <div className="ant-upload-text">Upload</div>
       </div>
     );
-
     const controls = [
       'undo', 'redo', 'separator',
       'font-size', 'separator',
@@ -302,29 +302,27 @@ onThirdCityChange = (value) => {
       const categoryData = provinceData.map(province => <Option key={province}>{province}</Option>)
       const tagData = cities.map(city => <Option key={city}>{city}</Option>)
       const labelData = cities1.map(city1 => <Option key={city1}>{city1}</Option>)
-
       return (
         <Form onSubmit={this.handleSubmit}>
           <FormItem label="文章封面" {...this.formLayout}>
-            {getFieldDecorator("image", {
-            })(
-                <div>
-                  <Upload
-                    name="image"
-                    listType="picture-card"
-                    fileList={fileList}
-                    beforeUpload={this.beforeUpload}
-                    onPreview={this.handlePreview}
-                    onChange={this.handleChange}
-                    accept="image/*"
-                  >
-                    {fileList.length >= 1 ? null : uploadButton}
-                  </Upload>
-                  <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
-                    <img alt="image" style={{ width: '100%' }} src={previewImage} />
-                  </Modal>
-                </div>
-            )}
+            {getFieldDecorator("image")(
+              <div>
+                <Upload
+                  name="image"
+                  listType="picture-card"
+                  fileList={[...this.state.fileList]}
+                  beforeUpload={this.beforeUpload}
+                  onPreview={this.handlePreview}
+                  onChange={this.handleChange}
+                  accept="image/*"
+                >
+                  {fileList.length >= 1 ? null : uploadButton}
+                </Upload>
+                <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
+                  <img alt="image" style={{ width: '100%' }} src={previewImage} />
+                </Modal>
+              </div>
+              )}
           </FormItem>
           <FormItem label="文章标题" {...this.formLayout}>
             {getFieldDecorator("title", {

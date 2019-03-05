@@ -111,7 +111,6 @@ export default {
     },
     *removePicture({ payload, callback }, { call, put }) {
       const response = yield call(removeBanner, payload);
-      console.log(response,"删除response")
       //更新删除后数据
       // if (response.status === 0) {
       //   const response = yield call(queryPictureList, payload);
@@ -124,7 +123,6 @@ export default {
       // if (callback) callback();
     },
     *picture({ payload }, { call, put }) {
-      console.log(payload)
       const response = yield call(getPicture, payload);
       yield put({
         type: "edictPicture",
@@ -135,10 +133,9 @@ export default {
 
   reducers: {
     edictPicture(state, { payload }) {
-      console.log(payload,"编辑图片")
       return {
         ...state,
-        data: payload
+        data: payload,
       };
     },
     savePicture(state, { payload }) {
@@ -148,35 +145,30 @@ export default {
       };
     },
     queryPictureList(state, { payload }) {
-      console.log(payload,'图片')
       return {
         ...state,
         list: payload
       };
     },
     updateArticle(state, { payload }) {
-      console.log('更新后', payload)
       return {
         ...state,
         list: payload,
       };
     },
     addArticle(state, { payload }) {
-      console.log('文章添加后', payload)
       return {
         ...state,
         list: payload,
       };
     },
     addPictureList(state, { payload }) {
-      console.log('图片添加后', payload)
       return {
         ...state,
         list: payload,
       };
     },
     removeList(state, { payload }) {
-      console.log('删除后', payload)
       return {
         ...state,
         list: payload,
