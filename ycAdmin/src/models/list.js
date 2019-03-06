@@ -10,6 +10,7 @@ import {
   getPicture,
   updatePicture
 } from "@/services/api";
+import router from "umi/router";
 
 export default {
   namespace: "list",
@@ -37,29 +38,34 @@ export default {
     // },
     *addArticle({ payload }, { call, put }) {
       const response = yield call(addArticleList, payload);
-      console.log(response.status,"addList")
-      // if(response.status !== 0) {
-      //   return false
-      // } else {
-      //   const addResponse = yield call(queryArticleList, payload);
-      //   if (addResponse.status !== 0) {
-      //     return false
-      //   }
-      //   yield put({
-      //     type: 'queryPictureList',
-      //     payload: addResponse.data,
-      //   });
-      // }
+      if(response === undefined) {
+        router.push("/exception/500")
+      }
+      if(response.status != 200) {
+        return false
+      } else {
+        const addResponse = yield call(queryArticleList, payload);
+        if (addResponse.status != 200) {
+          return false
+        }
+        yield put({
+          type: 'queryPictureList',
+          payload: addResponse.data,
+        });
+      }
     },
     *addPictureList({ payload }, { call, put }) {
       let callback;
-      console.log(payload)
       if(payload.BannerId) {
         callback = updatePicture;
       } else {
         callback = addPictureList;
       }
       const response = yield call(callback, payload);
+      console.log(response,"-----------")
+      if(response === undefined) {
+        router.push("/exception/500")
+      }
       yield put({
         type: 'queryPictureList',
         payload: response,
@@ -83,21 +89,14 @@ export default {
       // }
     },
     *removeList({ payload }, { call,put }) {
-      console.log(payload,'4')
-      console.log(Object.keys(payload).length,'5')
       const response = yield call(removeArticleList, payload);
       if (response.status === 0) {
         const response = yield call(queryArticleList, payload);
-        if (response.status !== 0) {
-          return
-        }
         yield put({
-          type: 'removeList',
+          type: 'queryPictureList',
           payload: response.data,
         });
-      } else {
-        return false
-      };
+      }
     },
     *updateArticle({ payload }, { call, put }) {
       const response = yield call(updateAritcleList, payload);
@@ -112,15 +111,13 @@ export default {
     *removePicture({ payload, callback }, { call, put }) {
       const response = yield call(removeBanner, payload);
       //更新删除后数据
-      // if (response.status === 0) {
-      //   const response = yield call(queryPictureList, payload);
-      //   console.log(response)
-      //   yield put({
-      //     type: "savePicture",
-      //     payload: response.data
-      //   });
-      // }
-      // if (callback) callback();
+      if (response.status === 0) {
+        const response = yield call(queryPictureList, payload);
+        yield put({
+          type: "queryPictureList",
+          payload: response
+        });
+      }
     },
     *picture({ payload }, { call, put }) {
       const response = yield call(getPicture, payload);

@@ -55,13 +55,11 @@ class DynamicPost extends Component {
       },
     });
     message.success('删除成功')
-    if(this.props.loading === false) {
-      this.componentDidMount()
-    }
+    this.componentDidMount()
   }
 
   handleDone = () => {
-    setTimeout(() => this.addBtn.blur(), 0);
+    // setTimeout(() => this.addBtn.blur(), 0);
     this.setState({
       done: false,
       visible: false
@@ -79,7 +77,7 @@ class DynamicPost extends Component {
   }
 
   handleModalCancel = () => {
-    setTimeout(() => this.addBtn.blur(), 0);
+    // setTimeout(() => this.addBtn.blur(), 0);
     this.setState({
       visible: false
     });
@@ -114,7 +112,7 @@ class DynamicPost extends Component {
     const { imageUrl, current }= this.state;
     const { dispatch, form, rule } = this.props;
     const BannerId = current ? current.BannerId : '';
-    setTimeout(() => this.addBtn.blur(), 0);
+    // setTimeout(() => this.addBtn.blur(), 0);
     form.validateFields((err, fieldsValue) => {
       if (!err) {
         this.setState({
@@ -319,9 +317,9 @@ class DynamicPost extends Component {
             style={{ width: "100%", marginBottom: 20 }}
             icon="plus" 
             onClick={this.showModal} 
-            ref={component => {
-              this.addBtn = findDOMNode(component);
-            }}
+            // ref={component => {
+            //   this.addBtn = findDOMNode(component);
+            // }}
           >
             添加轮播图
           </Button>

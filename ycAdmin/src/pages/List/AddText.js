@@ -121,7 +121,7 @@ class AddText extends React.Component {
   };
 
   handleDone = () => {
-    setTimeout(() => this.addBtn.blur(), 0);
+    // setTimeout(() => this.addBtn.blur(), 0);
     this.setState({
       done: false,
       visible: false
@@ -129,7 +129,7 @@ class AddText extends React.Component {
   };
 
   handleButtonCancel = () => {
-    setTimeout(() => this.addBtn.blur(), 0);
+    // setTimeout(() => this.addBtn.blur(), 0);
     this.setState({
       visible: false
     });
@@ -139,16 +139,18 @@ class AddText extends React.Component {
     e.preventDefault();
     const { dispatch, form } = this.props;
     const { imageUrl } = this.state;
-    console.log(imageUrl,"submitimageUrl")
-    setTimeout(() => this.addBtn.blur(), 0);
+    // setTimeout(() => this.addBtn.blur(), 0);
     form.validateFields((err, fieldsValue) => {
       if (!err) {
         const submitData = {
           text: fieldsValue.text.toHTML()
         }
-        this.setState({
-          done: true,
-        });
+        console.log(this.props)
+        if(this.props.list.list != []) {
+          this.setState({
+            done: true,
+          });
+        }
         dispatch({
           type: "list/addArticle",
           payload: {
@@ -171,19 +173,18 @@ class AddText extends React.Component {
   handleChange = (info) => {
     let fileList = info.fileList;
     this.setState({ fileList });
-    console.log('info',info)
-    const isJPG = info.file.type === 'image/jpeg';
-    const isPNG = info.file.type === 'image/png';
-    if(!isJPG && !isPNG) {
-      message.error('仅支持JPG，JPEG，PNG');
-    }
-    const isLt1M = info.file.size / 1024 / 1024 < 1;
-    if(!isLt1M) {
-      message.error('图片限制1M以下');
-    }
-    if(!((isJPG || isPNG) && isLt1M)) {
-      return false;
-    }
+    // const isJPG = info.file.type === 'image/jpeg';
+    // const isPNG = info.file.type === 'image/png';
+    // if(!isJPG && !isPNG) {
+    //   message.error('仅支持JPG，JPEG，PNG');
+    // }
+    // const isLt1M = info.file.size / 1024 / 1024 < 1;
+    // if(!isLt1M) {
+    //   message.error('图片限制1M以下');
+    // }
+    // if(!((isJPG || isPNG) && isLt1M)) {
+    //   return false;
+    // }
     let formData = new window.FormData()
     console.log(formData)
     formData.append('file', info.file, info.file.name)
@@ -219,7 +220,6 @@ class AddText extends React.Component {
   handleCancel = () => this.setState({ previewVisible: false })
 
   handlePreview = (file) => {
-    console.log(file,"file是什么？")
     this.setState({
       previewImage: file.url || file.thumbUrl,
       previewVisible: true,
@@ -276,7 +276,21 @@ class AddText extends React.Component {
             className={styles.formResult}
           />
         );
-      }
+       } //else {
+      //   return (
+      //     <Result
+      //       type="error"
+      //       title="操作失败"
+      //       description="请检查当前网络是否正常连接"
+      //       actions={
+      //         <Button type="primary" onClick={this.articlelist}>
+      //           知道了
+      //         </Button>
+      //       }
+      //       className={styles.formResult}
+      //     />
+      //   );
+      // }
 
       const categoryData = provinceData.map(province => <Option key={province}>{province}</Option>)
       const tagData = cities.map(city => <Option key={city}>{city}</Option>)
@@ -393,9 +407,10 @@ class AddText extends React.Component {
           style={{ marginTop: 15 }}
           type="primary" 
           htmlType="submit" 
-          onClick={this.showModal} ref={component => {
-            this.addBtn = findDOMNode(component);
-          }}
+          onClick={this.showModal} 
+          // ref={component => {
+          //   this.addBtn = findDOMNode(component);
+          // }}
         >
           发布
         </Button>

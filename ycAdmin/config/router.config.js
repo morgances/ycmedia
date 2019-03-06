@@ -18,7 +18,7 @@ export default [
     Routes: ["src/pages/Authorized"],
     // authority: ["admin", "user"],
     routes: [
-      { path: "/", redirect: "/account/center" },
+      // { path: "/", redirect: "/account/center" },
       // {
       //   name: "account",
       //   icon: "user",
@@ -95,6 +95,7 @@ export default [
       },*/
 
       // list
+      { path: '/', redirect: '/list/basic-list' },
       {
         path: "/list",
         icon: "file-text",
@@ -211,35 +212,38 @@ export default [
       //   ],
       // },
 
-      // // exception
-      // {
-      //   name: 'exception',
-      //   icon: 'warning',
-      //   path: '/exception',
-      //   routes: [
+      // exception
+      {
+        name: 'exception',
+        icon: 'warning',
+        path: '/exception',
+        hideInMenu: true,
+        routes: [
       //     {
       //       path: '/exception/403',
       //       name: 'not-permission',
       //       component: './Exception/403',
       //     },
-      //     {
-      //       path: '/exception/404',
-      //       name: 'not-find',
-      //       component: './Exception/404',
-      //     },
-      //     {
-      //       path: '/exception/500',
-      //       name: 'server-error',
-      //       component: './Exception/500',
-      //     },
+          // {
+          //   path: '/exception/404',
+          //   name: 'not-find',
+          //   component: './Exception/404',
+          //   hideInMenu: true,
+          // },
+          {
+            path: '/exception/500',
+            name: 'server-error',
+            component: './Exception/500',
+            hideInMenu: true,
+          },
       //     {
       //       path: '/exception/trigger',
       //       name: 'trigger',
       //       hideInMenu: true,
       //       component: './Exception/TriggerException',
       //     },
-      //   ],
-      // },
+        ],
+      },
       {
         component: "404"
       }

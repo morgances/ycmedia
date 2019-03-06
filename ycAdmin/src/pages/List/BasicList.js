@@ -112,8 +112,13 @@ class BasicList extends PureComponent {
   };
 
   componentDidMount() {
-    const { category, formValues } = this.state;
-    const { dispatch } = this.props;
+    const { category } = this.state;
+    const { dispatch, rule, loading } = this.props;
+    if(rule.data === {}) {
+      loading === true
+    } else {
+      loading === false
+    }
     dispatch({
       type: "rule/fetch",
       payload: {
@@ -153,19 +158,16 @@ class BasicList extends PureComponent {
   }
 
   deleteConfirm = aid => {
-    console.log(aid)
     const { dispatch } = this.props;
+    const { category } = this.state;
     dispatch({
       type: 'rule/removeText',
       payload: {
-        aid
+        aid,
+        category
       },
     });
     message.success('删除成功');
-    console.log(this.props.loading)
-    if(this.props.loading === false) {
-      this.componentDidMount()
-    }
   }
 
   adding = () => {

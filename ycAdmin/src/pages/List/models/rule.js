@@ -32,17 +32,15 @@ export default {
       });
       if (callback) callback();
     },
-    *removeText({ payload, callback }, { call, put }) {
+    *removeText({ payload }, { call, put }) {
       const response = yield call(removeArticle, payload);
-      //更新删除后数据
-      if (response.status === 200) {
-        const response = yield call(getArticleList, payload);
+      if(response.status === 200) {
+        const res = yield call(getArticleList, payload);
         yield put({
-          type: "save",
-          payload: response
-        });
+          type: 'save',
+          payload: res,
+        })
       }
-      if (callback) callback();
     },
     *update({ payload, callback }, { call, put }) {
       const response = yield call(updateRule, payload);
