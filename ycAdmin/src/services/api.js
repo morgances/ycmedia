@@ -161,6 +161,7 @@ export async function addPictureList(params) {
 }
 
 export async function updateAritcleList(params) {
+  console.log(params,"params")
   return request("/api/v1/article/update", {
     method: "POST",
     body: {

@@ -100,6 +100,7 @@ export default {
     },
     *updateArticle({ payload }, { call, put }) {
       const response = yield call(updateAritcleList, payload);
+      console.log(payload,"payload")
       if (response.status !== 0) {
         return
       }

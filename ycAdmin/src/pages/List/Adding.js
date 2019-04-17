@@ -1,29 +1,51 @@
-import React from "react";
-import { findDOMNode } from "react-dom";
-import { DatePicker, TimePicker, Button, Card, Modal, Form, Input, Cascader, Upload, Icon, message, Select } from "antd";
-import Result from "@/components/Result";
-import styles from "./Adding.less";
-import { connect } from "dva";
-import PageHeaderWrapper from "@/components/PageHeaderWrapper";
+import React from 'react';
+import { findDOMNode } from 'react-dom';
+import {
+  DatePicker,
+  TimePicker,
+  Button,
+  Card,
+  Modal,
+  Form,
+  Input,
+  Cascader,
+  Upload,
+  Icon,
+  message,
+  Select,
+} from 'antd';
+import Result from '@/components/Result';
+import { connect } from 'dva';
+import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import moment from 'moment';
 import BraftEditor from 'braft-editor';
 import 'braft-editor/dist/index.css';
 import Axios from 'axios';
 import { routerRedux } from 'dva/router';
+import styles from './Adding.less';
 
 const Option = Select.Option;
 const FormItem = Form.Item;
 
-const provinceData = ['文化资讯','书香银川','遗脉相承','银川旅游','艺术空间','文化消费','文化品牌','凤城演绎'];
+const provinceData = [
+  '文化资讯',
+  '书香银川',
+  '遗脉相承',
+  '银川旅游',
+  '艺术空间',
+  '文化消费',
+  '文化品牌',
+  '凤城演绎',
+];
 const cityData = {
-  文化资讯: ['文化动态','通知公告','政策法规','免费开放'],
-  书香银川: ['图书借阅','服务指南','数字资源','好书推荐'],
-  遗脉相承: ['文化遗产','非遗传承'],
+  文化资讯: ['文化动态', '通知公告', '政策法规', '免费开放'],
+  书香银川: ['图书借阅', '服务指南', '数字资源', '好书推荐'],
+  遗脉相承: ['文化遗产', '非遗传承'],
   银川旅游: [],
-  艺术空间: ['艺术资讯','名家介绍','艺术展示','艺术场馆'],
-  文化消费: ['银川影院','艺术剧院'],
-  文化品牌: ['公益性文化产品','公益性文化活动','中华优秀传统文化与民族文化'],
-  凤城演绎: ['群众文化','银川记忆']
+  艺术空间: ['艺术资讯', '名家介绍', '艺术展示', '艺术场馆'],
+  文化消费: ['银川影院', '艺术剧院'],
+  文化品牌: ['公益性文化产品', '公益性文化活动', '中华优秀传统文化与民族文化'],
+  凤城演绎: ['群众文化', '银川记忆'],
 };
 const secondCityData = {
   文化动态: [],
@@ -34,19 +56,19 @@ const secondCityData = {
   服务指南: [],
   数字资源: [],
   好书推荐: [],
-  文化遗产: ['文化遗址','文物鉴赏','文物保护'],
-  非遗传承: ['项目名单','传承保护','非遗展馆','民俗活动','传承基地','传承人'],
+  文化遗产: ['文化遗址', '文物鉴赏', '文物保护'],
+  非遗传承: ['项目名单', '传承保护', '非遗展馆', '民俗活动', '传承基地', '传承人'],
   艺术资讯: [],
   名家介绍: [],
-  艺术展示: ['绘画','书法','音乐','展览'],
+  艺术展示: ['绘画', '书法', '音乐', '展览'],
   艺术场馆: [],
   银川影院: [],
-  艺术剧院: ['院团介绍','剧目介绍','商业演出'],
+  艺术剧院: ['院团介绍', '剧目介绍', '商业演出'],
   公益性文化产品: [],
   公益性文化活动: [],
   中华优秀传统文化与民族文化: [],
-  群众文化: ['群文活动','民间团队','公益培训'],
-  银川记忆: ['西夏古都','民间传说','老银川']
+  群众文化: ['群文活动', '民间团队', '公益培训'],
+  银川记忆: ['西夏古都', '民间传说', '老银川'],
 };
 
 @connect(({ list, rule, loading }) => ({
@@ -56,6 +78,11 @@ const secondCityData = {
 }))
 @Form.create()
 class Adding extends React.Component {
+  formLayout = {
+    labelCol: { span: 7 },
+    wrapperCol: { span: 13 },
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -66,79 +93,75 @@ class Adding extends React.Component {
       previewVisible: false,
       previewImage: '',
       loading: false,
-      file_name:"",
+      file_name: '',
       fileList: [],
-      imageUrl: ""
-    }
+      imageUrl: '',
+    };
   }
 
   componentDidMount() {
     const { dispatch, match, loading } = this.props;
-    if(this.props.rule.data === {}) {
-      loading === true
-    }
-    else {
-      loading === false
+    if (this.props.rule.data === {}) {
+      loading === true;
+    } else {
+      loading === false;
     }
     const aid = Number(match.params.aid);
     dispatch({
-      type: "rule/text",
+      type: 'rule/text',
       payload: {
-        aid
-      }
+        aid,
+      },
     });
     setTimeout(() => {
       this.props.form.setFieldsValue({
-      text: BraftEditor.createEditorState(`${this.props.rule.data.text}`),
-      author: this.props.rule.data.author,
-      category: this.props.rule.data.category,
-      tag: this.props.rule.data.tag,
-      label: this.props.rule.data.label,
-      title: this.props.rule.data.title,
-      image: this.props.rule.data.image
-      })
+        text: BraftEditor.createEditorState(`${this.props.rule.data.text}`),
+        author: this.props.rule.data.author,
+        category: this.props.rule.data.category,
+        tag: this.props.rule.data.tag,
+        label: this.props.rule.data.label,
+        title: this.props.rule.data.title,
+        image: this.props.rule.data.image,
+      });
       this.setState({
-        fileList: this.props.rule.data.image === "" ? [] : [{uid: 1, url: this.props.rule.data.image }]
-      })
-    }, 500)
+        fileList:
+          this.props.rule.data.image === '' ? [] : [{ uid: 1, url: this.props.rule.data.image }],
+      });
+    }, 500);
   }
-//联动
-  handleProvinceChange = (value) => {
+
+  // 联动
+  handleProvinceChange = value => {
     this.setState({
       cities: cityData[value],
       secondCity: cityData[value][0],
     });
     this.props.form.setFields({
-      tag: null
-    })
-  }
+      tag: null,
+    });
+  };
 
-  onSecondCityChange = (value) => {
+  onSecondCityChange = value => {
     this.setState({
       secondCity: value,
       cities1: secondCityData[value],
       thirdCity: secondCityData[value][0],
     });
     this.props.form.setFields({
-      label: null
-    })
-  }
+      label: null,
+    });
+  };
 
-  onThirdCityChange = (value) => {
+  onThirdCityChange = value => {
     this.setState({
       thirdCity: value,
-    })
-  }
-
-  formLayout = {
-    labelCol: { span: 7 },
-    wrapperCol: { span: 13 }
+    });
   };
 
   showModal = () => {
     this.setState({
       visible: true,
-      current: undefined
+      current: undefined,
     });
   };
 
@@ -146,14 +169,14 @@ class Adding extends React.Component {
     setTimeout(() => this.addBtn.blur(), 0);
     this.setState({
       done: false,
-      visible: false
+      visible: false,
     });
   };
 
   handleButtonCancel = () => {
     setTimeout(() => this.addBtn.blur(), 0);
     this.setState({
-      visible: false
+      visible: false,
     });
   };
 
@@ -164,21 +187,22 @@ class Adding extends React.Component {
     const aid = Number(match.params.aid);
     setTimeout(() => this.addBtn.blur(), 0);
     form.validateFields((err, fieldsValue) => {
+      console.log(imageUrl,"image")
       if (!err) {
         const submitData = {
-          text: fieldsValue.text.toHTML()
-        }
+          text: fieldsValue.text.toHTML(),
+        };
         this.setState({
           done: true,
         });
         dispatch({
-          type: "list/updateArticle",
+          type: 'list/updateArticle',
           payload: {
             ...fieldsValue,
             aid,
             text: fieldsValue.text.toHTML(),
-            image: imageUrl
-          }
+            image: imageUrl === undefined ? "" : imageUrl,
+          },
         });
       }
     });
@@ -186,15 +210,13 @@ class Adding extends React.Component {
 
   selectMode(value) {
     this.setState({
-        selectMode: value
-    })
+      selectMode: value,
+    });
   }
 
-  //上传图片
-  handleChange = (info) => {
-    console.log(123)
-    console.log(info)
-    let fileList = info.fileList;
+  // 上传图片
+  handleChange = info => {
+    const fileList = info.fileList;
     this.setState({ fileList });
     // const isJPG = info.file.type === 'image/jpeg';
     // const isPNG = info.file.type === 'image/png';
@@ -208,52 +230,56 @@ class Adding extends React.Component {
     // if(!((isJPG || isPNG) && isLt1M)) {
     //   return false;
     // }
-    let formData = new window.FormData()
-    formData.append('file',info.file,info.file.name)
+    const formData = new window.FormData();
+    formData.append('file', info.file, info.file.name);
     Axios({
       headers: {
-        'Content-Type':'multipart/form-data'
+        'Content-Type': 'multipart/form-data',
       },
       method: 'post',
       data: formData,
-      url: 'http://39.98.162.91:9573/api/v1/upload'
-    }).then(res => {
-      if(fileList.length === 1) {
-        let imgurl = res.data.data
-        this.setState({
-          imageUrl: imgurl
-        })
-      }
-      else {
-        let imgurl = res.data.data
-        this.setState({
-          imageUrl: imgurl
-        })
-      }
-    }, err => {
-      return false
-    })
-  }
+      url: 'http://39.98.162.91:9573/api/v1/upload',
+    }).then(
+      res => {
+        if (fileList.length === 1) {
+          const imgurl = res.data.data;
+          this.setState({
+            imageUrl: imgurl,
+          });
+          console.log(imgurl,"111")
+        } else {
+          const imgurl = res.data.data;
+          this.setState({
+            imageUrl: imgurl,
+          });
+          console.log(imgurl,"imgurl")
+        }
+      },
+      err => false
+    );
+  };
 
   beforeUpload() {
-    return false
+    return false;
   }
 
-  handleCancel = () => this.setState({ previewVisible: false })
+  handleCancel = () => this.setState({ previewVisible: false });
 
-  handlePreview = (file) => {
+  handlePreview = file => {
     this.setState({
       previewImage: file.url || file.thumbUrl,
       previewVisible: true,
     });
-  }
+  };
 
   articlelist = () => {
     const { dispatch } = this.props;
-    dispatch(routerRedux.push({
-      pathname: '/list/basic-list/',
-    }))
-  }
+    dispatch(
+      routerRedux.push({
+        pathname: '/list/basic-list/',
+      })
+    );
+  };
 
   render() {
     const { previewVisible, previewImage, cities, cities1, fileList } = this.state;
@@ -264,25 +290,47 @@ class Adding extends React.Component {
       </div>
     );
     const controls = [
-      'undo', 'redo', 'separator',
-      'font-size', 'separator',
-      'text-color', 'bold', 'italic', 'underline', 'strike-through', 'separator',
-      'remove-styles', 'emoji',  'separator', 'text-indent', 'text-align', 'separator',
-      'headings', 'list-ul', 'list-ol', 'blockquote', 'code', 'separator',
-      'link', 'media', 'hr', 'separator',
-      'clear', 'separator'
-    ]
+      'undo',
+      'redo',
+      'separator',
+      'font-size',
+      'separator',
+      'text-color',
+      'bold',
+      'italic',
+      'underline',
+      'strike-through',
+      'separator',
+      'remove-styles',
+      'emoji',
+      'separator',
+      'text-indent',
+      'text-align',
+      'separator',
+      'headings',
+      'list-ul',
+      'list-ol',
+      'blockquote',
+      'code',
+      'separator',
+      'link',
+      'media',
+      'hr',
+      'separator',
+      'clear',
+      'separator',
+    ];
 
     const {
-      form: { getFieldDecorator, setFieldsValue }
+      form: { getFieldDecorator, setFieldsValue },
     } = this.props;
     const { visible, done, current = {}, imageUrl } = this.state;
     const modalFooter = done
       ? { footer: null, onCancel: this.handleDone }
       : {
-          okText: "保存",
+          okText: '保存',
           onOk: this.handleSubmit,
-          onCancel: this.handleButtonCancel
+          onCancel: this.handleButtonCancel,
         };
     const getModalContent = () => {
       if (done) {
@@ -299,13 +347,13 @@ class Adding extends React.Component {
           />
         );
       }
-      const categoryData = provinceData.map(province => <Option key={province}>{province}</Option>)
-      const tagData = cities.map(city => <Option key={city}>{city}</Option>)
-      const labelData = cities1.map(city1 => <Option key={city1}>{city1}</Option>)
+      const categoryData = provinceData.map(province => <Option key={province}>{province}</Option>);
+      const tagData = cities.map(city => <Option key={city}>{city}</Option>);
+      const labelData = cities1.map(city1 => <Option key={city1}>{city1}</Option>);
       return (
         <Form onSubmit={this.handleSubmit}>
           <FormItem label="文章封面" {...this.formLayout}>
-            {getFieldDecorator("image")(
+            {getFieldDecorator('image')(
               <div>
                 <Upload
                   name="image"
@@ -322,63 +370,61 @@ class Adding extends React.Component {
                   <img alt="image" style={{ width: '100%' }} src={previewImage} />
                 </Modal>
               </div>
-              )}
+            )}
           </FormItem>
           <FormItem label="文章标题" {...this.formLayout}>
-            {getFieldDecorator("title", {
+            {getFieldDecorator('title', {
               initialValue: this.props.rule.data.title || '',
-              rules: [{ required: true, message: "请输入文章标题" }],
+              rules: [{ required: true, message: '请输入文章标题' }],
             })(<Input placeholder="请输入" />)}
           </FormItem>
           <FormItem label="文章作者" {...this.formLayout}>
-            {getFieldDecorator("author", {
+            {getFieldDecorator('author', {
               initialValue: this.props.rule.data.author || '',
-              rules: [{ required: true, message: "请输入文章作者" }],
+              rules: [{ required: true, message: '请输入文章作者' }],
             })(<Input placeholder="请输入" />)}
           </FormItem>
-          <FormItem label="文章分类" {...this.formLayout} >
-            {getFieldDecorator("category", {
+          <FormItem label="文章分类" {...this.formLayout}>
+            {getFieldDecorator('category', {
               initialValue: this.props.rule.data.category || '',
-              rules: [{ required: true, message: "请选择文章分类" }],
+              rules: [{ required: true, message: '请选择文章分类' }],
             })(
-                <Select
-                  onChange={this.handleProvinceChange}
-                  getPopupContainer={triggerNode => triggerNode.parentNode}
-                >
-                  {categoryData}
-                </Select>
+              <Select
+                onChange={this.handleProvinceChange}
+                getPopupContainer={triggerNode => triggerNode.parentNode}
+              >
+                {categoryData}
+              </Select>
             )}
           </FormItem>
-          <FormItem label="文章标签" {...this.formLayout} >
-            {getFieldDecorator("tag", {
+          <FormItem label="文章标签" {...this.formLayout}>
+            {getFieldDecorator('tag', {
               initialValue: this.props.rule.data.tag || '',
             })(
-                <Select
-                  onChange={this.onSecondCityChange}
-                  getPopupContainer={triggerNode => triggerNode.parentNode}
-                >
-                  {tagData}
-                </Select>
+              <Select
+                onChange={this.onSecondCityChange}
+                getPopupContainer={triggerNode => triggerNode.parentNode}
+              >
+                {tagData}
+              </Select>
             )}
           </FormItem>
           <FormItem label="文章label" {...this.formLayout}>
-            {getFieldDecorator("label", {
+            {getFieldDecorator('label', {
               initialValue: this.props.rule.data.label || '',
             })(
-                <Select
-                  onChange={this.onThirdCityChange}
-                  getPopupContainer={triggerNode => triggerNode.parentNode}
-                >
-                  {labelData}
-                </Select>
+              <Select
+                onChange={this.onThirdCityChange}
+                getPopupContainer={triggerNode => triggerNode.parentNode}
+              >
+                {labelData}
+              </Select>
             )}
           </FormItem>
-          <FormItem {...this.formLayout} >
-            {getFieldDecorator("date",{
-              initialValue: new Date()
-            })(
-              <div></div>
-            )}
+          <FormItem {...this.formLayout}>
+            {getFieldDecorator('date', {
+              initialValue: new Date(),
+            })(<div />)}
           </FormItem>
         </Form>
       );
@@ -389,42 +435,41 @@ class Adding extends React.Component {
           <div className="editor-wrapper">
             <Form onSubmit={this.handleSubmit}>
               <FormItem>
-                {getFieldDecorator("text",{
+                {getFieldDecorator('text', {
                   validateTrigger: 'onBlur',
-                  rules: [{
-                    required: true,
-                    validator: (_, value, callback) => {
-                      if (value.isEmpty()) {
-                        callback('请输入文章内容')
-                      } else {
-                        callback()
-                      }
-                    }
-                  }],
-                })(
-                  <BraftEditor
-                    controls={controls}
-                  ></BraftEditor>
-                )}
+                  rules: [
+                    {
+                      required: true,
+                      validator: (_, value, callback) => {
+                        if (value.isEmpty()) {
+                          callback('请输入文章内容');
+                        } else {
+                          callback();
+                        }
+                      },
+                    },
+                  ],
+                })(<BraftEditor controls={controls} />)}
               </FormItem>
             </Form>
           </div>
         </Card>
         <Button
           style={{ marginTop: 15 }}
-          type="primary" 
-          htmlType="submit" 
-          onClick={this.showModal} ref={component => {
+          type="primary"
+          htmlType="submit"
+          onClick={this.showModal}
+          ref={component => {
             this.addBtn = findDOMNode(component);
           }}
         >
           发布
         </Button>
         <Modal
-          title={done ? null : `文章${current ? "发布" : "添加"}`}
+          title={done ? null : `文章${current ? '发布' : '添加'}`}
           className={styles.standardListForm}
           width={640}
-          bodyStyle={done ? { padding: "72px 0" } : { padding: "28px 0 0" }}
+          bodyStyle={done ? { padding: '72px 0' } : { padding: '28px 0 0' }}
           destroyOnClose
           visible={visible}
           {...modalFooter}

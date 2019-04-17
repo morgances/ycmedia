@@ -13,7 +13,7 @@ const FormItem = Form.Item;
 @connect(({ list, rule, loading }) => ({
   list,
   rule,
-  loading: loading.models.list,
+  loading: loading.models.rule,
 }))
 @Form.create()
 class DynamicPost extends Component {

@@ -136,18 +136,18 @@ export default [
       },
 
       // profile
-      {
-        path: "/profile",
-        name: "profile",
-        icon: "audit",
-        routes: [
-          {
-            path: "/profile/basic",
-            name: "basic",
-            component: "./Profile/BasicProfile"
-          }
-        ]
-      },
+      // {
+      //   path: "/profile",
+      //   name: "profile",
+      //   icon: "audit",
+      //   routes: [
+      //     {
+      //       path: "/profile/basic",
+      //       name: "basic",
+      //       component: "./Profile/BasicProfile"
+      //     }
+      //   ]
+      // },
 
       // forms
       // {

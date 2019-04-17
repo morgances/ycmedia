@@ -145,7 +145,6 @@ class AddText extends React.Component {
         const submitData = {
           text: fieldsValue.text.toHTML()
         }
-        console.log(this.props)
         if(this.props.list.list != []) {
           this.setState({
             done: true,
@@ -171,7 +170,7 @@ class AddText extends React.Component {
 
   //上传图片
   handleChange = (info) => {
-    let fileList = info.fileList;
+    const fileList = info.fileList;
     this.setState({ fileList });
     // const isJPG = info.file.type === 'image/jpeg';
     // const isPNG = info.file.type === 'image/png';
@@ -208,13 +207,12 @@ class AddText extends React.Component {
           imageUrl: imgurl
         })
       }
-    },err => {
-      console.log('err',err)
-    })
+    },err => false
+    )
   }
 
   beforeUpload() {
-    return false
+    return false;
   }
 
   handleCancel = () => this.setState({ previewVisible: false })
@@ -254,7 +252,7 @@ class AddText extends React.Component {
     const {
       form: { getFieldDecorator, setFieldsValue }
     } = this.props;
-    const { visible, done, current = {}, imageUrl } = this.state;
+    const { visible, done, current = {} } = this.state;
     const modalFooter = done
       ? { footer: null, onCancel: this.handleDone }
       : {
@@ -276,22 +274,8 @@ class AddText extends React.Component {
             className={styles.formResult}
           />
         );
-       } //else {
-      //   return (
-      //     <Result
-      //       type="error"
-      //       title="操作失败"
-      //       description="请检查当前网络是否正常连接"
-      //       actions={
-      //         <Button type="primary" onClick={this.articlelist}>
-      //           知道了
-      //         </Button>
-      //       }
-      //       className={styles.formResult}
-      //     />
-      //   );
-      // }
-
+       }
+     
       const categoryData = provinceData.map(province => <Option key={province}>{province}</Option>)
       const tagData = cities.map(city => <Option key={city}>{city}</Option>)
       const labelData = cities1.map(city1 => <Option key={city1}>{city1}</Option>)
