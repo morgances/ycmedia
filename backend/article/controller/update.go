@@ -67,6 +67,11 @@ func toKeyValStr(mp map[string]interface{}) string {
 			str += ", date=?"
 			continue
 		}
+		if v == nil {
+			str += fmt.Sprintf(", %s=''", k)
+			continue
+		}
+
 		switch v.(type) {
 		case float64:
 			str += fmt.Sprintf(", %s=%v", k, v)

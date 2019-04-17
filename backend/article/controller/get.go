@@ -11,16 +11,11 @@ import (
 )
 
 func (con Controller) GetArticleList(ctx *server.Context) error {
-	if ctx.Request().Method != "POST" {
-		log.Println("Error In GetList.Request:", NotPost)
-		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, NotPost))
-	}
-
 	var x struct {
-		Category int `json:"category"`
-		Tag      int `json:"tag"`
-		Label    int `json:"label"`
-		Page     int `json:"page"`
+		Category string `json:"category"`
+		Tag      string `json:"tag"`
+		Label    string `json:"label"`
+		Page     int    `json:"page"`
 	}
 
 	err := ctx.JSONBody(&x)
@@ -29,9 +24,9 @@ func (con Controller) GetArticleList(ctx *server.Context) error {
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
 	}
 
-	log.Printf("In GetArticleList: Category=%d, Tag=%d, Label=%d, Page=%d\n", x.Category, x.Tag, x.Label, x.Page)
+	log.Printf("In GetArticleList: Category=%s, Tag=%s, Label=%s, Page=%d\n", x.Category, x.Tag, x.Label, x.Page)
 
-	if x.Category < 0 || x.Tag < -1 || x.Label < -1 || x.Page < 1 {
+	if x.Page < 1 {
 		log.Println("Error In GetList.DataCheck:", BadData)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, BadData))
 	}
@@ -61,11 +56,6 @@ func (con Controller) GetArticleList(ctx *server.Context) error {
 }
 
 func (con Controller) GetTextById(ctx *server.Context) error {
-	if ctx.Request().Method != "POST" {
-		log.Println("Error In GetText.Request:", NotGet)
-		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, NotPost))
-	}
-
 	var x struct {
 		Aid int `json:"aid"`
 	}
@@ -93,12 +83,7 @@ func (con Controller) GetTextById(ctx *server.Context) error {
 }
 
 func (con Controller) GetNews(ctx *server.Context) error {
-	if ctx.Request().Method != "GET" {
-		log.Println("Error In GetNews.Request:", NotGet)
-		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, NotGet))
-	}
-
-	log.Printf("Get A Request For News\n")
+	log.Println("Get A Request For News")
 
 	articles, err := con.db.GetArticleOrderLimits("date", true, 0, 10)
 	if err != nil {
@@ -114,15 +99,10 @@ func (con Controller) GetNews(ctx *server.Context) error {
 }
 
 func (con Controller) GetMore(ctx *server.Context) error {
-	if ctx.Request().Method != "POST" {
-		log.Println("Error In GetMore.Request:", NotPost)
-		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, NotPost))
-	}
-
 	var x struct {
-		Category int       `json:"category"`
-		Tag      int       `json:"tag"`
-		Label    int       `json:"label"`
+		Category string    `json:"category"`
+		Tag      string    `json:"tag"`
+		Label    string    `json:"label"`
 		Date     time.Time `json:"date"`
 	}
 
@@ -132,16 +112,37 @@ func (con Controller) GetMore(ctx *server.Context) error {
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
 	}
 
-	log.Printf("In GetMore: Category=%d, Tag=%d, Label=%d, Date=%v\n", x.Category, x.Tag, x.Label, x.Date)
-
-	if x.Category < 0 || x.Tag < -1 || x.Label < -1 {
-		log.Println("Error In GetMore.DataCheck: ", BadData)
-		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, BadData))
-	}
+	log.Printf("In GetMore: Category=%s, Tag=%s, Label=%s, Date=%v\n", x.Category, x.Tag, x.Label, x.Date)
 
 	articles, err := con.db.GetArticleByDate(x.Category, x.Tag, x.Label, x.Date)
 	if err != nil {
 		log.Println("Error In GetMore.Mysql:", err)
+		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
+	}
+
+	for _, e := range articles {
+		e.Text = ""
+	}
+
+	return ctx.ServeJSON(base.RespStatusAndData(http.StatusOK, articles))
+}
+
+func (con Controller) GetAll(ctx *server.Context) error {
+	var x struct {
+		Category string `json:"category"`
+	}
+
+	err := ctx.JSONBody(&x)
+	if err != nil {
+		log.Println("Error In GetAll.JSONBody:", err)
+		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
+	}
+
+	log.Println("In GetAll: Category=", x.Category)
+
+	articles, err := con.db.GetAll("category", x.Category)
+	if err != nil {
+		log.Println("Error In GetAll.Mysql:", err)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
 	}
 
