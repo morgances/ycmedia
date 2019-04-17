@@ -7,10 +7,10 @@ package upload
 
 import (
 	"database/sql"
+	"log"
 	"os"
 
 	"github.com/TechCatsLab/apix/http/server"
-	log "github.com/TechCatsLab/logging/logrus"
 	"github.com/morgances/ycmedia/backend/base"
 	"github.com/morgances/ycmedia/backend/base/constants"
 	"github.com/morgances/ycmedia/backend/base/filter"

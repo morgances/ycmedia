@@ -6,10 +6,10 @@
 package http
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/TechCatsLab/apix/http/server"
-	log "github.com/TechCatsLab/logging/logrus"
 	"github.com/morgances/ycmedia/backend/base"
 	"github.com/morgances/ycmedia/backend/permission/mysql"
 )
@@ -24,18 +24,18 @@ func (ph *PermissionHandler) AddRelation(c *server.Context) error {
 
 	err := c.JSONBody(&relation)
 	if err != nil {
-		log.Error("Error in JSONBody:", err)
+		log.Println("Error in JSONBody:", err)
 		return c.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
 	}
 
 	if err = c.Validate(&relation); err != nil {
-		log.Error("Error in Validate:", err)
+		log.Println("Error in Validate:", err)
 		return c.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, nil))
 	}
 
 	err = mysql.Service.AddRelation(ph.SQLStore(), relation.AdminID, relation.RoleID)
 	if err != nil {
-		log.Error(err)
+		log.Println(err)
 		return c.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, nil))
 	}
 	return c.ServeJSON(base.RespStatusAndData(http.StatusOK, nil))
@@ -51,18 +51,18 @@ func (ph *PermissionHandler) RemoveRelation(c *server.Context) error {
 
 	err := c.JSONBody(&relation)
 	if err != nil {
-		log.Error("Error in JSONBody:", err)
+		log.Println("Error in JSONBody:", err)
 		return c.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
 	}
 
 	if err = c.Validate(&relation); err != nil {
-		log.Error("Error in Validate:", err)
+		log.Println("Error in Validate:", err)
 		return c.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, nil))
 	}
 
 	err = mysql.Service.RemoveRelation(ph.SQLStore(), relation.AdminID, relation.RoleID)
 	if err != nil {
-		log.Error(err)
+		log.Println(err)
 		return c.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, nil))
 	}
 	return c.ServeJSON(base.RespStatusAndData(http.StatusOK, nil))

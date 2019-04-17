@@ -3,10 +3,10 @@ package http
 import (
 	"errors"
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/TechCatsLab/apix/http/server"
-	log "github.com/TechCatsLab/logging/logrus"
 	"github.com/morgances/ycmedia/backend/admin/mysql"
 	"github.com/morgances/ycmedia/backend/base"
 	"github.com/morgances/ycmedia/backend/base/filter"
@@ -36,17 +36,17 @@ func (ah *AdminHandler) Create(c *server.Context) error {
 
 	err := c.JSONBody(&admin)
 	if err != nil {
-		log.Error("Error in JSONBody:", err)
+		log.Println("Error in JSONBody:", err)
 		return c.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
 	}
 
 	if err = c.Validate(&admin); err != nil {
-		log.Error("Error in Validate:", err)
+		log.Println("Error in Validate:", err)
 		return c.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, nil))
 	}
 	err = mysql.AdminServer.Create(ah.SQLStore(), &admin.Name, &admin.Pwd, &admin.RealName, &admin.Mobile, &admin.Email)
 	if err != nil {
-		log.Error(err)
+		log.Println(err)
 		return c.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, nil))
 	}
 	return c.ServeJSON(base.RespStatusAndData(http.StatusOK, nil))
@@ -65,18 +65,18 @@ func (ah *AdminHandler) Login(c *server.Context) error {
 
 	err := ctx.JSONBody(&admin)
 	if err != nil {
-		log.Error("Error in JSONBody:", err)
+		log.Println("Error in JSONBody:", err)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
 	}
 	fmt.Println(admin)
 	if err = ctx.Validate(&admin); err != nil {
-		log.Error("Error in Validate:", err)
+		log.Println("Error in Validate:", err)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, nil))
 	}
 
 	id, err := mysql.AdminServer.Login(ah.SQLStore(), &admin.Name, &admin.Pwd)
 	if err != nil {
-		log.Error(err)
+		log.Println(err)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, nil))
 	}
 
@@ -97,19 +97,19 @@ func (ah *AdminHandler) Email(c *server.Context) error {
 
 	err := ctx.JSONBody(&admin)
 	if err != nil {
-		log.Error("Error in JSONBody:", err)
+		log.Println("Error in JSONBody:", err)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
 	}
 
 	if err = ctx.Validate(&admin); err != nil {
-		log.Error("Error in Validate:", err)
+		log.Println("Error in Validate:", err)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, nil))
 	}
 
 	id := ctx.UID()
 	err = mysql.AdminServer.ModifyEmail(ah.SQLStore(), uint32(id), &admin.Email)
 	if err != nil {
-		log.Error(err)
+		log.Println(err)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, nil))
 	}
 	return ctx.ServeJSON(base.RespStatusAndData(http.StatusOK, nil))
@@ -127,19 +127,19 @@ func (ah *AdminHandler) Mobile(c *server.Context) error {
 
 	err := ctx.JSONBody(&admin)
 	if err != nil {
-		log.Error("Error in JSONBody:", err)
+		log.Println("Error in JSONBody:", err)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
 	}
 
 	if err = ctx.Validate(&admin); err != nil {
-		log.Error("Error in Validate:", err)
+		log.Println("Error in Validate:", err)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, nil))
 	}
 
 	id := ctx.UID()
 	err = mysql.AdminServer.ModifyMobile(ah.SQLStore(), uint32(id), &admin.Mobile)
 	if err != nil {
-		log.Error(err)
+		log.Println(err)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, nil))
 	}
 	return ctx.ServeJSON(base.RespStatusAndData(http.StatusOK, nil))
@@ -157,29 +157,29 @@ func (ah *AdminHandler) ModifyPwd(c *server.Context) error {
 
 	err := ctx.JSONBody(&admin)
 	if err != nil {
-		log.Error("Error in JSONBody:", err)
+		log.Println("Error in JSONBody:", err)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
 	}
 
 	if err = ctx.Validate(&admin); err != nil {
-		log.Error("Error in Validate:", err)
+		log.Println("Error in Validate:", err)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, nil))
 	}
 
 	if admin.NewPwd == admin.Pwd {
-		log.Error(errPwdRepeat)
+		log.Println(errPwdRepeat)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, nil))
 	}
 
 	if admin.NewPwd != admin.Confirm {
-		log.Debug(errPwdDisagree)
+		log.Panicln(errPwdDisagree)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, nil))
 	}
 
 	id := ctx.UID()
 	err = mysql.AdminServer.ModifyPwd(ah.SQLStore(), uint32(id), &admin.Pwd, &admin.NewPwd)
 	if err != nil {
-		log.Error(err)
+		log.Println(err)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, nil))
 	}
 
@@ -196,17 +196,17 @@ func (ah *AdminHandler) ModifyActive(c *server.Context) error {
 
 	err := c.JSONBody(&admin)
 	if err != nil {
-		log.Error("Error in JSONBody:", err)
+		log.Println("Error in JSONBody:", err)
 		return c.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
 	}
 	if err = c.Validate(&admin); err != nil {
-		log.Error("Error in Validate:", err)
+		log.Println("Error in Validate:", err)
 		return c.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, nil))
 	}
 
 	err = mysql.AdminServer.ModifyActive(ah.SQLStore(), admin.Id, admin.Active)
 	if err != nil {
-		log.Error(err)
+		log.Println(err)
 		return c.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, nil))
 	}
 
@@ -218,7 +218,7 @@ func (ah *AdminHandler) Isactive(c *server.Context) error {
 	id := ctx.UID()
 	isactive, err := mysql.AdminServer.IsActive(ah.SQLStore(), uint32(id))
 	if err != nil {
-		log.Error(err)
+		log.Println(err)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, nil))
 	}
 	return ctx.ServeJSON(base.RespStatusAndData(http.StatusOK, isactive))

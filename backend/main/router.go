@@ -2,11 +2,11 @@ package main
 
 import (
 	"database/sql"
+	"log"
 
 	_ "github.com/go-sql-driver/mysql"
 
 	"github.com/TechCatsLab/apix/http/server"
-	"github.com/TechCatsLab/logging/logrus"
 	"github.com/morgances/ycmedia/backend/admin"
 	"github.com/morgances/ycmedia/backend/article"
 	"github.com/morgances/ycmedia/backend/banner"
@@ -21,7 +21,7 @@ func init() {
 	router = server.NewRouter()
 	uploadDB, err := sql.Open("mysql", "root:123456@tcp(127.0.0.1:8806)/article?charset=utf8mb4&parseTime=True&loc=Local")
 	if err != nil {
-		logrus.Fatal(err)
+		log.Fatal(err)
 	}
 	upload.InitRouter(router, uploadDB, "http://127.0.0.1:9573", "AdminTokenKey")
 	admin.InitAdminRouter(router, uploadDB, "AdminTokenKey")

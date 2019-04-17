@@ -1,10 +1,10 @@
 package controller
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/TechCatsLab/apix/http/server"
-	log "github.com/TechCatsLab/logging/logrus"
 	"github.com/morgances/ycmedia/backend/article/mysql"
 	"github.com/morgances/ycmedia/backend/base"
 )
@@ -25,21 +25,21 @@ import (
 func (con Controller) Add(ctx *server.Context) error {
 	var x mysql.Article
 	if ctx.Request().Method != "POST" {
-		log.Error("Error In Request:", NotPost)
+		log.Println("Error In Request:", NotPost)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, NotPost))
 	}
 
 	err := ctx.JSONBody(&x)
 	if err != nil {
-		log.Error("Error In JSONBody:", err)
+		log.Println("Error In JSONBody:", err)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
 	}
 
-	log.Info("In AddArticle:", x)
+	log.Println("In AddArticle:", x)
 
 	err = con.db.AddArticle(x.Category, x.Tag, x.Label, x.Uid, x.Title, x.Author, x.Image, x.Text, x.Date)
 	if err != nil {
-		log.Error("Error In Mysql.AddArticle:", err)
+		log.Println("Error In Mysql.AddArticle:", err)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
 	}
 

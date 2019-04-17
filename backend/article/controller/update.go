@@ -2,18 +2,18 @@ package controller
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"time"
 
 	"github.com/TechCatsLab/apix/http/server"
-	log "github.com/TechCatsLab/logging/logrus"
 	"github.com/morgances/ycmedia/backend/base"
 )
 
 // Update
 func (con Controller) Update(ctx *server.Context) error {
 	if ctx.Request().Method != "POST" {
-		log.Error("Error In Request:", NotPost)
+		log.Println("Error In Request:", NotPost)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, NotPost))
 	}
 
@@ -21,25 +21,25 @@ func (con Controller) Update(ctx *server.Context) error {
 
 	err := ctx.JSONBody(&newMap)
 	if err != nil {
-		log.Error("Error In JSONBody:", err)
+		log.Println("Error In JSONBody:", err)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
 	}
 
 	mp, ok := newMap.(map[string]interface{})
 	if !ok {
-		log.Error("Error In JSONBody:", newMap)
+		log.Println("Error In JSONBody:", newMap)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, BadData))
 	}
 
 	v, ok := mp["aid"]
 
 	if !ok || int(v.(float64)) < 0 {
-		log.Error("Error In JSONBody:", BadData)
+		log.Println("Error In JSONBody:", BadData)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, BadData))
 	}
 
 	kvs := toKeyValStr(mp)
-	log.Info("In UpdateArticle:" + kvs)
+	log.Println("In UpdateArticle:" + kvs)
 
 	t, ok := mp["date"]
 	if !ok {
@@ -50,7 +50,7 @@ func (con Controller) Update(ctx *server.Context) error {
 	}
 
 	if err != nil {
-		log.Error("Error In Mysql UpdateArticle:", err)
+		log.Println("Error In Mysql UpdateArticle:", err)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
 	}
 
