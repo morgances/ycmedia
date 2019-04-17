@@ -11,10 +11,13 @@ import (
 
 func GetFile(ctx *server.Context) error {
 	filePath := ctx.Request().URL.Path
+
+	log.Println("In GetFile:", filePath)
+
 	data, err := ioutil.ReadFile(filePath)
 	if err != nil {
-		log.Println("Error In GetImage: ", err)
-		return ctx.ServeJSON(base.RespStatusAndData(400, err))
+		log.Println("Error In GetFile: ", err)
+		return ctx.ServeJSON(base.RespStatusAndData(400, err.Error()))
 	}
 
 	ctx.Response().WriteHeader(200)
