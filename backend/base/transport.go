@@ -2,10 +2,9 @@ package base
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"net/url"
-
-	"github.com/TechCatsLab/logging/logrus"
 
 	json "github.com/json-iterator/go"
 )
@@ -22,13 +21,13 @@ func Transport(req *http.Request) (int, string) {
 	// step 2
 	outReq.URL, err = url.Parse("http://localhost:9573/api/v1/user/upload")
 	if err != nil {
-		logrus.Error(err)
+		log.Println(err)
 		return 0, "0"
 	}
 
 	res, err := transport.RoundTrip(outReq)
 	if err != nil {
-		logrus.Error(err)
+		log.Println(err)
 		return 0, "0"
 	}
 

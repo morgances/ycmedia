@@ -2,11 +2,11 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/TechCatsLab/apix/http/server"
 	"github.com/TechCatsLab/apix/http/server/middleware"
-	"github.com/TechCatsLab/logging/logrus"
 	jwtgo "github.com/dgrijalva/jwt-go"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/morgances/ycmedia/backend/base/filter"
@@ -24,7 +24,7 @@ func main() {
 	ep.AttachMiddleware(middleware.NegroniJwtHandler("AdminTokenKey", filter.Skipper, nil, nil))
 
 	if err := ep.Start(router.Handler()); err != nil {
-		logrus.Fatal(err)
+		log.Fatal(err)
 	}
 
 	admin, err := NewAdminToken(1)

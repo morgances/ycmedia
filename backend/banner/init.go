@@ -2,19 +2,18 @@ package banner
 
 import (
 	"database/sql"
-
-	"github.com/morgances/ycmedia/backend/base"
-	"github.com/morgances/ycmedia/backend/base/filter"
+	"log"
 
 	"github.com/TechCatsLab/apix/http/server"
-	"github.com/TechCatsLab/logging/logrus"
 	isactive "github.com/morgances/ycmedia/backend/admin/http/filter"
 	"github.com/morgances/ycmedia/backend/banner/controller"
+	"github.com/morgances/ycmedia/backend/base"
+	"github.com/morgances/ycmedia/backend/base/filter"
 )
 
 func Register(r *server.Router, db *sql.DB, tokenKey string) error {
 	if r == nil {
-		logrus.Fatal("[InitRouter]: server is nil")
+		log.Fatal("[InitRouter]: server is nil")
 	}
 
 	c := controller.New(db)

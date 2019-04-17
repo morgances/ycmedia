@@ -7,9 +7,9 @@ package admin
 
 import (
 	"database/sql"
+	"log"
 
 	"github.com/TechCatsLab/apix/http/server"
-	log "github.com/TechCatsLab/logging/logrus"
 	httpAdmin "github.com/morgances/ycmedia/backend/admin/http"
 	isactive "github.com/morgances/ycmedia/backend/admin/http/filter"
 	admin "github.com/morgances/ycmedia/backend/admin/mysql"

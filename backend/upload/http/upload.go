@@ -7,11 +7,11 @@ package http
 
 import (
 	"io/ioutil"
+	"log"
 	"net/http"
 	"path"
 
 	"github.com/TechCatsLab/apix/http/server"
-	log "github.com/TechCatsLab/logging/logrus"
 	"github.com/morgances/ycmedia/backend/base"
 	"github.com/morgances/ycmedia/backend/base/constants"
 	"github.com/morgances/ycmedia/backend/upload/mysql"
@@ -25,7 +25,7 @@ type UploadController struct {
 // UploadOne single file upload
 func (u *UploadController) Upload(c *server.Context) error {
 	if c.Request().Method != "POST" {
-		log.Error("Request is not post method")
+		log.Println("Request is not post method")
 		return c.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, nil))
 	}
 
@@ -33,7 +33,7 @@ func (u *UploadController) Upload(c *server.Context) error {
 	userID := ctx.UID()
 
 	if userID == constants.InvalidUID {
-		log.Error("userID invalid")
+		log.Println("userID invalid")
 		return c.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, nil))
 	}
 
@@ -44,19 +44,19 @@ func (u *UploadController) Upload(c *server.Context) error {
 	}()
 
 	if err != nil {
-		log.Error(err)
+		log.Println(err)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, nil))
 	}
 
 	data, err := ioutil.ReadAll(file)
 	if err != nil {
-		log.Error(err)
+		log.Println(err)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, nil))
 	}
 
 	MD5Str, err := MD5(data)
 	if err != nil {
-		log.Error(err)
+		log.Println(err)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, nil))
 	}
 
@@ -67,7 +67,7 @@ func (u *UploadController) Upload(c *server.Context) error {
 	}
 
 	if err != mysql.ErrNoRows {
-		log.Error(err)
+		log.Println(err)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, nil))
 	}
 
@@ -76,13 +76,13 @@ func (u *UploadController) Upload(c *server.Context) error {
 
 	err = CopyFile(filePath, data)
 	if err != nil {
-		log.Error(err)
+		log.Println(err)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, nil))
 	}
 
 	err = mysql.Insert(u.SQLStore(), userID, filePath, MD5Str)
 	if err != nil {
-		log.Error(err)
+		log.Println(err)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, nil))
 	}
 	return ctx.ServeJSON(base.RespStatusAndData(http.StatusOK, u.BaseURL+filePath))

@@ -4,7 +4,6 @@ import (
 	"database/sql"
 
 	"github.com/TechCatsLab/apix/http/server"
-	"github.com/TechCatsLab/logging/logrus"
 	isactive "github.com/morgances/ycmedia/backend/admin/http/filter"
 	"github.com/morgances/ycmedia/backend/article/controller"
 	"github.com/morgances/ycmedia/backend/base"
