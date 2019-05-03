@@ -68,7 +68,7 @@ func (con Controller) GetTextById(ctx *server.Context) error {
 
 	log.Printf("In GetText: aid=%d\n", x.Aid)
 
-	if x.Aid < 1 {
+	if x.Aid < 0 {
 		log.Println("Error In GetText.DataCheck:", BadData)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, BadData))
 	}
@@ -83,9 +83,23 @@ func (con Controller) GetTextById(ctx *server.Context) error {
 }
 
 func (con Controller) GetNews(ctx *server.Context) error {
-	log.Println("Get A Request For News")
+	var x struct {
+		Page int `json:"page"`
+	}
 
-	articles, err := con.db.GetArticleOrderLimits("date", true, 0, 10)
+	err := ctx.JSONBody(&x)
+	if err != nil {
+		log.Println("Error In GetNews.JSONBody:", err)
+		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
+	}
+
+	log.Printf("In GetNews, Page=%d\n", x.Page)
+	if x.Page < 0 {
+		log.Println("Error In GetNews.DataCheck:", BadData)
+		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, BadData))
+	}
+
+	articles, err := con.db.GetArticleOrderLimits("date", true, 10*(x.Page-1), 10)
 	if err != nil {
 		log.Println("Error In GetNews.Mysql:", err)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))

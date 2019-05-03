@@ -50,7 +50,7 @@ func Register(r *server.Router, db *sql.DB, tokenKey string) error {
 	// r.Post("/api/v1/article/delete", c.Delete)
 	// r.Post("/api/v1/article/update", c.Update)
 
-	r.Get("/api/v1/article/news", c.GetNews)
+	r.Post("/api/v1/article/news", c.GetNews)
 	r.Post("/api/v1/article/getlist", c.GetArticleList)
 	r.Post("/api/v1/article/gettext", c.GetTextById)
 	r.Post("/api/v1/article/getmore", c.GetMore)
