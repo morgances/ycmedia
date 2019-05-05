@@ -7,26 +7,26 @@ export default {
       {
         title: '公益性文化产品',
         listName: 'product',
-        tag: 0,
-        page: 0,
-        category: 0,
-        isLoad: 0
+        tag: '公益性文化产品',
+        page: 1,
+        category: '文化品牌',
+        isLoad: 0,
       },
       {
         title: '公益性文化活动',
         listName: 'activity',
-        tag: 0,
-        page: 0,
-        category: 0,
-        isLoad: 0
+        tag: '公益性文化活动',
+        page: 1,
+        category: '文化品牌',
+        isLoad: 0,
       },
       {
         title: '中华优秀传统文化与民族文化',
         listName: 'culture',
-        tag: 0,
-        page: 0,
-        category: 0,
-        isLoad: 0
+        tag: '中华优秀传统文化与民族文化',
+        page: 1,
+        category: '文化品牌',
+        isLoad: 0,
       }
     ],
     focus: 0,
@@ -38,6 +38,9 @@ export default {
   effects: {
     *refresh({ payload }, { put, select }) { // 下拉刷新
       const { articleList, focus } = yield select(state => state[`${payload.nameSpace}`])
+      if (articleList.length === 0) {
+        return 'noMore'
+      }
       const { data, status } = yield getMore({
         category: articleList[0].category,
         tag: articleList[0].tag,
@@ -51,21 +54,25 @@ export default {
             focus
           }
         })
+        return true
+      } else if (status === 200 && data.data.length == 0) {
+        return 'noMore'
+      } else {
+        return false
       }
-      return data.data
     },
     *get({ payload }, { put, select }) { // 获取数据
       const { title, focus } = yield select(state => state[`${payload.nameSpace}`])
       const requestPayload = title[focus]
       const { data, status } = yield getList({
         category: requestPayload.category,
-        page: 0,
-        tag: requestPayload.tag
+        page: 1,
+        tag: requestPayload.tag,
       })
       data.data.map((item) => {
         item.time = item.date.slice(0, 10)
       })
-      if (status == 200) {
+      if (status === 200 && data.status === 200 && data.data.length > 0) {
         yield put({
           type: 'Get',
           payload: {
@@ -86,7 +93,7 @@ export default {
         const { data } = yield getList({
           category: focus.category,
           tag: focus.tag,
-          page: 0
+          page: 1
         })
         data.data.map((item) => {
           item.time = item.date.slice(0, 10)

@@ -15,7 +15,7 @@ class News extends React.Component {
     super(props)
     this.state = {
       isRefreshing: false,
-      loadMore: 0,
+      loadMore: false,
       isLoading: true
     }
   }
@@ -25,10 +25,10 @@ class News extends React.Component {
     dispatch({
       type: `culture_news/get`,
       payload: {
-        category: 0,
-        tag: 0,
-        page: 0,
-        lable: 0,
+        category: '文化资讯',
+        tag: '文化动态',
+        page: 1,
+        lable: "",
         nameSpace: 'culture_news'
       }
     })
@@ -67,30 +67,24 @@ class News extends React.Component {
     let contentHeight = event.nativeEvent.contentSize.height;
     if (y + height >= contentHeight - 30) {
       this.setState({
-        loadMore: 1
+        loadMore: true
       });
       const { dispatch } = this.props
-      const { data } = await dispatch({
+      const data  = await dispatch({
         type: `culture_news/loadMore`,
         payload: {
-          category: 0,
-          tag: 0,
+          category: '文化资讯',
+          tag: '文化动态',
           nameSpace: 'culture_news'
         }
       })
-      if (data.length == 0) {
-        this.setState({
-          loadMore: 2
-        })
-      } else {
-        this.setState({
-          loadMore: 0
-        })
-      }
+      this.setState({
+        loadMore: data
+      })
     } else {
       this.setState({
-        loadMore: 0
-      });
+        loadMore: false
+      })
     }
   }
 
@@ -118,16 +112,22 @@ class News extends React.Component {
             null
         }
         {
-          this.props.articleList.length > 0 ? 
+          this.props.articleList.length > 0 && this.state.isLoading === false ? 
             <View>
               <WingBlank size="lg">
                 <Item data={this.props} navigation={this.props.navigation}></Item>
               </WingBlank>
             </View>
             : 
-            <NoData></NoData>
+            null
         }
-        {this.state.loadMore > 0 ? <Loadmore data={ this.state.loadMore }></Loadmore> : null }
+        {
+          this.props.articleList.length === 0 && this.state.isLoading === false ? 
+            <NoData></NoData>
+            : 
+            null
+        }
+        { this.state.loadMore  ? <Loadmore data={ this.state.loadMore }></Loadmore> : null }
       </ScrollView>
     )
   }

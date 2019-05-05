@@ -4,45 +4,50 @@ export default {
   namespace: 'culture_free',
   state: {
     articleList: [],
-    page: 0
+    page: 1
   },
   effects: {
     *refresh({ payload }, { put, select }) {
       const { articleList } = yield select(state => state[`${payload.nameSpace}`])
       const { data, status } = yield getMore({
-        category: 0,
-        tag: 3,
+        category: '文化动态',
+        tag: '免费开放',
         date: articleList[0].date
       })
-      if (status == 200 && data.data.length > 0) {
+      if (data.status == 200 && data.data.length > 0 && status === 200) {
         yield put({
           type: 'Refresh',
           payload: data.data
         })
+        return true
+      } else if (data.status === 200 && data.data.length === 0 && status === 200) {
+        return 'noMore'
       }
-      return data.data
+      return false
     },
     *get({ payload }, { put }) {
       const { data, status } = yield getList(payload)
+      console.log(data)
       data.data.map((item) => {
         item.time = item.date.slice(0, 10)
       })
-      if (status == 200) {
+      if (status === 200 && data.status === 200) {
         yield put({
           type: 'Get',
           payload: data.data
         })
+        return true
       }
-      return data.data
+      return false
     },
     *loadMore({ payload }, { put, select }) {
       const { page } = yield select(state => state[`${payload.nameSpace}`])
       const { data, status } = yield getList({
         category: payload.category,
-        tag: payload.category,
+        tag: payload.tag,
         page: page + 1
       })
-      if (status == 200 && data.data.length > 0) {
+      if (status === 200 && data.data.length > 0 && data.status === 200) {
         yield put({
           type: 'LoadMore',
           payload: {

@@ -6,14 +6,16 @@ class LoadMoreFooter extends Component {
   }
   render() {
     const { data } = this.props
-    if (data.isLoad != undefined || data != undefined) {
+    if (data) {
       return (
         <View style={styles.footer}>
-          <Text style={styles.footerTitle}>{data.isLoad == 2 || data == 2 ? '已经滑到底啦' : '正在加载更多……'}</Text>
+          <Text style={styles.footerTitle}>
+            { data === 'noMore' ? '已经滑到底啦' : '正在加载更多……' }
+          </Text>
         </View>
       )
     } else {
-      return ( null )
+      return null
     }
   }
 }

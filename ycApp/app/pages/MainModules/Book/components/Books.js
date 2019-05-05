@@ -25,9 +25,10 @@ class Books extends React.Component {
     dispatch({
       type: `book_books/get`,
       payload: {
-        category: 1,
-        tag: 2,
-        page: 0,
+        category: '书香银川',
+        tag: '好书推荐',
+        page: 1,
+        lable: "",
         nameSpace: 'book_books'
       }
     })

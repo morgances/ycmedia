@@ -25,10 +25,10 @@ class Policies extends React.Component {
     dispatch({
       type: `culture_policies/get`,
       payload: {
-        category: 0,
-        tag: 2,
-        page: 0,
-        lable: 0,
+        category: '文化资讯',
+        tag: '政策法规',
+        page: 1,
+        lable: "",
         nameSpace: 'culture_policies'
       }
     })

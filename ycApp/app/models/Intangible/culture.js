@@ -7,29 +7,29 @@ export default {
       {
         title: '文化遗址',
         listName: 'culture',
-        tag: 0,
-        page: 0,
-        category: 2,
+        tag: '文化遗产',
+        page: 1,
+        category: '遗脉相承',
         isLoad: 0,
-        lable: 0
+        label: '文化遗址'
       },
       {
         title: '文物鉴赏',
         listName: 'relics',
-        tag: 0,
-        page: 0,
-        category: 2,
+        tag: '文化遗产',
+        page: 1,
+        category: '遗脉相承',
         isLoad: 0,
-        lable: 1
+        label: '文物鉴赏'
       },
       {
         title: '文物保护',
         listName: 'portect',
-        tag: 0,
+        tag: '文化遗产',
         page: 0,
-        category: 2,
+        category: '遗脉相承',
         isLoad: 0,
-        lable: 2
+        label: '文物保护'
       }
     ],
     focus: 0,
@@ -42,6 +42,9 @@ export default {
   effects: {
     *refresh({ payload }, { put, select }) { // 下拉刷新
       const { articleList, focus } = yield select(state => state[`${payload.nameSpace}`])
+      if (articleList.length === 0) {
+        return 'noMore'
+      }
       const { data, status } = yield getMore({
         category: articleList[0].category,
         tag: articleList[0].tag,
@@ -55,22 +58,27 @@ export default {
             focus
           }
         })
+        return true
+      } else if (status === 200 && data.data.length == 0) {
+        return 'noMore'
+      } else {
+        return false
       }
-      return data.data
     },
     *get({ payload }, { put, select }) { // 获取数据
       const { title, focus } = yield select(state => state[`${payload.nameSpace}`])
       const requestPayload = title[focus]
+      console.log(requestPayload, 'requestPayload')
       const { data, status } = yield getList({
         category: requestPayload.category,
-        page: 0,
+        page: 1,
         tag: requestPayload.tag,
-        lable: requestPayload.lable
+        label: requestPayload.label
       })
       data.data.map((item) => {
         item.time = item.date.slice(0, 10)
       })
-      if (status == 200) {
+      if (status === 200 && data.status === 200 && data.data.length > 0) {
         yield put({
           type: 'Get',
           payload: {
@@ -86,14 +94,13 @@ export default {
     *change({ payload }, { put, select }) { // 切换子版块
       const { title } = yield select(state => state[`${payload.name}`])
       const focus = title[payload.index]
-      console.log(focus, 'effect Focus')
       const focusList = yield select(state => state[`${payload.name}`][`${focus.listName}`])
-      if (focusList.length == 0) {
+      if (focusList.length === 0) {
         const { data } = yield getList({
           category: focus.category,
           tag: focus.tag,
-          lable: focus.lable,
-          page: 0
+          label: focus.label,
+          page: 1
         })
         data.data.map((item) => {
           item.time = item.date.slice(0, 10)

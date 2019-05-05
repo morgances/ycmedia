@@ -6,7 +6,7 @@ import Styles from '../../../../res/Styles'
 export default class Web extends React.Component {
   render() {
     return (
-      <View style={{width:Styles.Width(), height: Styles.ScreenHeight - Styles.Height(195)}}>
+      <View style={{width:Styles.Width(), height: Styles.Height() - Styles.Height(185)}}>
         <WebView 
           bounces={false}
           scalesPageToFit={true}

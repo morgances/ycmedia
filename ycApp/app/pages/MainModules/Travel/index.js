@@ -49,9 +49,9 @@ class Main extends Component<{}> {
     dispatch({
       type: `travel/get`,
       payload: {
-        category: 0,
-        tag: 0,
-        page: 0,
+        category: '银川旅游',
+        tag: '',
+        page: 1,
         nameSpace: 'travel'
       }
     })
@@ -96,8 +96,8 @@ class Main extends Component<{}> {
       const { data } = await dispatch({
         type: `travel/loadMore`,
         payload: {
-          category: 0,
-          tag: 0,
+          category: '银川旅游',
+          tag: '',
           nameSpace: 'travel'
         }
       })
@@ -125,7 +125,7 @@ class Main extends Component<{}> {
         refreshControl={
           <RefreshControl
             refreshing={this.state.isRefreshing}
-            onRefresh={this._onRefreshing.bind(this, [this.props, 'culture_news'])}
+            onRefresh={this._onRefreshing.bind(this, [this.props, 'travel'])}
             titleColor="#00ff00"
             colors={[Colors.primary]}
             progressBackgroundColor="#ffffff"
@@ -140,17 +140,23 @@ class Main extends Component<{}> {
             :
             null
         }
-       {
-        this.props.articleList.length > 0 ? 
-          <View>
-            <WingBlank size="lg">
-              <Item data={this.props} navigation={this.props.navigation}></Item>
-            </WingBlank>
-          </View>
-          : 
-          <NoData></NoData>
+        {
+          this.props.articleList.length > 0 && this.state.isLoading === false ? 
+            <View>
+              <WingBlank size="lg">
+                <Item data={this.props} navigation={this.props.navigation}></Item>
+              </WingBlank>
+            </View>
+            : 
+            null
         }
-        {this.state.loadMore > 0 ? <Loadmore data={ this.state.loadMore }></Loadmore> : null }
+        {
+          this.props.articleList.length === 0 && this.state.isLoading === false ? 
+            <NoData></NoData>
+            : 
+            null
+        }
+        { this.state.loadMore > 0 ? <Loadmore data={ this.state.loadMore }></Loadmore> : null }
       </ScrollView>
     );
   }
