@@ -40,14 +40,6 @@ export default class Modules extends React.Component {
         </Flex>
         <Flex>
           <Flex.Item style={styles.module}>
-            <TouchableOpacity onPress={() => dispatch(Navigator.navigate('Travel'))}>
-              <View style={styles.viewFlex}>
-                <Image style={styles.image} source={require('../../../assets/images/Main/module_four.png')}></Image>
-                <Text style={styles.text}>银川旅游</Text>
-              </View>
-            </TouchableOpacity>
-          </Flex.Item>
-          <Flex.Item style={styles.module}>
             <TouchableOpacity onPress={() => dispatch(Navigator.navigate('Art'))}>
               <View style={styles.viewFlex}>
                 <Image style={styles.image} source={require('../../../assets/images/Main/module_five.png')}></Image>
@@ -55,16 +47,6 @@ export default class Modules extends React.Component {
               </View>
             </TouchableOpacity>
           </Flex.Item>
-          <Flex.Item style={styles.module}>
-            <TouchableOpacity onPress={() => dispatch(Navigator.navigate('Spending'))}>
-              <View style={styles.viewFlex}>
-                <Image style={styles.image} source={require('../../../assets/images/Main/module_six.png')}></Image>
-                <Text style={styles.text}>文化消费</Text>
-              </View>
-            </TouchableOpacity>
-          </Flex.Item>
-        </Flex>
-        <Flex>
           <Flex.Item style={styles.module}>
             <TouchableOpacity onPress={() => dispatch(Navigator.navigate('Brand'))}>
               <View style={styles.viewFlex}>
@@ -81,14 +63,32 @@ export default class Modules extends React.Component {
               </View>
             </TouchableOpacity>
           </Flex.Item>
-          <Flex.Item style={styles.module}>
+        </Flex>
+        <Flex>
+          {/* <Flex.Item style={styles.module}>
+            <TouchableOpacity onPress={() => dispatch(Navigator.navigate('Spending'))}>
+              <View style={styles.viewFlex}>
+                <Image style={styles.image} source={require('../../../assets/images/Main/module_six.png')}></Image>
+                <Text style={styles.text}>文化消费</Text>
+              </View>
+            </TouchableOpacity>
+          </Flex.Item> */}
+          {/* <Flex.Item style={styles.module}>
+            <TouchableOpacity onPress={() => dispatch(Navigator.navigate('Travel'))}>
+              <View style={styles.viewFlex}>
+                <Image style={styles.image} source={require('../../../assets/images/Main/module_four.png')}></Image>
+                <Text style={styles.text}>银川旅游</Text>
+              </View>
+            </TouchableOpacity>
+          </Flex.Item> */}
+          {/* <Flex.Item style={styles.module}>
             <TouchableOpacity onPress={() => dispatch(Navigator.navigate('Map'))}>
               <View style={styles.viewFlex}>
                 <Image style={styles.image} source={require('../../../assets/images/Main/module_nine.png')}></Image>
                 <Text style={styles.text}>文化地图</Text>
               </View>
             </TouchableOpacity>
-          </Flex.Item>
+          </Flex.Item> */}
         </Flex>
       </WingBlank>
     )

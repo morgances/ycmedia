@@ -26,7 +26,6 @@ export default {
       return true
     },
     *get({ payload }, { put }) {
-      console.log(payload)
       const { data, status } = yield getNews(payload)
       data.data.map((item) => {
         item.time = item.date.slice(0, 10)

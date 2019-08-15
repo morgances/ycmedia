@@ -1,4 +1,4 @@
-import React from 'react';
+ import React from 'react';
 import { View, ScrollView, RefreshControl, Image } from 'react-native';
 import { WingBlank, Flex } from 'antd-mobile-rn';
 import { connect } from 'react-redux';
@@ -47,6 +47,7 @@ class Display extends React.Component {
         isLoading: true,
       }
     })
+    console.log('+++')
     const focusModel = data.title[index]
     this.setState(() => {
       return {
