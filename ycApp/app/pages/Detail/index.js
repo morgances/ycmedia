@@ -30,7 +30,8 @@ class Detail extends Component<{}> {
   constructor() {
     super()
     this.state = {
-      isLoading: true
+      isLoading: true,
+      isError: false
     }
   }
 
@@ -46,6 +47,12 @@ class Detail extends Component<{}> {
     if (resp.length > 0) {
       this.setState({ 'isLoading': false })
     }
+    if (!resp) {
+      this.setState({
+        'isLoading': false,
+        'isError': true
+      })
+    }
   }
 
   render() {
@@ -55,7 +62,7 @@ class Detail extends Component<{}> {
         style={{backgroundColor: Colors.white}}
         >
         {
-          this.state.isLoading == false ? 
+          this.state.isLoading == false && this.state.isError == false ? 
           <WingBlank size="lg">
             <View style={[styles.container, {flex: 1}]}>
               <Text style={ styles.title }>{ this.props.article.title }</Text>
@@ -70,7 +77,17 @@ class Detail extends Component<{}> {
               <HTMLView style={ styles.article } value={ `${this.props.article.text}` }></HTMLView>
             </View>
           </WingBlank> : 
-          <Image source= { require('../../assets/images/th.gif') } style={ styles.gif }></Image>
+          null
+        }
+        {
+          this.state.isLoading == true ?
+          <Image source= { require('../../assets/images/th.gif') } style={ styles.gif }></Image> :
+          null
+        }
+        {
+          this.state.isError == true ?
+          <Text>啊偶，好像出了点问题</Text> : 
+          null
         }
       </ScrollView>
     );
@@ -91,7 +108,7 @@ const styles = StyleSheet.create({
   },
   article: {
     marginTop: Styles.Height(30),
-    fontSize: Size.medium
+    // fontSize: Size.medium
   },
   gif: {
     height: Styles.Height(400),

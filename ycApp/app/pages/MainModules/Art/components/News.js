@@ -25,9 +25,9 @@ class News extends React.Component {
     dispatch({
       type: `art_news/get`,
       payload: {
-        category: 0,
-        tag: 0,
-        page: 0,
+        category: '艺术空间',
+        tag: '艺术资讯',
+        page: 1,
         nameSpace: 'art_news'
       }
     })
@@ -72,8 +72,8 @@ class News extends React.Component {
       const { data } = await dispatch({
         type: `art_news/loadMore`,
         payload: {
-          category: 0,
-          tag: 0,
+          category: '艺术空间',
+          tag: '艺术资讯',
           nameSpace: 'art_news'
         }
       })
@@ -101,7 +101,7 @@ class News extends React.Component {
         refreshControl={
           <RefreshControl
             refreshing={this.state.isRefreshing}
-            onRefresh={this._onRefreshing.bind(this, [this.props, 'culture_news'])}
+            onRefresh={this._onRefreshing.bind(this, [this.props, 'art_news'])}
             titleColor="#00ff00"
             colors={[Colors.primary]}
             progressBackgroundColor="#ffffff"
@@ -117,14 +117,20 @@ class News extends React.Component {
             null
         }
         {
-          this.props.articleList.length > 0 ? 
+          this.props.articleList.length > 0 && this.state.isLoading === false ? 
             <View>
               <WingBlank size="lg">
                 <Item data={this.props} navigation={this.props.navigation}></Item>
               </WingBlank>
             </View>
             : 
+            null
+        }
+        {
+          this.props.articleList.length === 0 && this.state.isLoading === false ? 
             <NoData></NoData>
+            : 
+            null
         }
         {this.state.loadMore > 0 ? <Loadmore data={ this.state.loadMore }></Loadmore> : null }
       </ScrollView>

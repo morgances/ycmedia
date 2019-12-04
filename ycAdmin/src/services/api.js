@@ -1,15 +1,6 @@
-//import { stringify } from "qs";
 import request from "@/utils/request";
 import { setToken } from "./token";
 import { async } from "q";
-
-// export async function queryProjectNotice() {
-//   return request("/api/project/notice");
-// }
-
-// export async function queryActivities() {
-//   return request("/api/activities");
-// }
 
 export async function getArticleList(params) {
   return request("/api/v1/article/getall", {
@@ -70,38 +61,9 @@ export async function getPicture(params) {
   })
 }
 
-// export async function updateRule(params) {
-//   return request("/api/rule", {
-//     method: "POST",
-//     body: {
-//       ...params,
-//       method: "update"
-//     }
-//   });
-// }
-
-// export async function fakeSubmitForm(params) {
-//   return request("/api/forms", {
-//     method: "POST",
-//     body: params
-//   });
-// }
-
-// export async function fakeChartData() {
-//   return request("/api/fake_chart_data");
-// }
-
 export async function queryTags() {
   return request("/api/tags");
 }
-
-// export async function queryBasicProfile() {
-//   return request("/api/profile/basic");
-// }
-
-// export async function queryAdvancedProfile() {
-//   return request("/api/profile/advanced");
-// }
 
 export async function queryArticleList(params) {
   return request("/api/v1/article/getall", {
@@ -161,7 +123,6 @@ export async function addPictureList(params) {
 }
 
 export async function updateAritcleList(params) {
-  console.log(params,"params")
   return request("/api/v1/article/update", {
     method: "POST",
     body: {
@@ -202,10 +163,6 @@ export async function fakeAccountLogin(params) {
 //     method: "POST",
 //     body: params
 //   });
-// }
-
-// export async function queryNotices() {
-//   return request("/api/notices");
 // }
 
 export async function getFakeCaptcha(params) {

@@ -1,22 +1,25 @@
 import request from '../utils/request'
 
-export function getList({ category, tag, page, lable = 0 }) {
+export function getList({ category, tag, page, label = "" }) {
   return request({
     url: '/getlist',
     method: 'POST',
     data: {
       category,
       tag,
-      lable,
+      label,
       page
     }
   })
 }
 
-export function getNews() {
+export function getNews({ page }) {
   return request({
     url: '/news',
-    method: 'GET'
+    method: 'POST',
+    data: {
+      page
+    }
   })
 }
 

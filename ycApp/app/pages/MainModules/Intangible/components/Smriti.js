@@ -28,10 +28,10 @@ class Smriti extends React.Component {
     const { focusModel } = await dispatch({
       type: `intangible_smriti/get`,
       payload: {
-        category: 2,
+        category: '遗脉相承',
         index: 0,
-        tag: 1,
-        lable: 0,
+        tag: '非遗传承',
+        lable: '文化遗址',
         nameSpace: 'intangible_smriti',
       }
     })
@@ -139,11 +139,17 @@ class Smriti extends React.Component {
                 null
             }
             {
-              this.props.articleList.length > 0 ? 
+              this.props.articleList.length > 0 && this.state.isLoading === false ? 
                 <Item data={this.props} navigation={this.props.navigation}></Item>
-                : 
+                :
+                null
+            }
+            {
+              this.props.articleList.length === 0 && this.state.isLoading === false ? 
                 <NoData></NoData>
-              }
+                : 
+                null
+            }
           </WingBlank>
         </View>
         { this.state.isLoadingMore ? <Loadmore data={ this.state.focusModel }></Loadmore> : null }

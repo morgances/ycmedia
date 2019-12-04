@@ -25,9 +25,10 @@ class Service extends React.Component {
     dispatch({
       type: `book_service/get`,
       payload: {
-        category: 1,
-        tag: 0,
-        page: 0,
+        category: '书香银川',
+        tag: '服务指南',
+        page: 1,
+        lable: "",
         nameSpace: 'book_service'
       }
     })

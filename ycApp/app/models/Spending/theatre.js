@@ -7,26 +7,29 @@ export default {
       {
         title: '院团介绍',
         listName: 'troupes',
-        tag: 0,
-        page: 0,
-        category: 0,
-        isLoad: 0
+        tag: '艺术剧院',
+        page: 1,
+        category: '文化消费',
+        isLoad: 0,
+        label: '院团介绍'
       },
       {
         title: '剧目介绍',
         listName: 'play',
-        tag: 0,
-        page: 0,
-        category: 0,
-        isLoad: 0
+        tag: '艺术剧院',
+        page: 1,
+        category: '文化消费',
+        isLoad: 0,
+        label: '剧目介绍'
       },
       {
         title: '商业演出',
         listName: 'performance',
-        tag: 0,
-        page: 0,
-        category: 0,
-        isLoad: 0
+        tag: '艺术剧院',
+        page: 1,
+        category: '文化消费',
+        isLoad: 0,
+        label: '商业演出'
       }
     ],
     focus: 0,
@@ -38,6 +41,9 @@ export default {
   effects: {
     *refresh({ payload }, { put, select }) { // 下拉刷新
       const { articleList, focus } = yield select(state => state[`${payload.nameSpace}`])
+      if (articleList.length === 0) {
+        return 'noMore'
+      }
       const { data, status } = yield getMore({
         category: articleList[0].category,
         tag: articleList[0].tag,
@@ -51,21 +57,26 @@ export default {
             focus
           }
         })
+        return true
+      } else if (status === 200 && data.data.length == 0) {
+        return 'noMore'
+      } else {
+        return false
       }
-      return data.data
     },
     *get({ payload }, { put, select }) { // 获取数据
       const { title, focus } = yield select(state => state[`${payload.nameSpace}`])
       const requestPayload = title[focus]
       const { data, status } = yield getList({
         category: requestPayload.category,
-        page: 0,
-        tag: requestPayload.tag
+        page: 1,
+        tag: requestPayload.tag,
+        label: requestPayload.label
       })
       data.data.map((item) => {
         item.time = item.date.slice(0, 10)
       })
-      if (status == 200) {
+      if (status === 200 && data.status === 200 && data.data.length > 0) {
         yield put({
           type: 'Get',
           payload: {
@@ -86,7 +97,7 @@ export default {
         const { data } = yield getList({
           category: focus.category,
           tag: focus.tag,
-          page: 0
+          page: 1
         })
         data.data.map((item) => {
           item.time = item.date.slice(0, 10)

@@ -25,10 +25,10 @@ class Free extends React.Component {
     dispatch({
       type: `culture_free/get`,
       payload: {
-        category: 0,
-        tag: 3,
-        lable: 0,
-        page: 0,
+        category: '文化资讯',
+        tag: "免费开放",
+        lable: "",
+        page: 1,
         nameSpace: 'culture_free'
       }
     })

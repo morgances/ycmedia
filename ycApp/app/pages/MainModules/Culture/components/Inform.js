@@ -25,10 +25,10 @@ class Inform extends React.Component {
     dispatch({
       type: `culture_inform/get`,
       payload: {
-        category: 0,
-        tag: 1,
-        page: 0,
-        lable: 0,
+        category: '文化资讯',
+        tag: "通知公告",
+        page: 1,
+        lable: "",
         nameSpace: 'culture_inform'
       }
     })

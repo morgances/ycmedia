@@ -58,9 +58,9 @@ class AddText extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      cities: cityData[provinceData[0]],
+      cities: [],
       secondCity: cityData[provinceData[0]][0],
-      cities1: secondCityData[cityData[provinceData[0]][0]],
+      cities1: [],
       thirdCity: secondCityData[cityData[provinceData[0]][0]][0],
       fileList: [],
       previewVisible: false,
@@ -164,7 +164,7 @@ class AddText extends React.Component {
 
   selectMode(value) {
     this.setState({
-        selectMode: value
+      selectMode: value
     })
   }
 
@@ -329,6 +329,7 @@ class AddText extends React.Component {
           <FormItem label="文章标签" {...this.formLayout} >
             {getFieldDecorator("tag", {
             })(
+                tagData.length === 0 ? <Select disabled /> :
                 <Select 
                   placeholder="请选择"
                   onChange={this.onSecondCityChange}
@@ -338,9 +339,10 @@ class AddText extends React.Component {
                 </Select>
               )}
           </FormItem>
-          <FormItem label="文章label" {...this.formLayout}>
+          <FormItem label="文章标记" {...this.formLayout}>
             {getFieldDecorator("label", {
             })(
+                labelData.length === 0 ? <Select disabled /> :
                 <Select 
                   placeholder="请选择"
                   onChange={this.onThirdCityChange}

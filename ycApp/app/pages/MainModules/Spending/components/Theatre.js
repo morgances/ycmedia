@@ -28,8 +28,10 @@ class Theatre extends React.Component {
     const { focusModel } = await dispatch({
       type: `spending_theatre/get`,
       payload: {
-        category: 0,
+        category: '文化消费',
         index: 0,
+        tag: '艺术影院',
+        lable: '院团介绍',
         nameSpace: 'spending_theatre',
       }
     })
@@ -42,6 +44,11 @@ class Theatre extends React.Component {
   }
 
   _onChildChanged(index, data) {
+    this.setState(() => {
+      return {
+        isLoading: true,
+      }
+    })
     const focusModel = data.title[index]
     this.setState(() => {
       return {
@@ -111,7 +118,7 @@ class Theatre extends React.Component {
         refreshControl={
           <RefreshControl
             refreshing={this.state.isRefreshing}
-            onRefresh={this._onRefreshing.bind(this, [this.props, 'intangible_smriti'])}
+            onRefresh={this._onRefreshing.bind(this, [this.props, 'spending_theatre'])}
             titleColor="#00ff00"
             colors={[Colors.primary]}
             progressBackgroundColor="#ffffff"
@@ -134,8 +141,14 @@ class Theatre extends React.Component {
             {
               this.props.articleList.length > 0 ? 
                 <Item data={this.props} navigation={this.props.navigation}></Item>
-                : 
+                :
+                null
+            }
+            {
+              this.props.articleList.length === 0 && this.state.isLoading === false ? 
                 <NoData></NoData>
+                : 
+                null
             }
           </WingBlank>
         </View>

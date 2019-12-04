@@ -1,4 +1,4 @@
-import React from 'react';
+ import React from 'react';
 import { View, ScrollView, RefreshControl, Image } from 'react-native';
 import { WingBlank, Flex } from 'antd-mobile-rn';
 import { connect } from 'react-redux';
@@ -28,7 +28,7 @@ class Display extends React.Component {
     const { focusModel } = await dispatch({
       type: `art_display/get`,
       payload: {
-        category: 0,
+        category: '艺术空间',
         index: 0,
         nameSpace: 'art_display',
       }
@@ -42,6 +42,12 @@ class Display extends React.Component {
   }
 
   _onChildChanged(index, data) {
+    this.setState(() => {
+      return {
+        isLoading: true,
+      }
+    })
+    console.log('+++')
     const focusModel = data.title[index]
     this.setState(() => {
       return {
@@ -135,9 +141,15 @@ class Display extends React.Component {
               {
                 this.props.articleList.length > 0 ? 
                   <Item data={this.props} navigation={this.props.navigation}></Item>
-                  : 
+                  :
+                  null
+              }
+              {
+                this.props.articleList.length === 0 && this.state.isLoading === false ? 
                   <NoData></NoData>
-                }
+                  : 
+                  null
+              }
             </Flex>
           </WingBlank>
         </View>

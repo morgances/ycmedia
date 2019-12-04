@@ -28,10 +28,10 @@ class Culture extends React.Component {
     const { focusModel } = await dispatch({
       type: `intangible_culture/get`,
       payload: {
-        category: 2,
+        category: '遗脉相承',
         index: 0,
-        tag: 0,
-        lable: 0,
+        tag: '文化遗产',
+        lable: '文化遗址',
         nameSpace: 'intangible_culture',
       }
     })
@@ -44,8 +44,12 @@ class Culture extends React.Component {
   }
 
   _onChildChanged(index, data) {
+    this.setState(() => {
+      return {
+        isLoading: true,
+      }
+    })
     const focusModel = data.title[index]
-    console.log(this.props.articleList, 'article')
     this.setState(() => {
       return {
         focusModel: {
@@ -114,7 +118,7 @@ class Culture extends React.Component {
         refreshControl={
           <RefreshControl
             refreshing={this.state.isRefreshing}
-            onRefresh={this._onRefreshing.bind(this, [this.props, 'intangible_smriti'])}
+            onRefresh={this._onRefreshing.bind(this, [this.props, 'intangible_culture'])}
             titleColor="#00ff00"
             colors={[Colors.primary]}
             progressBackgroundColor="#ffffff"
@@ -137,8 +141,14 @@ class Culture extends React.Component {
             {
               this.props.articleList.length > 0 && this.state.isLoading === false ? 
                 <Item data={this.props} navigation={this.props.navigation}></Item>
-                : 
+                :
+                null
+            }
+            {
+              this.props.articleList.length === 0 && this.state.isLoading === false ? 
                 <NoData></NoData>
+                : 
+                null
             }
         </WingBlank>
         </View>

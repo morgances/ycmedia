@@ -31,9 +31,9 @@ class Exhibition extends Component<{}> {
     dispatch({
       type: `art_venues/get`,
       payload: {
-        category: 0,
-        tag: 0,
-        page: 0,
+        category: '艺术空间',
+        tag: '艺术场馆',
+        page: 1,
         nameSpace: 'art_venues'
       }
     })
@@ -78,8 +78,8 @@ class Exhibition extends Component<{}> {
       const { data } = await dispatch({
         type: `art_venues/loadMore`,
         payload: {
-          category: 0,
-          tag: 0,
+          category: '艺术空间',
+          tag: '艺术场馆',
           nameSpace: 'art_venues'
         }
       })
@@ -102,37 +102,43 @@ class Exhibition extends Component<{}> {
   render() {
     return (
       <ScrollView
-      showsVerticalScrollIndicator={false}
-      style={{backgroundColor: Colors.white}}
-      refreshControl={
-        <RefreshControl
-          refreshing={this.state.isRefreshing}
-          onRefresh={this._onRefreshing.bind(this, [this.props, 'culture_news'])}
-          titleColor="#00ff00"
-          colors={[Colors.primary]}
-          progressBackgroundColor="#ffffff"
-        />
-      }
-      onScroll={this._onLoadingMore.bind(this)}
-      scrollEventThrottle={200}
-    >
-      { 
-        this.state.isLoading == true ? 
-          <Image source= { require('../../../../assets/images/th.gif') } style={{ height: Styles.Height(400), width: Styles.Width() }}></Image>
-          :
-          null
-      }
-      {
-        this.props.articleList.length > 0 ? 
-          <View>
-            <WingBlank size="lg">
-              <Item data={this.props} navigation={this.props.navigation}></Item>
-            </WingBlank>
-          </View>
-          : 
-          <NoData></NoData>
+        showsVerticalScrollIndicator={false}
+        style={{backgroundColor: Colors.white}}
+        refreshControl={
+          <RefreshControl
+            refreshing={this.state.isRefreshing}
+            onRefresh={this._onRefreshing.bind(this, [this.props, 'art_venues'])}
+            titleColor="#00ff00"
+            colors={[Colors.primary]}
+            progressBackgroundColor="#ffffff"
+          />
         }
-        {this.state.loadMore > 0 ? <Loadmore data={ this.state.loadMore }></Loadmore> : null }
+        onScroll={this._onLoadingMore.bind(this)}
+        scrollEventThrottle={200}
+      >
+        { 
+          this.state.isLoading == true ? 
+            <Image source= { require('../../../../assets/images/th.gif') } style={{ height: Styles.Height(400), width: Styles.Width() }}></Image>
+            :
+            null
+        }
+        {
+          this.props.articleList.length > 0 && this.state.isLoading === false ? 
+            <View>
+              <WingBlank size="lg">
+                <Item data={this.props} navigation={this.props.navigation}></Item>
+              </WingBlank>
+            </View>
+            : 
+            null
+        }
+        {
+          this.props.articleList.length === 0 && this.state.isLoading === false ? 
+            <NoData></NoData>
+            : 
+            null
+        }
+        { this.state.loadMore > 0 ? <Loadmore data={ this.state.loadMore }></Loadmore> : null }
       </ScrollView>
     );
   }

@@ -37,7 +37,7 @@ func (con Controller) Add(ctx *server.Context) error {
 
 	log.Println("In AddArticle:", x)
 
-	err = con.db.AddArticle(x.Category, x.Tag, x.Label, x.Uid, x.Title, x.Author, x.Image, x.Text, x.Date)
+	err = con.db.AddArticle(x.Uid, x.Title, x.Author, x.Category, x.Tag, x.Label, x.Image, x.Text, x.Date)
 	if err != nil {
 		log.Println("Error In Mysql.AddArticle:", err)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))

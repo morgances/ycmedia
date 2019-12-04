@@ -28,8 +28,10 @@ class Culture extends React.Component {
     const { focusModel } = await dispatch({
       type: `city_culture/get`,
       payload: {
-        category: 0,
+        category: '凤城演绎',
         index: 0,
+        tag: '群众文化',
+        label: '群文活动',
         nameSpace: 'city_culture',
       }
     })
@@ -42,6 +44,11 @@ class Culture extends React.Component {
   }
 
   _onChildChanged(index, data) {
+    this.setState(() => {
+      return {
+        isLoading: true,
+      }
+    })
     const focusModel = data.title[index]
     this.setState(() => {
       return {
@@ -134,9 +141,15 @@ class Culture extends React.Component {
             {
               this.props.articleList.length > 0 ? 
                 <Item data={this.props} navigation={this.props.navigation}></Item>
-                : 
+                :
+                null
+            }
+            {
+              this.props.articleList.length === 0 && this.state.isLoading === false ? 
                 <NoData></NoData>
-              }
+                : 
+                null
+            }
           </WingBlank>
         </View>
         { this.state.isLoadingMore ? <Loadmore data={ this.state.focusModel }></Loadmore> : null }

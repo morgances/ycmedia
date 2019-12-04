@@ -10,12 +10,14 @@ export default {
       const { data } = yield getText({
         aid: payload.aid
       })
-      data.data[0].time = data.data[0].date.slice(0, 10)
-      if (data.status == 200 && data.data.length > 0) {
+      if (data.status === 200) {
+        data.data[0].time = data.data[0].date.slice(0, 10)
         yield put({
           type: 'Get',
           payload: data.data[0]
         })
+      } else {
+        return false
       }
       return data.data
     }

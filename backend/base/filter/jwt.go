@@ -115,5 +115,9 @@ func Skipper(path string) bool {
 		return true
 	}
 
+	if strings.HasPrefix(path, "/files") {
+		return true
+	}
+
 	return false
 }

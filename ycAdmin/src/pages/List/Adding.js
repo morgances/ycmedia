@@ -86,9 +86,9 @@ class Adding extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      cities: cityData[provinceData[0]],
+      cities: [],
       secondCity: cityData[provinceData[0]][0],
-      cities1: secondCityData[cityData[provinceData[0]][0]],
+      cities1: [],
       thirdCity: secondCityData[cityData[provinceData[0]][0]][0],
       previewVisible: false,
       previewImage: '',
@@ -401,6 +401,7 @@ class Adding extends React.Component {
             {getFieldDecorator('tag', {
               initialValue: this.props.rule.data.tag || '',
             })(
+              !this.props.rule.data.tag && tagData.length === 0 ? <Select disabled /> :
               <Select
                 onChange={this.onSecondCityChange}
                 getPopupContainer={triggerNode => triggerNode.parentNode}
@@ -409,10 +410,11 @@ class Adding extends React.Component {
               </Select>
             )}
           </FormItem>
-          <FormItem label="文章label" {...this.formLayout}>
+          <FormItem label="文章标记" {...this.formLayout}>
             {getFieldDecorator('label', {
               initialValue: this.props.rule.data.label || '',
             })(
+              !this.props.rule.data.label && labelData.length === 0 ? <Select disabled /> :
               <Select
                 onChange={this.onThirdCityChange}
                 getPopupContainer={triggerNode => triggerNode.parentNode}

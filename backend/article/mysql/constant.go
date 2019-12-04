@@ -13,9 +13,9 @@ const (
         create table if not exists ` + ArticleTableName + `(
         aid      int unsigned  auto_increment,
         user_id  int           not null,
-        category int           not null,
-        tag      int           not null,
-        label    int           not null,
+        category varchar(128)  not null,
+        tag      varchar(128)  not null,
+        label    varchar(128)  not null,
         title    varchar(128)  not null,
         author   varchar(128)  not null,
         date     datetime      not null,
@@ -42,9 +42,9 @@ article:
 type Article struct {
 	Aid      int       `json:"aid"`
 	Uid      int       `json:"user_id"`
-	Category int       `json:"category"`
-	Tag      int       `json:"tag"`
-	Label    int       `json:"label"`
+	Category string    `json:"category"`
+	Tag      string    `json:"tag"`
+	Label    string    `json:"label"`
 	Title    string    `json:"title"`
 	Author   string    `json:"author"`
 	Date     time.Time `json:"date"`

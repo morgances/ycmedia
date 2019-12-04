@@ -16,14 +16,6 @@ export default {
         payload: response
       });
     },
-    // *fetchPicture({ payload }, { call, put }) {
-    //   const response = yield call(queryPictureList, payload);
-    //   console.log(response, 'response')
-    //   yield put({
-    //     type: "savePicture",
-    //     payload: response.data
-    //   });
-    // },
     *add({ payload, callback }, { call, put }) {
       const response = yield call(addArticle, payload);
       yield put({

@@ -36,16 +36,16 @@ export default class Main extends Component<{}> {
   render() {
     const tabs = [
       {
-        title: '图书借阅'
+        title: '借阅'
       },
       {
-        title: '服务指南'
+        title: '指南'
       },
       {
-        title: '数字资源'
+        title: '资源'
       },
       {
-        title: '好书推荐'
+        title: '荐书'
       }
     ]
     return (

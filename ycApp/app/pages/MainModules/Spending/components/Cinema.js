@@ -25,9 +25,9 @@ class Cinema extends Component<{}> {
     dispatch({
       type: `spending_cinema/get`,
       payload: {
-        category: 0,
-        tag: 0,
-        page: 0,
+        category: '文化消费',
+        tag: '银川影院',
+        page: 1,
         nameSpace: 'spending_cinema'
       }
     }),
@@ -72,8 +72,8 @@ class Cinema extends Component<{}> {
       const { data } = await dispatch({
         type: `spending_cinema/loadMore`,
         payload: {
-          category: 0,
-          tag: 0,
+          category: '文化消费',
+          tag: '银川影院',
           nameSpace: 'spending_cinema'
         }
       })
@@ -117,14 +117,20 @@ class Cinema extends Component<{}> {
             null
         }
         {
-          this.props.articleList.length > 0 ? 
+          this.props.articleList.length > 0 && this.state.isLoading === false ? 
             <View>
               <WingBlank size="lg">
                 <Item data={this.props} navigation={this.props.navigation}></Item>
               </WingBlank>
             </View>
             : 
+            null
+        }
+        {
+          this.props.articleList.length === 0 && this.state.isLoading === false ? 
             <NoData></NoData>
+            : 
+            null
         }
         {this.state.loadMore > 0 ? <Loadmore data={ this.state.loadMore }></Loadmore> : null }
       </ScrollView>

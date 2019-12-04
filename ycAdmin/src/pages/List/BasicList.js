@@ -197,7 +197,7 @@ class BasicList extends PureComponent {
       {
         title: '文章类别',
         children: [{
-          title: '文章Tag',
+          title: '文章标签',
           dataIndex: 'tag',
           key: 'tag',
           ...this.getColumnSearchProps('tag'),
@@ -206,7 +206,7 @@ class BasicList extends PureComponent {
               {tag === "" ? "" : <Tag color="blue" key={tag}>{tag}</Tag>}
             </span>
         },{
-          title: '文章label',
+          title: '文章标记',
           dataIndex: 'label',
           key: 'label',
           ...this.getColumnSearchProps('label'),

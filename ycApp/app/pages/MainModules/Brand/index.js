@@ -52,8 +52,10 @@ class Brand extends Component<{}> {
     const { focusModel } = await dispatch({
       type: `brand/get`,
       payload: {
-        category: 0,
+        category: '文化品牌',
         index: 0,
+        tag: '',
+        label: '公益性文化产品',
         nameSpace: 'brand',
       }
     })
@@ -66,6 +68,11 @@ class Brand extends Component<{}> {
   }
 
   _onChildChanged(index, data) {
+    this.setState(() => {
+      return {
+        isLoading: true,
+      }
+    })
     const focusModel = data.title[index]
     this.setState(() => {
       return {
@@ -135,7 +142,7 @@ class Brand extends Component<{}> {
         refreshControl={
           <RefreshControl
             refreshing={this.state.isRefreshing}
-            onRefresh={this._onRefreshing.bind(this, [this.props, 'intangible_smriti'])}
+            onRefresh={this._onRefreshing.bind(this, [this.props, 'brand'])}
             titleColor="#00ff00"
             colors={[Colors.primary]}
             progressBackgroundColor="#ffffff"
@@ -158,8 +165,14 @@ class Brand extends Component<{}> {
             {
               this.props.articleList.length > 0 ? 
                 <Item data={this.props} navigation={this.props.navigation}></Item>
-                : 
+                :
+                null
+            }
+            {
+              this.props.articleList.length === 0 && this.state.isLoading === false ? 
                 <NoData></NoData>
+                : 
+                null
             }
           </WingBlank>
         </View>

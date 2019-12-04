@@ -39,14 +39,3 @@ export async function removeList(params) {
     }
   });
 }
-
-// export async function updateList(params) {
-//   const { count = 5, ...restParams } = params;
-//   return request(`/api/fake_list?count=${count}`, {
-//     method: 'POST',
-//     body: {
-//       ...restParams,
-//       method: 'update',
-//     },
-//   });
-// }

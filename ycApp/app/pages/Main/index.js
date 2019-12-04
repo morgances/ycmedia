@@ -40,7 +40,7 @@ class Main extends Component<{}> {
     super(props)
     this.state = {
       isRefreshing: false,
-      loadMore: 0
+      loadMore: false
     }
   }
 
@@ -49,10 +49,7 @@ class Main extends Component<{}> {
     dispatch({
       type: `home/get`,
       payload: {
-        category: 0,
-        tag: 0,
-        page: 0,
-        nameSpace: 'home'
+        page: 1,
       }
     })
   }
@@ -85,30 +82,22 @@ class Main extends Component<{}> {
     let contentHeight = event.nativeEvent.contentSize.height;
     if (y + height >= contentHeight - 30) {
       this.setState({
-        loadMore: 1
+        loadMore: true
       });
       const { dispatch } = this.props
-      const { data } = await dispatch({
+      const data = await dispatch({
         type: `home/loadMore`,
         payload: {
-          category: 0,
-          tag: 0,
           nameSpace: 'home'
         }
       })
-      if (data.length == 0) {
-        this.setState({
-          loadMore: 2
-        })
-      } else {
-        this.setState({
-          loadMore: 0
-        })
-      }
+      this.setState({
+        loadMore: data
+      })
     } else {
       this.setState({
-        loadMore: 0
-      });
+        loadMore: false
+      })
     }
   }
   
@@ -156,7 +145,7 @@ class Main extends Component<{}> {
                     : 
                     <Image source= { require('../../assets/images/th.gif') } style={{ height: Styles.Height(400), width: Styles.Width() }}></Image>
                   }          
-                {this.state.loadMore > 0 ? <Loadmore data={ this.state.loadMore }></Loadmore> : null }
+                { this.state.loadMore ? <Loadmore data={ this.state.loadMore }></Loadmore> : null }
               </WingBlank>
             </View>
           </View>

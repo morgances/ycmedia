@@ -25,9 +25,10 @@ class Resources extends React.Component {
     dispatch({
       type: `book_resources/get`,
       payload: {
-        category: 1,
-        tag: 1,
-        page: 0,
+        category: '书香银川',
+        tag: '数字资源',
+        page: 1,
+        lable: "",
         nameSpace: 'book_resources'
       }
     })
