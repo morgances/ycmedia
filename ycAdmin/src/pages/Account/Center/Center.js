@@ -25,42 +25,42 @@ export default class Center extends PureComponent {
       });
     }
 
-  renderActivities() {
-    const {
-      activities: { list },
-    } = this.props;
-    return list.map(item => {
-      const events = item.template.split(/@\{([^{}]*)\}/gi).map(key => {
-        if (item[key]) {
-          return (
-            <a href={item[key].link} key={item[key].name}>
-              {item[key].name}
-            </a>
-          );
-        }
-        return key;
-      });
-      return (
-        <List.Item key={item.id}>
-          <List.Item.Meta
-            avatar={<Avatar src={item.user.avatar} />}
-            title={
-              <span>
-                <a className={styles.username}>{item.user.name}</a>
-                &nbsp;
-                <span className={styles.event}>{events}</span>
-              </span>
-            }
-            description={
-              <span className={styles.datetime} title={item.updatedAt}>
-                {moment(item.updatedAt).fromNow()}
-              </span>
-            }
-          />
-        </List.Item>
-      );
-    });
-  }
+  // renderActivities() {
+  //   const {
+  //     activities: { list },
+  //   } = this.props;
+  //   return list.map(item => {
+  //     const events = item.template.split(/@\{([^{}]*)\}/gi).map(key => {
+  //       if (item[key]) {
+  //         return (
+  //           <a href={item[key].link} key={item[key].name}>
+  //             {item[key].name}
+  //           </a>
+  //         );
+  //       }
+  //       return key;
+  //     });
+  //     return (
+  //       <List.Item key={item.id}>
+  //         <List.Item.Meta
+  //           avatar={<Avatar src={item.user.avatar} />}
+  //           title={
+  //             <span>
+  //               <a className={styles.username}>{item.user.name}</a>
+  //               &nbsp;
+  //               <span className={styles.event}>{events}</span>
+  //             </span>
+  //           }
+  //           description={
+  //             <span className={styles.datetime} title={item.updatedAt}>
+  //               {moment(item.updatedAt).fromNow()}
+  //             </span>
+  //           }
+  //         />
+  //       </List.Item>
+  //     );
+  //   });
+  // }
 
   render() {
     const {
@@ -98,7 +98,7 @@ export default class Center extends PureComponent {
               loading={activitiesLoading}
             >
               <List loading={activitiesLoading} size="large">
-                <div className={styles.activitiesList}>{this.renderActivities()}</div>
+                {/* <div className={styles.activitiesList}>{this.renderActivities()}</div> */}
               </List>
             </Card>
       </PageHeaderWrapper>

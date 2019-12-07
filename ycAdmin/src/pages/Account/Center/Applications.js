@@ -1,7 +1,7 @@
 import React, { PureComponent } from "react";
 import { List, Card, Avatar } from "antd";
 import { connect } from "dva";
-import stylesApplications from "../../List/Applications.less";
+import stylesApplications from "./Applications.less";
 
 @connect(({ list }) => ({
   list
