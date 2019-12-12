@@ -3,7 +3,7 @@ package http
 import (
 	"io/ioutil"
 	"log"
-
+	"os"
 	"github.com/morgances/ycmedia/backend/base"
 
 	"github.com/TechCatsLab/apix/http/server"
@@ -11,7 +11,8 @@ import (
 
 func GetFile(ctx *server.Context) error {
 	filePath := ctx.Request().URL.Path
-	filePath = "." + filePath
+	pwd, _ := os.Getwd()
+	filePath = pwd + filePath
 	log.Println("In GetFile:", filePath)
 
 	data, err := ioutil.ReadFile(filePath)
