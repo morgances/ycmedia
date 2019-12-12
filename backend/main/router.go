@@ -19,11 +19,13 @@ var (
 
 func init() {
 	router = server.NewRouter()
-	uploadDB, err := sql.Open("mysql", "root:123456@tcp(172.17.0.3:3306)/article?charset=utf8mb4&parseTime=True&loc=Local")
+	// uploadDB, err := sql.Open("mysql", "root:123456@tcp(172.17.0.3:3306)/article?charset=utf8mb4&parseTime=True&loc=Local")
+	uploadDB, err := sql.Open("mysql", "root:123456@tcp(127.0.0.1:3306)/article?charset=utf8mb4&parseTime=True&loc=Local")
 	if err != nil {
 		log.Fatal(err)
 	}
-	upload.InitRouter(router, uploadDB, "http://39.98.162.91:9573/", "AdminTokenKey")
+	// upload.InitRouter(router, uploadDB, "http://39.98.162.91:9573/", "AdminTokenKey")
+	upload.InitRouter(router, uploadDB, "http://127.0.0.1:9573/", "AdminTokenKey")
 	admin.InitAdminRouter(router, uploadDB, "AdminTokenKey")
 	banner.Register(router, uploadDB, "AdminTokenKey")
 	article.Register(router, uploadDB, "AdminTokenKey")

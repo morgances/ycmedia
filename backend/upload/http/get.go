@@ -11,7 +11,7 @@ import (
 
 func GetFile(ctx *server.Context) error {
 	filePath := ctx.Request().URL.Path
-
+	filePath = "." + filePath
 	log.Println("In GetFile:", filePath)
 
 	data, err := ioutil.ReadFile(filePath)
