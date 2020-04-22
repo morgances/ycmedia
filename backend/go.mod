@@ -12,7 +12,10 @@ require (
 	github.com/json-iterator/go v1.1.8
 	github.com/leodido/go-urn v1.2.0 // indirect
 	github.com/rs/cors v1.7.0 // indirect
+	github.com/smartystreets/goconvey v1.6.4 // indirect
 	github.com/urfave/negroni v1.0.0 // indirect
 	golang.org/x/crypto v0.0.0-20191206172530-e9b2fee46413
+	google.golang.org/appengine v1.6.5 // indirect
+	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
 	gopkg.in/go-playground/validator.v9 v9.30.2 // indirect
 )

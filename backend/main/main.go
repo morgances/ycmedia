@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"net/http"
 	"time"
 
 	"github.com/TechCatsLab/apix/http/server"
@@ -20,6 +21,7 @@ func main() {
 	ep := server.NewEntrypoint(serverConfig, nil)
 	ep.AttachMiddleware(middleware.NegroniRecoverHandler())
 	ep.AttachMiddleware(middleware.NegroniCorsAllowAll())
+	ep.AttachMiddleware(new(cors))
 	// ep.AttachMiddleware(middleware.NegroniJwtHandler("UserTokenKey", nil, nil, nil))
 	ep.AttachMiddleware(middleware.NegroniJwtHandler("AdminTokenKey", filter.Skipper, nil, nil))
 
@@ -50,4 +52,13 @@ func NewAdminToken(userID uint) (string, error) {
 	})
 
 	return token.SignedString([]byte("AdminTokenKey")) //签名
+}
+
+type cors struct {}
+
+func (c *cors) ServeHTTP(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
+	headers := w.Header()
+	headers.Set("Access-Control-Allow-Origin", "*")
+	//fmt.Println("add cors")
+	next(w, r)
 }
