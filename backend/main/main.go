@@ -21,7 +21,7 @@ func main() {
 	ep := server.NewEntrypoint(serverConfig, nil)
 	ep.AttachMiddleware(middleware.NegroniRecoverHandler())
 	ep.AttachMiddleware(middleware.NegroniCorsAllowAll())
-	ep.AttachMiddleware(new(cors))
+	//ep.AttachMiddleware(new(cors))
 	// ep.AttachMiddleware(middleware.NegroniJwtHandler("UserTokenKey", nil, nil, nil))
 	ep.AttachMiddleware(middleware.NegroniJwtHandler("AdminTokenKey", filter.Skipper, nil, nil))
 
@@ -54,13 +54,13 @@ func NewAdminToken(userID uint) (string, error) {
 	return token.SignedString([]byte("AdminTokenKey")) //签名
 }
 
-type cors struct {}
-
-func (c *cors) ServeHTTP(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
-	headers := w.Header()
-	origin := r.Header.Get("Origin")
-
-	headers.Set("Access-Control-Allow-Origin", origin)
-	//fmt.Println("add cors")
-	next(w, r)
-}
+//type cors struct {}
+//
+//func (c *cors) ServeHTTP(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
+//	headers := w.Header()
+//	origin := r.Header.Get("Origin")
+//	fmt.Println(origin)
+//	headers.Set("Access-Control-Allow-Origin", origin)
+//	//fmt.Println("add cors")
+//	next(w, r)
+//}
