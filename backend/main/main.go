@@ -58,7 +58,9 @@ type cors struct {}
 
 func (c *cors) ServeHTTP(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
 	headers := w.Header()
-	headers.Set("Access-Control-Allow-Origin", "*")
+	origin := r.Header.Get("Origin")
+
+	headers.Set("Access-Control-Allow-Origin", origin)
 	//fmt.Println("add cors")
 	next(w, r)
 }
