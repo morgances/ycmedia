@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"log"
-	"net/http"
 	"time"
 
 	"github.com/TechCatsLab/apix/http/server"
