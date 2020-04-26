@@ -1,6 +1,6 @@
 // use localStorage to store the authority info, which might be sent from server in actual project.
 export function getAuthority(str) {
-  return localStorage.getItem('antd-pro-authority');
+  // return localStorage.getItem('antd-pro-authority');
   const authorityString =
     typeof str === "undefined"
       ? localStorage.getItem("antd-pro-authority")

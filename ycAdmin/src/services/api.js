@@ -1,5 +1,4 @@
 import request from "@/utils/request";
-import { setToken } from "./token";
 import { async } from "q";
 
 export async function getArticleList(params) {
@@ -61,8 +60,14 @@ export async function getPicture(params) {
   })
 }
 
-export async function queryTags() {
-  return request("/api/tags");
+export async function uploadPicture(params) {
+  return request("/api/v1/upload", {
+    method: "POST",
+    body: {
+      ...params,
+      method: "post"
+    }
+  })
 }
 
 export async function queryArticleList(params) {
@@ -140,9 +145,8 @@ export async function updatePicture(params) {
   });
 }
 
-export async function fakeAccountLogin(params) {
+export async function AccountLogin(params) {
   console.log(params, "params")
-  //let resp = await request("/api/v1/admin/login", {
   return request("/api/v1/admin/login", {
     method: "POST",
     body: {
@@ -150,29 +154,11 @@ export async function fakeAccountLogin(params) {
     }
   });
 
-  // const { status } = resp;
-
-  // if ((status !== undefined) && (status === 0)){
-  //   setToken(resp.data.token)
-  //   return true
-  // }
-  // return false;
 }
 
-// export async function fakeRegister(params) {
-//   return request("/api/register", {
+// export async function getFakeCaptcha(params) {
+//   return request("/api/v1/admin/login", {
 //     method: "POST",
 //     body: params
 //   });
 // }
-
-export async function getFakeCaptcha(params) {
-  return request("/api/v1/admin/login", {
-    method: "POST",
-    body: params
-  });
-}
-
-export async function queryCurrent() {
-  return request('/api/currentUser');
-}

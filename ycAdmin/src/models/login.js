@@ -1,9 +1,10 @@
 import { routerRedux } from "dva/router";
 import { stringify } from "qs";
-import { fakeAccountLogin, getFakeCaptcha } from "@/services/api";
+import { AccountLogin, getFakeCaptcha } from "@/services/api";
 import { setAuthority } from "@/utils/authority";
 import { getPageQuery } from "@/utils/utils";
 import { reloadAuthorized } from "@/utils/Authorized";
+import { setToken } from "../services/token";
 
 export default {
   namespace: "login",
@@ -14,9 +15,7 @@ export default {
 
   effects: {
     *login({ payload }, { call, put }) {
-      const response = yield call(fakeAccountLogin, payload);
-      console.log(payload, 'payload')
-      console.log(response, 'loginRESP')
+      const response = yield call(AccountLogin, payload);
       yield put({
         type: "changeLoginStatus",
         payload: {
@@ -27,6 +26,11 @@ export default {
       if (response.status === 200) {
         window.location.href = "http://localhost:8000/list/basic-list";
         return;
+      }
+      const { status } = response;
+
+      if ((status !== undefined) && (status === 0)){
+        return setToken(response.data)
       }
     }
       // Login successfully

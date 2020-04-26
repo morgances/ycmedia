@@ -121,7 +121,6 @@ class AddText extends React.Component {
   };
 
   handleDone = () => {
-    // setTimeout(() => this.addBtn.blur(), 0);
     this.setState({
       done: false,
       visible: false
@@ -129,7 +128,6 @@ class AddText extends React.Component {
   };
 
   handleButtonCancel = () => {
-    // setTimeout(() => this.addBtn.blur(), 0);
     this.setState({
       visible: false
     });
@@ -139,7 +137,6 @@ class AddText extends React.Component {
     e.preventDefault();
     const { dispatch, form } = this.props;
     const { imageUrl } = this.state;
-    // setTimeout(() => this.addBtn.blur(), 0);
     form.validateFields((err, fieldsValue) => {
       if (!err) {
         const submitData = {
@@ -193,7 +190,7 @@ class AddText extends React.Component {
       },
       method: 'post',
       data: formData,
-      url: 'http://127.0.0.1:9573/api/v1/upload'
+      url: 'http://39.105.141.168:9573/api/v1/upload'
     }).then(res => {
       if(fileList.length === 1) {
         let imgurl = res.data.data

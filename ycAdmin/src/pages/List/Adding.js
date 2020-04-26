@@ -238,7 +238,7 @@ class Adding extends React.Component {
       },
       method: 'post',
       data: formData,
-      url: 'http://127.0.0.1:9573/api/v1/upload',
+      url: 'http://39.105.141.168:9573/api/v1/upload',
     }).then(
       res => {
         if (fileList.length === 1) {

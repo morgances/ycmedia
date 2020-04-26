@@ -3,7 +3,7 @@ import { notification } from "antd";
 import router from "umi/router";
 import hash from "hash.js";
 import { isAntdPro } from "./utils";
-import { getText } from "@/services/api";
+import { getToken } from "../services/token";
 
 const codeMessage = {
   200: "服务器成功返回请求的数据。",
@@ -57,7 +57,7 @@ const cachedSave = (response, hashcode) => {
   return response;
 };
 
-const baseURL = 'http://127.0.0.1:9573'
+const baseURL = 'http://39.105.141.168:9573'
 /**
  * Requests a URL, returning a promise.
  *
@@ -81,7 +81,7 @@ export default function request(url, option) {
     .digest("hex");
 
   const defaultOptions = {
-    credentials: "include"
+    // credentials: "include"
   };
   const newOptions = { ...defaultOptions, ...options };
   if (
@@ -90,11 +90,17 @@ export default function request(url, option) {
     newOptions.method === "DELETE"
   ) {
     if (!(newOptions.body instanceof FormData)) {
+      let token = getToken()
       newOptions.headers = {
         Accept: "application/json",
         "Content-Type": "application/json; charset=utf-8",
         ...newOptions.headers
       };
+
+      if (token) {
+        newOptions.headers['token'] = token;
+      }
+
       newOptions.body = JSON.stringify(newOptions.body);
     } else {
       // newOptions.body is FormData

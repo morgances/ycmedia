@@ -6,7 +6,6 @@ import {
   addPictureList,
   queryPictureList,
   removeBanner,
-  getPictureList,
   getPicture,
   updatePicture
 } from "@/services/api";

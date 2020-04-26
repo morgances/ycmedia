@@ -1,4 +1,4 @@
-import { getArticleList, removeArticle, removeBanner, addArticle, getText, getPicture, getPictureList } from "@/services/api";
+import { getArticleList, removeArticle, removeBanner, addArticle, getText, getPicture, getPictureList, uploadPicture } from "@/services/api";
 import { routerRedux } from 'dva/router'
 
 export default {
@@ -69,6 +69,13 @@ export default {
     }
     if (callback) callback();
   },
+  *upload({ payload }, { call, put }) {
+    const response = yield call(uploadPicture, payload);
+    yield put({
+      type: "upload",
+      payload: response
+    });
+  },
 
   reducers: {
     save(state, { payload }) {
@@ -99,6 +106,12 @@ export default {
       return {
         ...state,
         data: payload,
+      };
+    },
+    upload(state, { payload }) {
+      return {
+        ...state,
+        data: payload
       };
     },
   }

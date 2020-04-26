@@ -104,7 +104,7 @@ class LoginPage extends Component {
               }
             />
           </Tab>
-          <Tab
+          {/* <Tab
             key="mobile"
             tab={formatMessage({ id: "app.login.tab-login-mobile" })}
           >
@@ -156,7 +156,7 @@ class LoginPage extends Component {
                 }
               ]}
             />
-          </Tab>
+          </Tab> */}
           <div>
             <Checkbox checked={autoLogin} onChange={this.changeAutoLogin}>
               <FormattedMessage id="app.login.remember-me" />

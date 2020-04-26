@@ -40,8 +40,7 @@ class DynamicPost extends Component {
     }
     dispatch({
       type: "list/fetch",
-      payload: {
-      }
+      payload: {}
     });
   };
 
@@ -137,6 +136,11 @@ class DynamicPost extends Component {
 
   //上传图片
   handleChange = (info) => {
+    const { dispatch } = this.props;
+    // dispatch({
+    //   type: "rule/upload",
+    //   payload: {}
+    // });
     let fileList = info.fileList;
     this.setState({ fileList });
     console.log('info',info)
@@ -160,7 +164,7 @@ class DynamicPost extends Component {
       },
       method: 'post',
       data: formData,
-      url: 'http://127.0.0.1:9573/api/v1/upload'
+      url: 'http://39.105.141.168:9573/api/v1/upload'
     }).then(res => {
       if(fileList.length === 1) {
         let imgurl = res.data.data
