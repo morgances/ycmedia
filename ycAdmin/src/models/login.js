@@ -23,14 +23,15 @@ export default {
         }
       });
       console.log(response, "response")
-      if (response.status === 200) {
-        window.location.href = "http://localhost:8000/list/basic-list";
-        return;
-      }
       const { status } = response;
 
       if ((status !== undefined) && (status === 0)){
         return setToken(response.data)
+      }
+      console.log(setToken(response.data))
+      if (response.status === 200) {
+        window.location.href = "http://localhost:8000/list/basic-list";
+        return;
       }
     }
       // Login successfully

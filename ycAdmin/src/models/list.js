@@ -61,7 +61,6 @@ export default {
         callback = addPictureList;
       }
       const response = yield call(callback, payload);
-      console.log(response,"-----------")
       if(response === undefined) {
         router.push("/exception/500")
       }

@@ -91,20 +91,21 @@ export default function request(url, option) {
   ) {
     if (!(newOptions.body instanceof FormData)) {
       let token = getToken()
+      console.log(token, "request, token")
       newOptions.headers = {
+        Authorization: `Bearer ${token}`,
         Accept: "application/json",
         "Content-Type": "application/json; charset=utf-8",
         ...newOptions.headers
       };
 
-      if (token) {
-        newOptions.headers['token'] = token;
-      }
-
       newOptions.body = JSON.stringify(newOptions.body);
     } else {
       // newOptions.body is FormData
+      let token = getToken()
+      console.log(token, "request, token")
       newOptions.headers = {
+        Authorization: `Bearer ${token}`,
         Accept: "application/json",
         ...newOptions.headers
       };
