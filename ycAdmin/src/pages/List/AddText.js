@@ -186,7 +186,8 @@ class AddText extends React.Component {
     formData.append('file', info.file, info.file.name)
     Axios({
       headers: {
-        'Content-Type':'multipart/form-data'
+        'Content-Type':'multipart/form-data',
+        Authorization: `Bearer ${token}`
       },
       method: 'post',
       data: formData,
