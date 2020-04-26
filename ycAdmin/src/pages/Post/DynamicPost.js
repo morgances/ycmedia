@@ -47,7 +47,6 @@ class DynamicPost extends Component {
   };
 
   deleteConfirm = BannerId => {
-    console.log(BannerId)
     const { dispatch } = this.props;
     dispatch({
       type: 'list/removePicture',
@@ -114,7 +113,6 @@ class DynamicPost extends Component {
     const { dispatch, form } = this.props;
     const BannerId = current ? current.BannerId : '';
     // setTimeout(() => this.addBtn.blur(), 0);
-    console.log(imageUrl, "url")
     form.validateFields((err, fieldsValue) => {
       if (!err) {
         this.setState({
@@ -157,7 +155,6 @@ class DynamicPost extends Component {
     // if(!((isJPG || isPNG) && isLt1M)) {
     //   return false;
     // }
-    console.log(info.file, "info")
     let formData = new window.FormData()
     formData.append('file',info.file,info.file.name)
     // dispatch({
@@ -166,7 +163,6 @@ class DynamicPost extends Component {
     //     value
     //   },
     // });
-    console.log(formData, "what is formData")
     let token = getToken()
     Axios({
       headers: {
@@ -177,7 +173,6 @@ class DynamicPost extends Component {
       data: formData,
       url: 'http://39.105.141.168:9573/api/v1/upload'
     }).then(res => {
-      console.log(res, "what is res")
       if(fileList.length === 1) {
         let imgurl = res.data.data
         this.setState({
@@ -214,7 +209,6 @@ class DynamicPost extends Component {
       list: { list: { data } },
       rowKey
     } = this.props;
-    console.log(data, "data is?")
     const { previewVisible, modalVisible, visible, done, current = {}, imageUrl, fileList, previewImage } = this.state;
     const modalFooter = done
       ? { footer: null, onCancel: this.handleDone }

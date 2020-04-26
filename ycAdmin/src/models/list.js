@@ -64,7 +64,6 @@ export default {
     },
     *updateArticle({ payload }, { call, put }) {
       const response = yield call(updateAritcleList, payload);
-      console.log(payload,"payload")
       if (response.status !== 0) {
         return
       }
@@ -97,7 +96,6 @@ export default {
         type: "uploadPicture",
         payload: response
       })
-      console.log(payload, response, "upload resp")
     }
   },
 

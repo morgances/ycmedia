@@ -23,6 +23,8 @@ import 'braft-editor/dist/index.css';
 import Axios from 'axios';
 import { routerRedux } from 'dva/router';
 import styles from './Adding.less';
+import { getToken } from "../../services/token";
+
 
 const Option = Select.Option;
 const FormItem = Form.Item;
@@ -187,7 +189,6 @@ class Adding extends React.Component {
     const aid = Number(match.params.aid);
     setTimeout(() => this.addBtn.blur(), 0);
     form.validateFields((err, fieldsValue) => {
-      console.log(imageUrl,"image")
       if (!err) {
         const submitData = {
           text: fieldsValue.text.toHTML(),
@@ -231,8 +232,8 @@ class Adding extends React.Component {
     //   return false;
     // }
     const formData = new window.FormData();
+    let token = getToken()
     formData.append('file', info.file, info.file.name);
-    console.log(formData.append('file', info.file, info.file.name), "what is formData")
     Axios({
       headers: {
         'Content-Type': 'multipart/form-data',

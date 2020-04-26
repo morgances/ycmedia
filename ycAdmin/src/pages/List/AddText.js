@@ -10,6 +10,8 @@ import BraftEditor from 'braft-editor';
 import 'braft-editor/dist/index.css';
 import Axios from 'axios';
 import { routerRedux } from 'dva/router';
+import { getToken } from "../../services/token";
+
 
 const Option = Select.Option;
 const FormItem = Form.Item;
@@ -182,7 +184,7 @@ class AddText extends React.Component {
     //   return false;
     // }
     let formData = new window.FormData()
-    console.log(formData)
+    let token = getToken()
     formData.append('file', info.file, info.file.name)
     Axios({
       headers: {
