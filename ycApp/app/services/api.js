@@ -2,7 +2,7 @@ import request from '../utils/request'
 
 export function getList({ category, tag, page, label = "" }) {
   return request({
-    url: '/getlist',
+    url: '/article/getlist',
     method: 'POST',
     data: {
       category,
@@ -15,7 +15,7 @@ export function getList({ category, tag, page, label = "" }) {
 
 export function getNews({ page }) {
   return request({
-    url: '/news',
+    url: '/article/news',
     method: 'POST',
     data: {
       page
@@ -26,7 +26,7 @@ export function getNews({ page }) {
 
 export function getText({ aid }) {
   return request({
-    url: '/gettext',
+    url: '/article/gettext',
     method: 'POST',
     data: {
       aid
@@ -36,7 +36,7 @@ export function getText({ aid }) {
 
 export function getMore({ category, tag, date, lable }) {
   return request({
-    url: '/getmore',
+    url: '/article/getmore',
     method: 'POST',
     data: {
       category,

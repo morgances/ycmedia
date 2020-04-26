@@ -92,13 +92,13 @@ class News extends React.Component {
     return (
       <ScrollView
         showsVerticalScrollIndicator={false}
-        style={{backgroundColor: Colors.white}}
+        style={{backgroundColor: this.props.theme.background, marginTop: Styles.Height(10)}}
         refreshControl={
           <RefreshControl
             refreshing={this.state.isRefreshing}
             onRefresh={this._onRefreshing.bind(this, [this.props, 'culture_news'])}
             titleColor="#00ff00"
-            colors={[Colors.primary]}
+            colors={[this.props.theme.primary]}
             progressBackgroundColor="#ffffff"
           />
         }
@@ -107,7 +107,7 @@ class News extends React.Component {
       >
         { 
           this.state.isLoading == true ? 
-            <Image source= { require('../../../../assets/images/th.gif') } style={{ height: Styles.Height(400), width: Styles.Width() }}></Image>
+            <Image source= { require('../../../../assets/images/th.gif') } style={{ height: Styles.Height(400), width: Styles.Width() - 30 }}></Image>
             :
             null
         }
@@ -115,7 +115,7 @@ class News extends React.Component {
           this.props.articleList.length > 0 && this.state.isLoading === false ? 
             <View>
               <WingBlank size="lg">
-                <Item data={this.props} navigation={this.props.navigation}></Item>
+                <Item theme={this.props.theme} data={this.props} navigation={this.props.navigation}></Item>
               </WingBlank>
             </View>
             : 
@@ -133,6 +133,7 @@ class News extends React.Component {
   }
 }
 
-export default connect(({ culture_news }) => ({
+export default connect(({ culture_news, theme }) => ({
   ...culture_news,
+  ...theme,
 }))(News);

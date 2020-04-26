@@ -3,6 +3,7 @@ import { View, ScrollView, Text, StyleSheet, Image } from 'react-native';
 import { connect } from 'react-redux';
 import { WingBlank, Flex } from 'antd-mobile-rn';
 import HTMLView from 'react-native-htmlview';
+import { Appearance } from 'react-native-appearance';
 
 import Colors from '../../res/Colors'
 import Styles from '../../res/Styles'
@@ -13,12 +14,12 @@ class Detail extends Component<{}> {
   static navigationOptions = {
     title: '文章详情',
     headerStyle: {
-      backgroundColor: Colors.primary,
+      backgroundColor: Appearance.getColorScheme() == 'dark' ? '#333' : "#00b9a2",
       elevation: 0,
       shadowOpacity: 0,
       height: 44
     },
-    headerTintColor: Colors.white,
+    headerTintColor: '#fff',
     headerTitleStyle: {
       fontSize: Size.large,
       fontWeight: null,
@@ -27,8 +28,8 @@ class Detail extends Component<{}> {
     headerRight: <View />
   }
 
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
       isLoading: true,
       isError: false
@@ -59,22 +60,22 @@ class Detail extends Component<{}> {
     return (
       <ScrollView
         showsVerticalScrollIndicator={false}
-        style={{backgroundColor: Colors.white}}
+        style={{backgroundColor: this.props.theme.background}}
         >
         {
           this.state.isLoading == false && this.state.isError == false ? 
           <WingBlank size="lg">
             <View style={[styles.container, {flex: 1}]}>
-              <Text style={ styles.title }>{ this.props.article.title }</Text>
+              <Text style={{...styles.title, color: this.props.theme.title}}>{ this.props.article.title }</Text>
               <Flex style={ styles.instruction }>
                 <Flex.Item style={[{ flex: 1 }]}>
-                  <Text style={{ textAlign: 'left' }}>{ this.props.article.author }</Text>
+                  <Text style={{ textAlign: 'left', color: this.props.theme.subTitle }}>{ this.props.article.author }</Text>
                 </Flex.Item>
                 <Flex.Item style={[{ flex: 1 }]}>
-                  <Text style={{ textAlign: 'right' }}>{ this.props.article.time }</Text>
+                  <Text style={{ textAlign: 'right', color: this.props.theme.subTitle }}>{ this.props.article.time }</Text>
                 </Flex.Item>
               </Flex>
-              <HTMLView style={ styles.article } value={ `${this.props.article.text}` }></HTMLView>
+              <HTMLView style={styles.article} stylesheet={{ p: {color: this.props.theme.text, fontSize: Size.medium}, a: {color: this.props.theme.text}}} value={ `${this.props.article.text}` }></HTMLView>
             </View>
           </WingBlank> : 
           null
@@ -100,8 +101,7 @@ const styles = StyleSheet.create({
     paddingBottom: Styles.Height(20)
   },
   title: {
-    fontSize: Size.maxlarge,
-    color: Colors.black
+    fontSize: Size.large,
   },
   instruction: {
     marginTop: Styles.Height(15),
@@ -116,7 +116,8 @@ const styles = StyleSheet.create({
   }
 })
 
-export default connect(({ detail }) => ({
+export default connect(({ detail, theme }) => ({
   ...detail,
+  ...theme,
 }))(Detail);
 

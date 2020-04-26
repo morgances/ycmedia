@@ -5,10 +5,10 @@ class LoadMoreFooter extends Component {
     super(props);
   }
   render() {
-    const { data } = this.props
+    const { data, theme } = this.props
     if (data) {
       return (
-        <View style={styles.footer}>
+        <View style={{ ...styles.footer}}>
           <Text style={styles.footerTitle}>
             { data === 'noMore' ? '已经滑到底啦' : '正在加载更多……' }
           </Text>

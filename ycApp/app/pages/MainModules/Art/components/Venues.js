@@ -9,14 +9,13 @@ import { View, ScrollView, RefreshControl, Image } from 'react-native'
 import { WingBlank } from 'antd-mobile-rn';
 import { connect } from 'react-redux';
 
-import Colors from '../../../../res/Colors'
 import Styles from '../../../../res/Styles'
 import Item from '../../../../components/Item_instruction'
 import Loadmore from '../../../../components/LoadMore'
 import refresh_result from '../../../../components/Refresh_result'
 import NoData from '../../../../components/NoData'
 
-class Exhibition extends Component<{}> {
+class Exhibition extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -103,13 +102,13 @@ class Exhibition extends Component<{}> {
     return (
       <ScrollView
         showsVerticalScrollIndicator={false}
-        style={{backgroundColor: Colors.white}}
+        style={{backgroundColor: this.props.theme.background, marginTop: Styles.Height(10)}}
         refreshControl={
           <RefreshControl
             refreshing={this.state.isRefreshing}
             onRefresh={this._onRefreshing.bind(this, [this.props, 'art_venues'])}
             titleColor="#00ff00"
-            colors={[Colors.primary]}
+            colors={[this.props.theme.primary]}
             progressBackgroundColor="#ffffff"
           />
         }
@@ -126,7 +125,7 @@ class Exhibition extends Component<{}> {
           this.props.articleList.length > 0 && this.state.isLoading === false ? 
             <View>
               <WingBlank size="lg">
-                <Item data={this.props} navigation={this.props.navigation}></Item>
+                <Item theme={this.props.theme} data={this.props} navigation={this.props.navigation}></Item>
               </WingBlank>
             </View>
             : 
@@ -144,6 +143,7 @@ class Exhibition extends Component<{}> {
   }
 }
 
-export default connect(({ art_venues }) => ({
+export default connect(({ art_venues, theme }) => ({
   ...art_venues,
+  ...theme,
 }))(Exhibition);

@@ -12,13 +12,15 @@ export default (props) => {
     const list = props.data.articleList || props.data
     const listItems = list.map((item, index) => 
       <TouchableOpacity key={`${item.title}${index}`} onPress={() => dispatch(Navigator.navigate('Detail', { aid: item.aid }))}>
-        <View style={styles.content}>
-          <Image style={styles.content_image} source={{ uri: `${item.image}`, cache: 'force-cache' }}></Image>
-          <Text style={{ fontSize: FontSize.medium, color: Colors.black, marginLeft: Styles.Width(2) }}>
-            { item.title.length > 8 ? `${item.title.slice(0, 7)}...` : item.title }
-          </Text>
-          <View style={ styles.content_time_view}>
-            <Text style={ styles.content_time }>{item.time}</Text>
+        <View style={{ ...styles.content, backgroundColor: props.theme.containerbg }}>
+          <Image style={{ backgroundColor: props.theme.subTitle, ...styles.content_image}} source={{ uri: `${item.image}`, cache: 'force-cache' }}></Image>
+          <View style={{marginLeft: Styles.Width(8)}}>
+            <Text numberOfLines={1} style={{ fontSize: FontSize.medium, color: props.theme.title}}>
+              { item.title.length > 8 ? `${item.title.slice(0, 7)}...` : item.title }
+            </Text>
+          </View>
+          <View style={{...styles.content_time_view}}>
+            <Text style={{...styles.content_time, color: props.theme.subTitle}}>{item.time}</Text>
           </View>
         </View>
       </TouchableOpacity>
@@ -33,21 +35,20 @@ export default (props) => {
 const styles = StyleSheet.create({
   content: {
     paddingBottom: Styles.Height(10),
-    marginBottom: Styles.Height(16)
+    marginBottom: Styles.Height(16),
+    borderRadius: 6
   },
   content_image: {
     borderRadius: 6,
     width: Styles.Width(283),
     height: Styles.Height(201),
-    marginBottom: Styles.Height(17),
-    backgroundColor: Colors.gray
+    marginBottom: Styles.Height(10),
   },
   content_time_view: {
     marginTop: Styles.Height(4),
-    marginLeft: Styles.Width(2)
+    marginLeft: Styles.Width(8)
   },
   content_time: {
     fontSize: FontSize.xmedium,
-    color: Colors.gray3
   }
 })

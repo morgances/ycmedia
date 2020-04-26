@@ -3,7 +3,6 @@ import { View, ScrollView, RefreshControl, Image } from 'react-native';
 import { WingBlank } from 'antd-mobile-rn';
 import { connect } from 'react-redux';
 
-import Colors from '../../../../res/Colors'
 import Styles from '../../../../res/Styles'
 import Item from '../../../../components/Item_time'
 import Loadmore from '../../../../components/LoadMore'
@@ -98,13 +97,13 @@ class Free extends React.Component {
     return (
       <ScrollView
         showsVerticalScrollIndicator={false}
-        style={{backgroundColor: Colors.white}}
+        style={{backgroundColor: this.props.theme.background, marginTop: Styles.Height(10)}}
         refreshControl={
           <RefreshControl
             refreshing={this.state.isRefreshing}
             onRefresh={this._onRefreshing.bind(this, [this.props, 'culture_free'])}
             titleColor="#00ff00"
-            colors={[Colors.primary]}
+            colors={[this.props.theme.primary]}
             progressBackgroundColor="#ffffff"
           />
         }
@@ -113,7 +112,7 @@ class Free extends React.Component {
       >
         { 
           this.state.isLoading == true ? 
-            <Image source= { require('../../../../assets/images/th.gif') } style={{ height: Styles.Height(400), width: Styles.Width() }}></Image>
+            <Image source= { require('../../../../assets/images/th.gif') } style={{ height: Styles.Height(400), width: Styles.Width() - 30 }}></Image>
             :
             null
         }
@@ -121,7 +120,7 @@ class Free extends React.Component {
           this.props.articleList.length > 0 ? 
             <View>
               <WingBlank size="lg">
-                <Item data={this.props} navigation={this.props.navigation}></Item>
+                <Item theme={this.props.theme} data={this.props} navigation={this.props.navigation}></Item>
               </WingBlank>
             </View>
             : 
@@ -133,6 +132,7 @@ class Free extends React.Component {
   }
 }
 
-export default connect(({ culture_free }) => ({
+export default connect(({ culture_free, theme }) => ({
   ...culture_free,
+  ...theme,
 }))(Free);

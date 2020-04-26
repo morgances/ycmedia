@@ -7,6 +7,8 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
 import { Tabs } from 'antd-mobile-rn';
+import { connect } from 'react-redux';
+import { Appearance } from 'react-native-appearance';
 
 import Colors from '../../../res/Colors';
 import Size from '../../../res/Fonts/size'
@@ -16,16 +18,16 @@ import Inform from './components/Inform'
 import Policies from './components/Policies'
 import Free from './components/Free'
 
-export default class Main extends Component<{}> {
+class Main extends Component<{}> {
   static navigationOptions = {
     title: '文化资讯',
     headerStyle: {
-      backgroundColor: Colors.primary,
+      backgroundColor: Appearance.getColorScheme() == 'dark' ? '#333' : "#00b9a2",
       elevation: 0,
       shadowOpacity: 0,
       height: 44
     },
-    headerTintColor: Colors.white,
+    headerTintColor: '#fff',
     headerTitleStyle: {
       fontSize: Size.large,
       fontWeight: null,
@@ -49,15 +51,15 @@ export default class Main extends Component<{}> {
       }
     ]
     return (
-      <View style={{flex: 1}}>
+      <View style={{flex: 1, backgroundColor: this.props.theme.background}}>
         <Tabs 
-          tabBarBackgroundColor={Colors.primary}
+          tabBarBackgroundColor={this.props.theme.primary}
           tabBarPosition='top'
           tabs={tabs}
           initialPage={0}
-          tabBarActiveTextColor={Colors.white}
-          tabBarInactiveTextColor={Colors.black}
-          tabBarUnderlineStyle={{backgroundColor: Colors.white}}>
+          tabBarActiveTextColor={this.props.theme.textActive}
+          tabBarInactiveTextColor={this.props.theme.textInactive}
+          tabBarUnderlineStyle={{backgroundColor: this.props.theme.containerbg}}>
           <View>
             <News navigation={this.props.navigation}></News>
           </View>
@@ -75,3 +77,7 @@ export default class Main extends Component<{}> {
     );
   }
 }
+
+export default connect(({ theme }) => ({
+  ...theme
+}))(Main);

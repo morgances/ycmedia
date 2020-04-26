@@ -114,13 +114,13 @@ class Smriti extends React.Component {
     return (
       <ScrollView
         showsVerticalScrollIndicator={false}
-        style={{backgroundColor: Colors.white}}
+        style={{backgroundColor: this.props.theme.background, marginTop: Styles.Height(10)}}
         refreshControl={
           <RefreshControl
             refreshing={this.state.isRefreshing}
             onRefresh={this._onRefreshing.bind(this, [this.props, 'intangible_smriti'])}
             titleColor="#00ff00"
-            colors={[Colors.primary]}
+            colors={[this.props.theme.primary]}
             progressBackgroundColor="#ffffff"
           />
         }
@@ -130,17 +130,17 @@ class Smriti extends React.Component {
         <View>
           <WingBlank size="lg">
             <Flex style={{marginTop: Styles.Height(20)}} wrap="wrap" justify="around">
-              <Lists callbackParent={this._onChildChanged.bind(this)} data={this.props} name={'intangible_smriti'}></Lists>
+              <Lists theme={this.props.theme} callbackParent={this._onChildChanged.bind(this)} data={this.props} name={'intangible_smriti'}></Lists>
             </Flex>
             { 
               this.state.isLoading == true ? 
-                <Image source= { require('../../../../assets/images/th.gif') } style={{ height: Styles.Height(400), width: Styles.Width() }}></Image>
+                <Image source= { require('../../../../assets/images/th.gif') } style={{ height: Styles.Height(400), width: Styles.Width() - 30 }}></Image>
                 :
                 null
             }
             {
               this.props.articleList.length > 0 && this.state.isLoading === false ? 
-                <Item data={this.props} navigation={this.props.navigation}></Item>
+                <Item theme={this.props.theme} data={this.props} navigation={this.props.navigation}></Item>
                 :
                 null
             }
@@ -158,6 +158,7 @@ class Smriti extends React.Component {
   }
 }
 
-export default connect(({ intangible_smriti }) => ({
+export default connect(({ intangible_smriti, theme }) => ({
   ...intangible_smriti,
+  ...theme,
 }))(Smriti);

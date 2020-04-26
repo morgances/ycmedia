@@ -101,7 +101,7 @@ class Router extends React.PureComponent {
   render() {
     const { dispatch, router } = this.props;
     const navigation = addNavigationHelpers({ dispatch, state: router });
-    return <Navigator navigation={navigation} />;
+    return <Navigator navigation={navigation}/>;
   }
 }
 

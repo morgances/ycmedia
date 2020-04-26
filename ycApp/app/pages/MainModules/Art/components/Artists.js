@@ -104,13 +104,13 @@ class Artist extends Component<{}> {
     return (
       <ScrollView
         showsVerticalScrollIndicator={false}
-        style={{backgroundColor: Colors.white}}
+        style={{backgroundColor: this.props.theme.background, marginTop: Styles.Height(10)}}
         refreshControl={
           <RefreshControl
             refreshing={this.state.isRefreshing}
             onRefresh={this._onRefreshing.bind(this, [this.props, 'art_artists'])}
             titleColor="#00ff00"
-            colors={[Colors.primary]}
+            colors={[this.props.theme.primary]}
             progressBackgroundColor="#ffffff"
           />
         }
@@ -119,7 +119,7 @@ class Artist extends Component<{}> {
       >
         { 
           this.state.isLoading == true ? 
-            <Image source= { require('../../../../assets/images/th.gif') } style={{ height: Styles.Height(400), width: Styles.Width() }}></Image>
+            <Image source= { require('../../../../assets/images/th.gif') } style={{ height: Styles.Height(400), width: Styles.Width() - 30 }}></Image>
             :
             null
         }
@@ -127,7 +127,7 @@ class Artist extends Component<{}> {
           this.props.articleList.length > 0 && this.state.isLoading === false ? 
             <View>
               <WingBlank size="lg">
-                <Item data={this.props} navigation={this.props.navigation}></Item>
+                <Item theme={this.props.theme} data={this.props} navigation={this.props.navigation}></Item>
               </WingBlank>
             </View>
             : 
@@ -145,6 +145,7 @@ class Artist extends Component<{}> {
   }
 }
 
-export default connect(({ art_artists }) => ({
+export default connect(({ art_artists, theme }) => ({
   ...art_artists,
+  ...theme,
 }))(Artist);

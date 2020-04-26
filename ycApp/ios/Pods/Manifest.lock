@@ -1,0 +1,107 @@
+PODS:
+  - AMap3DMap (6.6.0):
+    - AMapFoundation (~> 1.5)
+  - AMapFoundation (1.6.3)
+  - boost-for-react-native (1.63.0)
+  - DoubleConversion (1.1.6)
+  - Folly (2016.10.31.00):
+    - boost-for-react-native
+    - DoubleConversion
+    - glog
+  - glog (0.3.5)
+  - React (0.57.8):
+    - React/Core (= 0.57.8)
+  - react-native-amap3d (1.1.1):
+    - AMap3DMap (~> 6.6.0)
+    - React
+  - react-native-appearance (0.3.3):
+    - React
+  - React/Core (0.57.8):
+    - yoga (= 0.57.8.React)
+  - React/CxxBridge (0.57.8):
+    - Folly (= 2016.10.31.00)
+    - React/Core
+    - React/cxxreact
+  - React/cxxreact (0.57.8):
+    - boost-for-react-native (= 1.63.0)
+    - Folly (= 2016.10.31.00)
+    - React/jschelpers
+    - React/jsinspector
+  - React/DevSupport (0.57.8):
+    - React/Core
+    - React/RCTWebSocket
+  - React/fishhook (0.57.8)
+  - React/jschelpers (0.57.8):
+    - Folly (= 2016.10.31.00)
+    - React/PrivateDatabase
+  - React/jsinspector (0.57.8)
+  - React/PrivateDatabase (0.57.8)
+  - React/RCTBlob (0.57.8):
+    - React/Core
+  - React/RCTNetwork (0.57.8):
+    - React/Core
+  - React/RCTText (0.57.8):
+    - React/Core
+  - React/RCTWebSocket (0.57.8):
+    - React/Core
+    - React/fishhook
+    - React/RCTBlob
+  - RNVectorIcons (6.6.0):
+    - React
+  - yoga (0.57.8.React)
+
+DEPENDENCIES:
+  - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
+  - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
+  - glog (from `../node_modules/react-native/third-party-podspecs/GLog.podspec`)
+  - react-native-amap3d (from `../node_modules/react-native-amap3d/lib/ios`)
+  - react-native-appearance (from `../node_modules/react-native-appearance`)
+  - React/Core (from `../node_modules/react-native`)
+  - React/CxxBridge (from `../node_modules/react-native`)
+  - React/DevSupport (from `../node_modules/react-native`)
+  - React/RCTNetwork (from `../node_modules/react-native`)
+  - React/RCTText (from `../node_modules/react-native`)
+  - React/RCTWebSocket (from `../node_modules/react-native`)
+  - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
+  - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
+
+SPEC REPOS:
+  trunk:
+    - AMap3DMap
+    - AMapFoundation
+    - boost-for-react-native
+
+EXTERNAL SOURCES:
+  DoubleConversion:
+    :podspec: "../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec"
+  Folly:
+    :podspec: "../node_modules/react-native/third-party-podspecs/Folly.podspec"
+  glog:
+    :podspec: "../node_modules/react-native/third-party-podspecs/GLog.podspec"
+  React:
+    :path: "../node_modules/react-native"
+  react-native-amap3d:
+    :path: "../node_modules/react-native-amap3d/lib/ios"
+  react-native-appearance:
+    :path: "../node_modules/react-native-appearance"
+  RNVectorIcons:
+    :path: "../node_modules/react-native-vector-icons"
+  yoga:
+    :path: "../node_modules/react-native/ReactCommon/yoga"
+
+SPEC CHECKSUMS:
+  AMap3DMap: 37425c7d47420cbfaee88328be3dc3781814b999
+  AMapFoundation: 9ed923193b357ebb30a073e9fe255d3c24054d5a
+  boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
+  DoubleConversion: bb338842f62ab1d708ceb63ec3d999f0f3d98ecd
+  Folly: c89ac2d5c6ab169cd7397ef27485c44f35f742c7
+  glog: e8acf0ebbf99759d3ff18c86c292a5898282dcde
+  React: adbac0757ce35e92fbd447ab98c810209d27d9b0
+  react-native-amap3d: 7ee6406ae17b263f4ae4bbb9eacd1bc53cc8bd4f
+  react-native-appearance: 98e4530857c366de634f58e5db91bf97feaa96ff
+  RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
+  yoga: 74cdf036c30820443b25ade59916236b1e95ee93
+
+PODFILE CHECKSUM: 8513aa8a4dec5957160e713fafdc6d47b3ae46d8
+
+COCOAPODS: 1.9.1

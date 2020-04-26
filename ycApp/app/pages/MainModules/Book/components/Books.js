@@ -98,13 +98,13 @@ class Books extends React.Component {
     return (
       <ScrollView
         showsVerticalScrollIndicator={false}
-        style={{backgroundColor: Colors.white}}
+        style={{backgroundColor: this.props.theme.background, marginTop: Styles.Height(10)}}
         refreshControl={
           <RefreshControl
             refreshing={this.state.isRefreshing}
             onRefresh={this._onRefreshing.bind(this, [this.props, 'book_books'])}
             titleColor="#00ff00"
-            colors={[Colors.primary]}
+            colors={[this.props.theme.primary]}
             progressBackgroundColor="#ffffff"
           />
         }
@@ -113,7 +113,7 @@ class Books extends React.Component {
       >
         { 
           this.state.isLoading == true ? 
-            <Image source= { require('../../../../assets/images/th.gif') } style={{ height: Styles.Height(400), width: Styles.Width() }}></Image>
+            <Image source= { require('../../../../assets/images/th.gif') } style={{ height: Styles.Height(400), width: Styles.Width() - 30 }}></Image>
             :
             null
         }
@@ -121,7 +121,7 @@ class Books extends React.Component {
           this.props.articleList.length > 0 ? 
             <View>
               <WingBlank size="lg">
-                <Item data={this.props} navigation={this.props.navigation}></Item>
+                <Item theme={this.props.theme} data={this.props} navigation={this.props.navigation}></Item>
               </WingBlank>
             </View>
             : 
@@ -133,6 +133,7 @@ class Books extends React.Component {
   }
 }
 
-export default connect(({ book_books }) => ({
+export default connect(({ book_books, theme }) => ({
   ...book_books,
+  ...theme,
 }))(Books);

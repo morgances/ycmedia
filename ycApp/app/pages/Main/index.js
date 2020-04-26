@@ -8,8 +8,9 @@ import React, { Component } from 'react';
 import { ScrollView, StatusBar, View, RefreshControl, Image, StyleSheet, Text } from 'react-native';
 import { connect } from 'react-redux';
 import { Flex, WingBlank } from 'antd-mobile-rn';
+import { Appearance } from 'react-native-appearance';
 
-import Colors from '../../res/Colors'
+import isDark from '../../res/Colors'
 import Size from '../../res/Fonts/size'
 import Styles from '../../res/Styles'
 
@@ -23,12 +24,12 @@ class Main extends Component<{}> {
   static navigationOptions = {
     title: '银川公共文化',
     headerStyle: {
-      backgroundColor: Colors.primary,
+      backgroundColor: Appearance.getColorScheme() == 'dark' ? '#333' : "#00b9a2",
       elevation: 0,
       shadowOpacity: 0,
       height: 44
     },
-    headerTintColor: Colors.white,
+    headerTintColor: '#fff',
     headerTitleStyle: {
       fontSize: Size.large,
       fontWeight: null,
@@ -40,18 +41,30 @@ class Main extends Component<{}> {
     super(props)
     this.state = {
       isRefreshing: false,
-      loadMore: false
+      loadMore: false,
     }
+  }
+
+  componentWillMount() {
+    const { dispatch } = this.props
+    const colorScheme = Appearance.getColorScheme();
+    const theme = isDark(colorScheme)
+    dispatch({
+      type: `theme/set`,
+      payload: {
+        theme,
+      }
+    })
   }
 
   componentDidMount() {
     const { dispatch } = this.props
-    dispatch({
-      type: `home/get`,
-      payload: {
-        page: 1,
-      }
-    })
+    // dispatch({
+    //   type: `home/get`,
+    //   payload: {
+    //     page: 1,
+    //   }
+    // })
   }
   
   async _onRefreshing(data) {
@@ -103,54 +116,54 @@ class Main extends Component<{}> {
   
   render() {
     return (
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        style={{backgroundColor: Colors.white}}
-        refreshControl={
-          <RefreshControl
-            refreshing={this.state.isRefreshing}
-            onRefresh={this._onRefreshing.bind(this, [this.props, 'home'])}
-            titleColor="#00ff00"
-            colors={[Colors.primary]}
-            progressBackgroundColor="#ffffff"
-          />
-        }
-        onScroll={this._onLoadingMore.bind(this)}
-        scrollEventThrottle={200}
-      >
-        <StatusBar  
-          animated={true}
-          hidden={false}  
-          backgroundColor={Colors.primary} 
-          translucent={false}
-          barStyle={'light-content'}
-        >  
-        </StatusBar>
-        <View style={{backgroundColor: '#f2f3f5'}}>
-          <Carousel></Carousel>
-          <Modules navigation={this.props.navigation}></Modules>
-          <View style={styles.news}>
-            <View style={styles.news_header}>
-              <Flex wrap='wrap' justify="center">
-                <Text style={{ fontSize: Size.xlarge }}>最新资讯</Text>
-              </Flex>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={{backgroundColor: this.props.theme.background}}
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.isRefreshing}
+              onRefresh={this._onRefreshing.bind(this, [this.props, 'home'])}
+              titleColor={this.props.theme.title}
+              colors={["#00b9a2"]}
+              progressBackgroundColor={this.props.theme.background}
+            />
+          }
+          onScroll={this._onLoadingMore.bind(this)}
+          scrollEventThrottle={200}
+        >
+          <StatusBar  
+            animated={true}
+            hidden={false}  
+            backgroundColor={ this.props.theme.primary } 
+            translucent={false}
+            barStyle={'light-content'}
+          >  
+          </StatusBar>
+          <View style={{backgroundColor: this.props.theme.background}}>
+            <Carousel></Carousel>
+            <Modules navigation={this.props.navigation}></Modules>
+            <View style={{background: this.props.theme.background, ...styles.news}}>
+              <View style={styles.news_header}>
+                <Flex wrap='wrap' justify="center">
+                  <Text style={{ fontSize: Size.xlarge, color: this.props.theme.title }}>最新资讯</Text>
+                </Flex>
+              </View>
+              <View style={{ backgroundColor: this.props.theme.background, ...styles.news_content_view}}>
+                <WingBlank size="lg">
+                  {
+                    this.props.articleList.length > 0 ? 
+                      <View>
+                          <Item data={this.props} navigation={this.props.navigation} theme={this.props.theme}></Item>
+                      </View>
+                      : 
+                      <Image source= { require('../../assets/images/th.gif') } style={{backgroundColor: this.props.theme.background, height: Styles.Height(400), width: Styles.Width() - 30 }}></Image>
+                    }          
+                  { this.state.loadMore ? <Loadmore theme={this.props.theme} data={ this.state.loadMore }></Loadmore> : null }
+                </WingBlank>
+              </View>
             </View>
-            <View style={styles.news_content_view}>
-              <WingBlank size="lg">
-                {
-                  this.props.articleList.length > 0 ? 
-                    <View>
-                        <Item data={this.props} navigation={this.props.navigation}></Item>
-                    </View>
-                    : 
-                    <Image source= { require('../../assets/images/th.gif') } style={{ height: Styles.Height(400), width: Styles.Width() }}></Image>
-                  }          
-                { this.state.loadMore ? <Loadmore data={ this.state.loadMore }></Loadmore> : null }
-              </WingBlank>
-            </View>
-          </View>
-        </View> 
-      </ScrollView>
+          </View> 
+        </ScrollView>
     )
   }
 }
@@ -165,12 +178,10 @@ const styles = StyleSheet.create({
     paddingBottom: Styles.Height(15),
   },
   news_content_view: {
-    backgroundColor: Colors.white,
     borderRadius: 15,
     paddingTop: Styles.Height(10),
   },
   news_content: {
-    borderBottomColor: Colors.gray1,
     borderBottomWidth: 1,
     borderStyle: 'solid',
     paddingTop: Styles.Height(20),
@@ -187,10 +198,10 @@ const styles = StyleSheet.create({
   },
   news_content_time: {
     textAlign: 'right',
-    color: Colors.gray3
   }
 })
 
-export default connect(({ home }) => ({
+export default connect(({ home, theme }) => ({
   ...home,
+  ...theme
 }))(Main);

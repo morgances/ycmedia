@@ -50,10 +50,12 @@ import brand from './Brand/index'
 import city_culture from './City/culture'
 import city_memory from './City/memory'
 import detail from './Detail'
+import theme from './theme'
 
 export const Models = [
   init,
   router,
+  theme,
   home,
   culture_news,
   culture_policies,

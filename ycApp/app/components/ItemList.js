@@ -9,6 +9,7 @@ export default class Lists extends React.Component {
   render() {
     const data = this.props.data
     const name = this.props.name
+    const theme = this.props.theme
     const callbackParent = this.props.callbackParent || null
     function change(index) {
       if (callbackParent) callbackParent(index, data)
@@ -26,10 +27,10 @@ export default class Lists extends React.Component {
         <TouchableOpacity key={`${item.title}${index}`} onPress={() => change(index)}>
           <View style={[
             styles.nav,
-            data.focus == index ? styles.navActive : styles.navUnactive,
+            data.focus == index ? {backgroundColor: theme.listBoxActive } : { backgroundColor: theme.containerbg},
             item.title.length < 6 ? styles.short : styles.long  
           ]}>
-            <Text style={[data.focus == index ? styles.navActive : styles.navUnactive]}>{item.title}</Text>
+            <Text style={[data.focus == index ? {...styles.navActive, color: theme.textActive} : {...styles.navUnactive, color: theme.textInactive}]}>{item.title}</Text>
           </View>
         </TouchableOpacity>
       )
@@ -42,14 +43,6 @@ export default class Lists extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  navActive: {
-    backgroundColor: Colors.primary,
-    color: Colors.white
-  },
-  navUnactive: {
-    backgroundColor: Colors.gray4,
-    color: Colors.gray2,
-  },
   short: {
     width: Styles.Width(185)
   },

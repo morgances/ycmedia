@@ -15,11 +15,11 @@ export default (props) => {
       <TouchableOpacity key={`${item.title}${index}`} onPress={() => dispatch(Navigator.navigate('Detail', { aid: item.aid }))}>
         <Flex style={styles.news_content} wrap='wrap' justify="center">
           <Flex.Item style={[{ flex: 2 }]}>
-            <Image style={styles.news_content_image} source={{ uri: `${item.image}`, cache: 'force-cache' }}></Image>
+            <Image style={{...styles.news_content_image, backgroundColor: props.theme.subTitle}} source={{ uri: `${item.image}`, cache: 'force-cache' }}></Image>
           </Flex.Item>
           <Flex.Item style={{ flex: 3.5, paddingLeft: 10 }}>
-            <Text style={{ fontSize: FontSize.medium, color: Colors.black }}>{item.title}</Text>
-            <Text numberOfLines={2} style={styles.news_content_instruction} >{item.instruction}</Text>
+            <Text style={{ fontSize: FontSize.medium, color: props.theme.text }}>{item.title}</Text>
+            <Text numberOfLines={2} style={{ ...styles.news_content_instruction, color: props.theme.text }} >{item.instruction}</Text>
           </Flex.Item>
         </Flex>
       </TouchableOpacity>
@@ -43,7 +43,6 @@ const styles = StyleSheet.create({
     height: Styles.Height(140),
     width: Styles.Width(200),
     borderRadius: 5,
-    backgroundColor: Colors.gray
   },
   news_content_instruction: {
     marginTop: Styles.Height(15)

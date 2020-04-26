@@ -7,6 +7,8 @@
 import React, { Component } from 'react';
 import { Text, View } from 'react-native';
 import { Tabs } from 'antd-mobile-rn';
+import { connect } from 'react-redux';
+import { Appearance } from 'react-native-appearance';
 
 import Size from '../../../res/Fonts/size';
 import Colors from '../../../res/Colors'
@@ -16,16 +18,19 @@ import News from  './components/News'
 import Artists from './components/Artists'
 import Venues from './components/Venues'
 
-export default class Main extends Component<{}> {
+class Main extends Component<{}> {
+  constructor(props) {
+    super(props)
+  }
   static navigationOptions = {
     title: '艺术空间',
     headerStyle: {
-      backgroundColor: Colors.primary,
+      backgroundColor: Appearance.getColorScheme() == 'dark' ? '#333' : "#00b9a2",
       elevation: 0,
       shadowOpacity: 0,
       height: 44
     },
-    headerTintColor: Colors.white,
+    headerTintColor: '#fff',
     headerTitleStyle: {
       fontSize: Size.large,
       fontWeight: null,
@@ -49,15 +54,15 @@ export default class Main extends Component<{}> {
       }
     ]
     return (
-      <View style={{ flex: 1, backgroundColor: Colors.white }}>
+      <View style={{ flex: 1, backgroundColor: this.props.theme.background }}>
         <Tabs 
-          tabBarBackgroundColor={Colors.primary}
+          tabBarBackgroundColor={this.props.theme.primary}
           tabBarPosition='top'
           tabs={tabs}
           initialPage={0}
-          tabBarActiveTextColor={Colors.white}
-          tabBarInactiveTextColor={Colors.black}
-          tabBarUnderlineStyle={{backgroundColor: Colors.white}}>
+          tabBarActiveTextColor={this.props.theme.textActive}
+          tabBarInactiveTextColor={this.props.theme.textInactive}
+          tabBarUnderlineStyle={{backgroundColor: this.props.theme.containerbg}}>
           <View>
             <News navigation={this.props.navigation}></News>
           </View>
@@ -75,3 +80,7 @@ export default class Main extends Component<{}> {
     );
   }
 }
+
+export default connect(({ theme }) => ({
+  ...theme
+}))(Main);

@@ -8,6 +8,7 @@ import React, { Component } from 'react'
 import { View, ScrollView, RefreshControl, Image } from 'react-native'
 import { WingBlank, Flex } from 'antd-mobile-rn'
 import { connect } from 'react-redux';
+import { Appearance } from 'react-native-appearance';
 
 import Size from '../../../res/Fonts/size'
 import Colors from '../../../res/Colors'
@@ -23,12 +24,12 @@ class Brand extends Component<{}> {
   static navigationOptions = {
     title: '文化品牌',
     headerStyle: {
-      backgroundColor: Colors.primary,
+      backgroundColor: Appearance.getColorScheme() == 'dark' ? '#333' : "#00b9a2",
       elevation: 0,
       shadowOpacity: 0,
       height: 44
     },
-    headerTintColor: Colors.white,
+    headerTintColor: '#fff',
     headerTitleStyle: {
       fontSize: Size.large,
       fontWeight: null,
@@ -138,13 +139,13 @@ class Brand extends Component<{}> {
     return (
       <ScrollView
         showsVerticalScrollIndicator={false}
-        style={{backgroundColor: Colors.white}}
+        style={{backgroundColor: this.props.theme.background, marginTop: Styles.Height(10)}}
         refreshControl={
           <RefreshControl
             refreshing={this.state.isRefreshing}
             onRefresh={this._onRefreshing.bind(this, [this.props, 'brand'])}
             titleColor="#00ff00"
-            colors={[Colors.primary]}
+            colors={[this.props.theme.primary]}
             progressBackgroundColor="#ffffff"
           />
         }
@@ -154,17 +155,17 @@ class Brand extends Component<{}> {
         <View>
           <WingBlank size="lg">
             <Flex style={{marginTop: Styles.Height(20)}} justify="start" wrap="wrap">
-              <Lists callbackParent={this._onChildChanged.bind(this)} data={this.props} name={'brand'}></Lists>
+              <Lists theme={this.props.theme} callbackParent={this._onChildChanged.bind(this)} data={this.props} name={'brand'}></Lists>
             </Flex>
             { 
               this.state.isLoading == true ? 
-                <Image source= { require('../../../assets/images/th.gif') } style={{ height: Styles.Height(400), width: Styles.Width() }}></Image>
+                <Image source= { require('../../../assets/images/th.gif') } style={{ height: Styles.Height(400), width: Styles.Width() - 30 }}></Image>
                 :
                 null
             }
             {
               this.props.articleList.length > 0 ? 
-                <Item data={this.props} navigation={this.props.navigation}></Item>
+                <Item theme={this.props.theme} data={this.props} navigation={this.props.navigation}></Item>
                 :
                 null
             }
@@ -182,6 +183,7 @@ class Brand extends Component<{}> {
   }
 }
 
-export default connect(({ brand }) => ({
+export default connect(({ brand, theme }) => ({
   ...brand,
+  ...theme,
 }))(Brand);

@@ -113,13 +113,13 @@ class Display extends React.Component {
     return (
       <ScrollView
         showsVerticalScrollIndicator={false}
-        style={{backgroundColor: Colors.white}}
+        style={{backgroundColor: this.props.theme.background, marginTop: Styles.Height(10)}}
         refreshControl={
           <RefreshControl
             refreshing={this.state.isRefreshing}
             onRefresh={this._onRefreshing.bind(this, [this.props, 'art_display'])}
             titleColor="#00ff00"
-            colors={[Colors.primary]}
+            colors={[this.props.theme.primary]}
             progressBackgroundColor="#ffffff"
           />
         }
@@ -129,18 +129,18 @@ class Display extends React.Component {
         <View>
           <WingBlank size="lg">
             <Flex style={{marginTop: Styles.Height(20)}} justify="between" wrap="wrap">
-              <Lists callbackParent={this._onChildChanged.bind(this)} data={this.props} name={'art_display'}></Lists>
+              <Lists theme={this.props.theme} callbackParent={this._onChildChanged.bind(this)} data={this.props} name={'art_display'}></Lists>
             </Flex>
             <Flex style={{marginTop: Styles.Height(5)}} justify="between" wrap="wrap">
               { 
                 this.state.isLoading == true ? 
-                  <Image source= { require('../../../../assets/images/th.gif') } style={{ height: Styles.Height(400), width: Styles.Width() }}></Image>
+                  <Image source= { require('../../../../assets/images/th.gif') } style={{ height: Styles.Height(400), width: Styles.Width() - 30 }}></Image>
                   :
                   null
               }
               {
                 this.props.articleList.length > 0 ? 
-                  <Item data={this.props} navigation={this.props.navigation}></Item>
+                  <Item theme={this.props.theme} data={this.props} navigation={this.props.navigation}></Item>
                   :
                   null
               }
@@ -159,6 +159,7 @@ class Display extends React.Component {
   }
 }
 
-export default connect(({ art_display }) => ({
+export default connect(({ art_display, theme }) => ({
   ...art_display,
+  ...theme,
 }))(Display);
