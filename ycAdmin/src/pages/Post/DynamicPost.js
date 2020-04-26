@@ -109,7 +109,7 @@ class DynamicPost extends Component {
   handleSubmit = e => {
     e.preventDefault();
     const { imageUrl, current }= this.state;
-    const { dispatch, form, rule } = this.props;
+    const { dispatch, form } = this.props;
     const BannerId = current ? current.BannerId : '';
     // setTimeout(() => this.addBtn.blur(), 0);
     form.validateFields((err, fieldsValue) => {
@@ -137,13 +137,8 @@ class DynamicPost extends Component {
   //上传图片
   handleChange = (info) => {
     const { dispatch } = this.props;
-    // dispatch({
-    //   type: "rule/upload",
-    //   payload: {}
-    // });
     let fileList = info.fileList;
     this.setState({ fileList });
-    console.log('info',info)
     // const isJPG = info.file.type === 'image/jpeg';
     // const isPNG = info.file.type === 'image/png';
     // if(!isJPG && !isPNG) {
@@ -157,30 +152,38 @@ class DynamicPost extends Component {
     //   return false;
     // }
     let formData = new window.FormData()
-    formData.append('file',info.file,info.file.name)
-    Axios({
-      headers: {
-        'Content-Type':'multipart/form-data'
+    console.log(fileList, "fileList", formData)
+    dispatch({
+      type: "list/upload",
+      payload: {
+        headers: {
+          'Content-Type':'multipart/form-data'
+        },
+        data: formData
       },
-      method: 'post',
-      data: formData,
-      url: 'http://39.105.141.168:9573/api/v1/upload'
-    }).then(res => {
-      if(fileList.length === 1) {
-        let imgurl = res.data.data
-        this.setState({
-          imageUrl: imgurl
-        })
-      }
-      else {
-        let imgurl = res.data.data
-        this.setState({
-          imageUrl: imgurl
-        })
-      }
-    },err => {
-      return false
-    })
+    });
+    // formData.append('file',info.file,info.file.name)
+    // Axios({
+    //   headers: {
+    //     'Content-Type':'multipart/form-data'
+    //   },
+    //   method: 'post',
+    //   data: formData,
+    //   url: 'http://39.105.141.168:9573/api/v1/upload'
+    // }).then(res => {
+    //   if(fileList.length === 1) {
+    //     let imgurl = res.data.data
+    //     this.setState({
+    //       imageUrl: imgurl
+    //     })
+    //   }
+    //   else {
+    //     let imgurl = res.data.data
+    //     this.setState({
+    //       imageUrl: imgurl
+    //     })
+    //   }
+    // })
   }
 
   beforeUpload() {
@@ -199,7 +202,7 @@ class DynamicPost extends Component {
   render() {
     const {
       form: { getFieldDecorator },
-      list: { list: { data } },
+      // list: { list: { data } },
       rowKey
     } = this.props;
     const { previewVisible, modalVisible, visible, done, current = {}, imageUrl, fileList, previewImage } = this.state;
@@ -330,7 +333,7 @@ class DynamicPost extends Component {
           <Table
             bordered
             rowKey={rowKey || 'BannerId'}
-            dataSource={data}
+            // dataSource={data}
             columns={columns}
             pagination={{ pageSize: 5 }}
           />

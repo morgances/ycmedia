@@ -246,13 +246,11 @@ class Adding extends React.Component {
           this.setState({
             imageUrl: imgurl,
           });
-          console.log(imgurl,"111")
         } else {
           const imgurl = res.data.data;
           this.setState({
             imageUrl: imgurl,
           });
-          console.log(imgurl,"imgurl")
         }
       },
       err => false

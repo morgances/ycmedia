@@ -1,13 +1,13 @@
 import {
   queryArticleList,
-  removeArticleList,
-  addArticleList,
+  addArticle,
   updateAritcleList,
   addPictureList,
   queryPictureList,
   removeBanner,
   getPicture,
-  updatePicture
+  updatePicture,
+  uploadPicture
 } from "@/services/api";
 import router from "umi/router";
 
@@ -28,15 +28,8 @@ export default {
         payload: response
       });
     },
-    // *appendFetch({ payload }, { call, put }) {
-    //   const response = yield call(queryFakeList, payload);
-    //   yield put({
-    //     type: "appendList",
-    //     payload: Array.isArray(response) ? response : []
-    //   });
-    // },
     *addArticle({ payload }, { call, put }) {
-      const response = yield call(addArticleList, payload);
+      const response = yield call(addArticle, payload);
       if(response === undefined) {
         router.push("/exception/500")
       }
@@ -68,33 +61,6 @@ export default {
         type: 'queryPictureList',
         payload: response,
       })
-      // const response = yield call(addPictureList, payload);
-      // console.log(payload,"图片payload")
-      // console.log(response, '图片添加成功')
-      // if(response.status !== 0) {
-      //   return false
-      // } else {
-      //   const addResponse = yield call(queryPictureList, payload);
-      //   console.log(addResponse,"addResponse")
-      //   if (addResponse.status !== 0) {
-      //     return false
-      //   } else {
-      //     yield put({
-      //       type: 'queryPictureList',
-      //       payload: addResponse.data,
-      //     });
-      //   }
-      // }
-    },
-    *removeList({ payload }, { call,put }) {
-      const response = yield call(removeArticleList, payload);
-      if (response.status === 0) {
-        const response = yield call(queryArticleList, payload);
-        yield put({
-          type: 'queryPictureList',
-          payload: response.data,
-        });
-      }
     },
     *updateArticle({ payload }, { call, put }) {
       const response = yield call(updateAritcleList, payload);
@@ -124,6 +90,14 @@ export default {
         type: "edictPicture",
         payload: response.data
       })
+    },
+    *upload({ payload }, { call, put }) {
+      const response = yield call(uploadPicture, payload);
+      yield put({
+        type: "uploadPicture",
+        payload: response
+      })
+      console.log(response, "upload resp")
     }
   },
 
@@ -170,11 +144,11 @@ export default {
         list: payload,
       }
     },
-    appendList(state, action) {
+    uploadPicture(state, { payload }) {
       return {
         ...state,
-        list: state.list.concat(action.payload)
-      };
-    }
+        list: payload,
+      }
+    },
   }
 };
