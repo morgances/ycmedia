@@ -13,6 +13,14 @@ export function getList({ category, tag, page, label = "" }) {
   })
 }
 
+export function getBanners() {
+  return request({
+    url: '/banner/all',
+    method: 'POST',
+    data: {}
+  })
+}
+
 export function getNews({ page }) {
   return request({
     url: '/article/news',

@@ -6,6 +6,15 @@ import Styles from '../../../res/Styles';
 import Colors from '../../../res/Colors';
 
 export default (props) => {
+  const { banners } = props
+  function List() {
+    const BannerList = banners.map((item) =>
+      <View style={[styles.containerHorizontal, { backgroundColor: '#999' }]}>
+        <ImageBackground style={styles.containerHorizontal} source={{uri: item.ImagePath}}></ImageBackground>
+      </View>
+    )
+    return BannerList
+  }
   return (
     <View>
       <Carousel
@@ -15,18 +24,7 @@ export default (props) => {
         infinite
         dotActiveStyle={styles.dotActive}
       >
-        <View style={[styles.containerHorizontal, { backgroundColor: '#999' }]}>
-          <ImageBackground style={styles.containerHorizontal} source={require('../../../assets/images/Main/spring.jpg')}></ImageBackground>
-        </View>
-        <View style={[styles.containerHorizontal, { backgroundColor: '#999' }]}>
-          <ImageBackground style={styles.containerHorizontal} source={require('../../../assets/images/Main/summer.jpg')}></ImageBackground>
-        </View>
-        <View style={[styles.containerHorizontal, { backgroundColor: '#999' }]}>
-          <ImageBackground style={styles.containerHorizontal} source={require('../../../assets/images/Main/fall.jpg')}></ImageBackground>
-        </View>
-        <View style={[styles.containerHorizontal, { backgroundColor: '#999' }]}>
-          <ImageBackground style={styles.containerHorizontal} source={require('../../../assets/images/Main/winter.jpg')}></ImageBackground>
-        </View>
+        <List></List>
       </Carousel>
     </View>
   )

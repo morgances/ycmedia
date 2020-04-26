@@ -20,7 +20,7 @@ import Item from '../../components/Item_time'
 import Loadmore from '../../components/LoadMore'
 import refresh_result from '../../components/Refresh_result'
 
-class Main extends Component<{}> {
+class Main extends Component {
   static navigationOptions = {
     title: '银川公共文化',
     headerStyle: {
@@ -59,12 +59,16 @@ class Main extends Component<{}> {
 
   componentDidMount() {
     const { dispatch } = this.props
-    // dispatch({
-    //   type: `home/get`,
-    //   payload: {
-    //     page: 1,
-    //   }
-    // })
+    dispatch({
+      type: `home/get`,
+      payload: {
+        page: 1,
+      }
+    })
+    dispatch({
+      type:  `banner/get`,
+      payload: {}
+    })
   }
   
   async _onRefreshing(data) {
@@ -140,7 +144,7 @@ class Main extends Component<{}> {
           >  
           </StatusBar>
           <View style={{backgroundColor: this.props.theme.background}}>
-            <Carousel></Carousel>
+            <Carousel banners={this.props.banners}></Carousel>
             <Modules navigation={this.props.navigation}></Modules>
             <View style={{background: this.props.theme.background, ...styles.news}}>
               <View style={styles.news_header}>
@@ -201,7 +205,8 @@ const styles = StyleSheet.create({
   }
 })
 
-export default connect(({ home, theme }) => ({
+export default connect(({ home, theme, banner }) => ({
   ...home,
-  ...theme
+  ...theme,
+  ...banner
 }))(Main);

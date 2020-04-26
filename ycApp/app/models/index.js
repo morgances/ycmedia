@@ -51,11 +51,13 @@ import city_culture from './City/culture'
 import city_memory from './City/memory'
 import detail from './Detail'
 import theme from './theme'
+import banner from './Banner/index'
 
 export const Models = [
   init,
   router,
   theme,
+  banner,
   home,
   culture_news,
   culture_policies,
