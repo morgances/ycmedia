@@ -219,6 +219,7 @@ class Adding extends React.Component {
   handleChange = info => {
     const fileList = info.fileList;
     this.setState({ fileList });
+    let value = info.file;
     // const isJPG = info.file.type === 'image/jpeg';
     // const isPNG = info.file.type === 'image/png';
     // if(!isJPG && !isPNG) {
@@ -233,7 +234,9 @@ class Adding extends React.Component {
     // }
     const formData = new window.FormData();
     let token = getToken()
-    formData.append('file', info.file, info.file.name);
+    if (!value.url) {
+      formData.append('file',info.file,info.file.name)
+    }
     Axios({
       headers: {
         'Content-Type': 'multipart/form-data',

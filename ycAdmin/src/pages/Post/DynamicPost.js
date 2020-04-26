@@ -139,9 +139,7 @@ class DynamicPost extends Component {
   handleChange = (info) => {
     const { dispatch } = this.props;
     let fileList = info.fileList;
-    let name = 'file';
     let value = info.file;
-    let fileName = info.file.name;
     this.setState({ fileList });
     // const isJPG = info.file.type === 'image/jpeg';
     // const isPNG = info.file.type === 'image/png';
@@ -155,8 +153,10 @@ class DynamicPost extends Component {
     // if(!((isJPG || isPNG) && isLt1M)) {
     //   return false;
     // }
-    let formData = new window.FormData()
-    formData.append('file',info.file,info.file.name)
+    let formData = new FormData()
+    if (!value.url) {
+      formData.append('file',info.file,info.file.name)
+    }
     // dispatch({
     //   type: "list/upload",
     //   payload: {
