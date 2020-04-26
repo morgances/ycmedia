@@ -97,7 +97,7 @@ export default {
         type: "uploadPicture",
         payload: response
       })
-      console.log(response, "upload resp")
+      console.log(payload, response, "upload resp")
     }
   },
 

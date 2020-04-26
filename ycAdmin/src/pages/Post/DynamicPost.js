@@ -9,6 +9,8 @@ import moment from 'moment';
 import Axios from 'axios';
 import ImageGallery from 'react-image-gallery';
 import { routerRedux } from "dva/router";
+import { getToken } from "../../services/token";
+
 const FormItem = Form.Item;
 @connect(({ list, rule, loading }) => ({
   list,
@@ -112,6 +114,7 @@ class DynamicPost extends Component {
     const { dispatch, form } = this.props;
     const BannerId = current ? current.BannerId : '';
     // setTimeout(() => this.addBtn.blur(), 0);
+    console.log(imageUrl, "url")
     form.validateFields((err, fieldsValue) => {
       if (!err) {
         this.setState({
@@ -138,6 +141,9 @@ class DynamicPost extends Component {
   handleChange = (info) => {
     const { dispatch } = this.props;
     let fileList = info.fileList;
+    let name = 'file';
+    let value = info.file;
+    let fileName = info.file.name;
     this.setState({ fileList });
     // const isJPG = info.file.type === 'image/jpeg';
     // const isPNG = info.file.type === 'image/png';
@@ -151,39 +157,42 @@ class DynamicPost extends Component {
     // if(!((isJPG || isPNG) && isLt1M)) {
     //   return false;
     // }
+    console.log(info.file, "info")
     let formData = new window.FormData()
-    console.log(fileList, "fileList", formData)
-    dispatch({
-      type: "list/upload",
-      payload: {
-        headers: {
-          'Content-Type':'multipart/form-data'
-        },
-        data: formData
-      },
-    });
-    // formData.append('file',info.file,info.file.name)
-    // Axios({
-    //   headers: {
-    //     'Content-Type':'multipart/form-data'
+    formData.append('file',info.file,info.file.name)
+    // dispatch({
+    //   type: "list/upload",
+    //   payload: {
+    //     value
     //   },
-    //   method: 'post',
-    //   data: formData,
-    //   url: 'http://39.105.141.168:9573/api/v1/upload'
-    // }).then(res => {
-    //   if(fileList.length === 1) {
-    //     let imgurl = res.data.data
-    //     this.setState({
-    //       imageUrl: imgurl
-    //     })
-    //   }
-    //   else {
-    //     let imgurl = res.data.data
-    //     this.setState({
-    //       imageUrl: imgurl
-    //     })
-    //   }
-    // })
+    // });
+    console.log(formData, "what is formData")
+    let token = getToken()
+    Axios({
+      headers: {
+        'Content-Type':'multipart/form-data',
+        Authorization: `Bearer ${token}`
+      },
+      method: 'post',
+      data: formData,
+      url: 'http://39.105.141.168:9573/api/v1/upload'
+    }).then(res => {
+      console.log(res, "what is res")
+      if(fileList.length === 1) {
+        let imgurl = res.data.data
+        this.setState({
+          imageUrl: imgurl
+        })
+      }
+      else {
+        let imgurl = res.data.data
+        this.setState({
+          imageUrl: imgurl
+        })
+      }
+    },err => {
+      return false
+    })
   }
 
   beforeUpload() {
@@ -202,9 +211,10 @@ class DynamicPost extends Component {
   render() {
     const {
       form: { getFieldDecorator },
-      // list: { list: { data } },
+      list: { list: { data } },
       rowKey
     } = this.props;
+    console.log(data, "data is?")
     const { previewVisible, modalVisible, visible, done, current = {}, imageUrl, fileList, previewImage } = this.state;
     const modalFooter = done
       ? { footer: null, onCancel: this.handleDone }
@@ -333,7 +343,7 @@ class DynamicPost extends Component {
           <Table
             bordered
             rowKey={rowKey || 'BannerId'}
-            // dataSource={data}
+            dataSource={data}
             columns={columns}
             pagination={{ pageSize: 5 }}
           />

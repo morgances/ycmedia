@@ -232,6 +232,7 @@ class Adding extends React.Component {
     // }
     const formData = new window.FormData();
     formData.append('file', info.file, info.file.name);
+    console.log(formData.append('file', info.file, info.file.name), "what is formData")
     Axios({
       headers: {
         'Content-Type': 'multipart/form-data',
