@@ -14,7 +14,7 @@ import (
 func (con Controller) Update(ctx *server.Context) error {
 	if ctx.Request().Method != "POST" {
 		log.Println("Error In Request:", NotPost)
-		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, NotPost))
+		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, NotPost.Error()))
 	}
 
 	var newMap interface{}
@@ -22,20 +22,20 @@ func (con Controller) Update(ctx *server.Context) error {
 	err := ctx.JSONBody(&newMap)
 	if err != nil {
 		log.Println("Error In JSONBody:", err)
-		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
+		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err.Error()))
 	}
 
 	mp, ok := newMap.(map[string]interface{})
 	if !ok {
 		log.Println("Error In JSONBody:", newMap)
-		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, BadData))
+		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, BadData.Error()))
 	}
 
 	v, ok := mp["aid"]
 
 	if !ok || int(v.(float64)) < 0 {
 		log.Println("Error In JSONBody:", BadData)
-		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, BadData))
+		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, BadData.Error()))
 	}
 
 	kvs := toKeyValStr(mp)
@@ -51,7 +51,7 @@ func (con Controller) Update(ctx *server.Context) error {
 
 	if err != nil {
 		log.Println("Error In Mysql UpdateArticle:", err)
-		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
+		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err.Error()))
 	}
 
 	return ctx.ServeJSON(base.RespStatusAndData(http.StatusOK, nil))

@@ -17,7 +17,7 @@ import (
 func (con Controller) Delete(ctx *server.Context) error {
 	if ctx.Request().Method != "POST" {
 		log.Println("Error In Request:", NotPost)
-		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, NotPost))
+		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, NotPost.Error()))
 	}
 
 	var x struct {
@@ -27,20 +27,20 @@ func (con Controller) Delete(ctx *server.Context) error {
 	err := ctx.JSONBody(&x)
 	if err != nil {
 		log.Println("Error In JSONBody:", err)
-		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
+		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err.Error()))
 	}
 
 	log.Printf("In DeleteArticle: aid = %d\n", x.Aid)
 
 	if x.Aid < 0 {
 		log.Println("Error In JSONBody:", BadData)
-		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, BadData))
+		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, BadData.Error()))
 	}
 
 	err = con.db.DeleteArticle(x.Aid)
 	if err != nil {
 		log.Println("Error In Mysql DeleteArticle:", err)
-		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
+		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err.Error()))
 	}
 
 	return ctx.ServeJSON(base.RespStatusAndData(http.StatusOK, nil))

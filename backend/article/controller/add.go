@@ -26,13 +26,13 @@ func (con Controller) Add(ctx *server.Context) error {
 	var x mysql.Article
 	if ctx.Request().Method != "POST" {
 		log.Println("Error In Request:", NotPost)
-		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, NotPost))
+		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, NotPost.Error()))
 	}
 
 	err := ctx.JSONBody(&x)
 	if err != nil {
 		log.Println("Error In JSONBody:", err)
-		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
+		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err.Error()))
 	}
 
 	log.Println("In AddArticle:", x)
@@ -40,7 +40,7 @@ func (con Controller) Add(ctx *server.Context) error {
 	err = con.db.AddArticle(x.Uid, x.Title, x.Author, x.Category, x.Tag, x.Label, x.Image, x.Text, x.Date)
 	if err != nil {
 		log.Println("Error In Mysql.AddArticle:", err)
-		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
+		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err.Error()))
 	}
 
 	return ctx.ServeJSON(base.RespStatusAndData(http.StatusOK, nil))

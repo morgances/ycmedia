@@ -21,20 +21,20 @@ func (con Controller) GetArticleList(ctx *server.Context) error {
 	err := ctx.JSONBody(&x)
 	if err != nil {
 		log.Println("Error In GetList.JSONBody:", err)
-		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
+		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err.Error()))
 	}
 
 	log.Printf("In GetArticleList: Category=%s, Tag=%s, Label=%s, Page=%d\n", x.Category, x.Tag, x.Label, x.Page)
 
 	if x.Page < 1 {
 		log.Println("Error In GetList.DataCheck:", BadData)
-		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, BadData))
+		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, BadData.Error()))
 	}
 
 	articles, err := con.db.GetArticleListDesc(x.Category, x.Tag, x.Label, x.Page*10-10, 10, "date")
 	if err != nil {
 		log.Println("Error In GetList.Mysql:", err)
-		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
+		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err.Error()))
 	}
 
 	for _, e := range articles {
@@ -44,7 +44,7 @@ func (con Controller) GetArticleList(ctx *server.Context) error {
 	articleCount, pageCount, err := con.db.GetArticleAndPageCount(x.Category, x.Tag, x.Label)
 	if err != nil {
 		log.Println("Error In GetList.Mysql:", err)
-		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
+		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err.Error()))
 	}
 
 	return ctx.ServeJSON(map[string]interface{}{
@@ -63,20 +63,20 @@ func (con Controller) GetTextById(ctx *server.Context) error {
 	err := ctx.JSONBody(&x)
 	if err != nil {
 		log.Println("Error In GetText.JSONBody:", err)
-		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
+		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err.Error()))
 	}
 
 	log.Printf("In GetText: aid=%d\n", x.Aid)
 
 	if x.Aid < 0 {
 		log.Println("Error In GetText.DataCheck:", BadData)
-		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, BadData))
+		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, BadData.Error()))
 	}
 
 	article, err := con.db.GetArticleById(x.Aid)
 	if err != nil {
 		log.Println("Error In GetText.Mysql:", err)
-		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
+		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err.Error()))
 	}
 
 	return ctx.ServeJSON(base.RespStatusAndData(http.StatusOK, article))
@@ -90,19 +90,19 @@ func (con Controller) GetNews(ctx *server.Context) error {
 	err := ctx.JSONBody(&x)
 	if err != nil {
 		log.Println("Error In GetNews.JSONBody:", err)
-		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
+		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err.Error()))
 	}
 
 	log.Printf("In GetNews, Page=%d\n", x.Page)
 	if x.Page < 0 {
 		log.Println("Error In GetNews.DataCheck:", BadData)
-		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, BadData))
+		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, BadData.Error()))
 	}
 
 	articles, err := con.db.GetArticleOrderLimits("date", true, 10*(x.Page-1), 10)
 	if err != nil {
 		log.Println("Error In GetNews.Mysql:", err)
-		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
+		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err.Error()))
 	}
 
 	for _, e := range articles {
@@ -123,7 +123,7 @@ func (con Controller) GetMore(ctx *server.Context) error {
 	err := ctx.JSONBody(&x)
 	if err != nil {
 		log.Println("Error In GetMore.JSONBody:", err)
-		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
+		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err.Error()))
 	}
 
 	log.Printf("In GetMore: Category=%s, Tag=%s, Label=%s, Date=%v\n", x.Category, x.Tag, x.Label, x.Date)
@@ -131,7 +131,7 @@ func (con Controller) GetMore(ctx *server.Context) error {
 	articles, err := con.db.GetArticleByDate(x.Category, x.Tag, x.Label, x.Date)
 	if err != nil {
 		log.Println("Error In GetMore.Mysql:", err)
-		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
+		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err.Error()))
 	}
 
 	for _, e := range articles {
@@ -149,7 +149,7 @@ func (con Controller) GetAll(ctx *server.Context) error {
 	err := ctx.JSONBody(&x)
 	if err != nil {
 		log.Println("Error In GetAll.JSONBody:", err)
-		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
+		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err.Error()))
 	}
 
 	log.Println("In GetAll: Category=", x.Category)
@@ -157,7 +157,7 @@ func (con Controller) GetAll(ctx *server.Context) error {
 	articles, err := con.db.GetAll("category", x.Category)
 	if err != nil {
 		log.Println("Error In GetAll.Mysql:", err)
-		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
+		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err.Error()))
 	}
 
 	for _, e := range articles {
