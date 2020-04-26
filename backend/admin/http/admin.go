@@ -2,7 +2,6 @@ package http
 
 import (
 	"errors"
-	"fmt"
 	"log"
 	"net/http"
 
@@ -68,7 +67,6 @@ func (ah *AdminHandler) Login(c *server.Context) error {
 		log.Println("Error in JSONBody:", err)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err.Error()))
 	}
-	fmt.Println(admin)
 	if err = ctx.Validate(&admin); err != nil {
 		log.Println("Error in Validate:", err)
 		return ctx.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err.Error()))
@@ -82,6 +80,7 @@ func (ah *AdminHandler) Login(c *server.Context) error {
 
 	token, err := filter.NewAdminToken(id, ah.Token)
 	ctx.SetUID(id)
+	log.Println("Login: ",admin)
 	return ctx.ServeJSON(base.RespStatusAndData(http.StatusOK, token))
 }
 

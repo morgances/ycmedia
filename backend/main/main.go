@@ -28,8 +28,8 @@ func main() {
 		log.Fatal(err)
 	}
 
-	admin, err := NewAdminToken(1)
-	fmt.Println("admin: ", admin, err)
+	admin, err := NewAdminToken(1000)
+	fmt.Println("admin JWT Token: ", admin, err)
 
 	ep.Wait()
 }

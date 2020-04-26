@@ -49,7 +49,7 @@ func (con *Controller) Insert(c *server.Context) error {
 		return c.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
 	}
 
-	log.Println("[create] ", req)
+	log.Println("[create Banner] ","Name: ",req.Name,"ImagePath: ",req.ImagePath,"Event: ",req.Event)
 
 	return base.WriteStatusAndIDJSON(c, constants.ErrSucceed, id)
 }
@@ -92,7 +92,8 @@ func (con *Controller) DeleteById(c *server.Context) error {
 		return base.WriteStatusAndDataJSON(c, http.StatusBadRequest, nil)
 	}
 
-	log.Println("[delete]", req)
+	log.Println("[delete banner]", "id: ",req.Id)
+
 	return base.WriteStatusAndDataJSON(c, constants.ErrSucceed, nil)
 }
 
@@ -127,6 +128,7 @@ func (con *Controller) Update(c *server.Context) error {
 		return c.ServeJSON(base.RespStatusAndData(http.StatusBadRequest, err))
 	}
 
-	log.Println("[update]", req)
+	log.Println("[update]","Id:", req.Id, "Name: ",req.Name,"ImagePath: ",req.ImagePath,"Event: ",req.Event)
+
 	return base.WriteStatusAndIDJSON(c, constants.ErrSucceed, req.Id)
 }

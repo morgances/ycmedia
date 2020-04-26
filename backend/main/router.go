@@ -30,5 +30,5 @@ func init() {
 	admin.InitAdminRouter(router, uploadDB, "AdminTokenKey")
 	banner.Register(router, uploadDB, "AdminTokenKey")
 	article.Register(router, uploadDB, "AdminTokenKey")
-	// fmt.Println("server start")
+	log.Println("server start")
 }
