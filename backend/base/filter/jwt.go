@@ -51,15 +51,17 @@ func (f *JWTFilter) Check(ctx *server.Context) bool {
 	//which to get user id
 	c := &base.Context{Context: ctx}
 
-	// claims, err := f.checkJWT(c)
-	// if err != nil {
-	// 	log.Error(err)
-	// 	return false
-	// }
+	claims, err := f.checkJWT(c)
+	if err != nil {
+		fmt.Println("Error in JWT check: ", err)
+		return false
+	}
 
-	// rawUID := uint32(claims[base.CtxKeyUID].(float64))
-	// c.SetUID(rawUID)
-	c.SetUID(1000)
+	rawUID := uint32(claims[base.CtxKeyUID].(float64))
+	c.SetUID(rawUID)
+	//c.SetUID(1000)
+
+
 	//which to authentication
 	//url := c.Request().URL.Path
 	// result, err := mysql.Service.URLPermissions(f.db, url)
