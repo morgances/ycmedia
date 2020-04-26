@@ -31,6 +31,9 @@ const (
 var (
 	AdminServer *AdminserviceProvider
 
+	AdminUser = "admin"
+	AdminPwd = "admin"
+
 	errInvalidMysql = errors.New("affected 0 rows")
 	errLoginFailed  = errors.New("invalid username or password")
 	ErrNoRows       = errors.New("there is no such data in database")
@@ -71,6 +74,31 @@ func CreateTable(db *sql.DB) error {
 	return err
 }
 
+func CreteAdminUser(db *sql.DB) error {
+	var (
+		id       uint32
+		password string
+	)
+	hash, err := base.SaltHashGenerate(&AdminPwd)
+	if err != nil {return err}
+
+	// check is exists adminuser
+	if err = db.QueryRow(adminSqlString[mysqlUserLogin], AdminUser).Scan(&id, &password);err != nil {return  err}
+
+	if id != 0 || base.SaltHashCompare([]byte(password), &AdminPwd){
+		return errors.New("Already have admin user")
+	}
+
+	result, err := db.Exec(adminSqlString[mysqlUserInsert],AdminUser,hash,AdminUser,"","", true)
+	if err != nil {
+		return err
+	}
+	if rows, _ := result.RowsAffected(); rows == 0 {return errInvalidMysql}
+
+	return nil
+}
+
+
 // CreateAdmin create a new user account.
 func (*AdminserviceProvider) Create(db *sql.DB, name, pwd, realName, mobile, email *string) error {
 	hash, err := base.SaltHashGenerate(pwd)
@@ -102,7 +130,7 @@ func (*AdminserviceProvider) Login(db *sql.DB, name, pwd *string) (uint32, error
 	}
 
 	if !base.SaltHashCompare([]byte(password), pwd) {
-		return 0, errLoginFailed
+		return constants.InvalidUID, errLoginFailed
 	}
 
 	return id, nil

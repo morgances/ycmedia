@@ -7,6 +7,7 @@ package admin
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 
 	"github.com/TechCatsLab/apix/http/server"
@@ -24,7 +25,7 @@ func InitAdminRouter(r *server.Router, db *sql.DB, tokenKey string) {
 		log.Fatal("[InitRouter]: server is nil")
 	}
 
-	err := createTable(db)
+	err := createTableAndInitAdminUser(db)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -72,7 +73,7 @@ func InitAdminRouter(r *server.Router, db *sql.DB, tokenKey string) {
 	r.Post("/api/v1/permission/removerelation", p.RemoveRelation, jwt.Check, active.Isactive)
 }
 
-func createTable(db *sql.DB) error {
+func createTableAndInitAdminUser(db *sql.DB) error {
 	err := admin.CreateDatabase(db)
 	if err != nil {
 		return err
@@ -81,6 +82,13 @@ func createTable(db *sql.DB) error {
 	err = admin.CreateTable(db)
 	if err != nil {
 		return err
+	}
+
+	err = admin.CreteAdminUser(db)
+	if err != nil {
+		fmt.Println(err.Error())
+	}else {
+		fmt.Println("Create admin user with password: ", admin.AdminUser, admin.AdminPwd)
 	}
 
 	err = permission.CreatePermissionTable(db)
