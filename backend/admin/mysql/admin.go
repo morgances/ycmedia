@@ -83,13 +83,9 @@ func CreteAdminUser(db *sql.DB) error {
 	if err != nil {return err}
 
 	// check is exists adminuser
-	if err = db.QueryRow(adminSqlString[mysqlUserLogin], AdminUser).Scan(&id, &password);err != nil {return  err}
+	if err = db.QueryRow(adminSqlString[mysqlUserLogin], AdminUser).Scan(&id, &password);err == nil||id != 0 || base.SaltHashCompare([]byte(password), &AdminPwd) {return  errors.New("Already have admin user")}
 
-	if id != 0 || base.SaltHashCompare([]byte(password), &AdminPwd){
-		return errors.New("Already have admin user")
-	}
-
-	result, err := db.Exec(adminSqlString[mysqlUserInsert],AdminUser,hash,AdminUser,"","", true)
+	result, err := db.Exec(adminSqlString[mysqlUserInsert],AdminUser,hash,AdminUser,"1","1", true)
 	if err != nil {
 		return err
 	}

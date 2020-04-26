@@ -86,7 +86,7 @@ func createTableAndInitAdminUser(db *sql.DB) error {
 
 	err = admin.CreteAdminUser(db)
 	if err != nil {
-		fmt.Println(err.Error())
+		fmt.Println("[error] in create default Admin User: ", err.Error())
 	}else {
 		fmt.Println("Create admin user with password: ", admin.AdminUser, admin.AdminPwd)
 	}
