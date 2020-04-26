@@ -23,7 +23,7 @@ func init() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	upload.InitRouter(router, uploadDB, "http://39.98.162.91:9573/", "AdminTokenKey")
+	upload.InitRouter(router, uploadDB, "http://127.0.0.1:9573/", "AdminTokenKey")
 	admin.InitAdminRouter(router, uploadDB, "AdminTokenKey")
 	banner.Register(router, uploadDB, "AdminTokenKey")
 	article.Register(router, uploadDB, "AdminTokenKey")

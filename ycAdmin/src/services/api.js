@@ -141,6 +141,7 @@ export async function updatePicture(params) {
 }
 
 export async function fakeAccountLogin(params) {
+  console.log(params, "params")
   //let resp = await request("/api/v1/admin/login", {
   return request("/api/v1/admin/login", {
     method: "POST",

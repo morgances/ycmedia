@@ -160,7 +160,7 @@ class DynamicPost extends Component {
       },
       method: 'post',
       data: formData,
-      url: 'http://39.98.162.91:9573/api/v1/upload'
+      url: 'http://127.0.0.1:9573/api/v1/upload'
     }).then(res => {
       if(fileList.length === 1) {
         let imgurl = res.data.data

@@ -15,6 +15,7 @@ export default {
   effects: {
     *login({ payload }, { call, put }) {
       const response = yield call(fakeAccountLogin, payload);
+      console.log(payload, 'payload')
       console.log(response, 'loginRESP')
       yield put({
         type: "changeLoginStatus",
@@ -22,7 +23,7 @@ export default {
           status: true
         }
       });
-      console.log(response)
+      console.log(response, "response")
       if (response.status === 200) {
         window.location.href = "http://localhost:8000/list/basic-list";
         return;
@@ -75,7 +76,6 @@ export default {
 
   reducers: {
     changeLoginStatus(state, { payload }) {
-      console.log('登录：', payload)
       //setAuthority(payload.currentAuthority);
       return {
         ...state,
