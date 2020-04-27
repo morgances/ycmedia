@@ -248,7 +248,7 @@ class AddingArticle extends React.Component {
       'text-color', 'bold', 'italic', 'underline', 'strike-through', 'separator',
       'remove-styles', 'emoji',  'separator', 'text-indent', 'text-align', 'separator',
       'headings', 'list-ul', 'list-ol', 'blockquote', 'code', 'separator',
-      'link', 'media', 'hr', 'separator',
+      'link', 'hr', 'separator',
       'clear', 'separator'
     ]
     const {
