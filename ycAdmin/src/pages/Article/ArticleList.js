@@ -27,12 +27,12 @@ import {
 import Highlighter from 'react-highlight-words';
 import PageHeaderWrapper from "@/components/PageHeaderWrapper";
 import ArticleListContent from "@/components/ArticleListContent";
-import styles from "./BasicList.less";
+import styles from "./ArticleList.less";
 import StandardFormRow from "@/components/StandardFormRow";
 import StandardTable from "@/components/StandardTable";
 import Link from 'umi/link';
 import { routerRedux } from 'dva/router';
-import Adding from "./Adding";
+import EditingArticle from "./EditingArticle";
 
 const Search = Input.Search;
 const FormItem = Form.Item;
@@ -45,7 +45,7 @@ const RadioGroup = Radio.Group;
   loading: loading.models.rule,
 }))
 @Form.create()
-class BasicList extends PureComponent {
+class ArticleList extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -120,7 +120,7 @@ class BasicList extends PureComponent {
       loading === false
     }
     dispatch({
-      type: "rule/fetch",
+      type: "rule/queryArticleList",
       payload: {
         category
       }
@@ -134,7 +134,7 @@ class BasicList extends PureComponent {
     const { dispatch } = this.props;
     const { category } = this.state;
     dispatch({
-      type: "rule/fetch",
+      type: "rule/queryArticleList",
       payload: {
         category: e.target.value
       }
@@ -161,7 +161,7 @@ class BasicList extends PureComponent {
     const { dispatch } = this.props;
     const { category } = this.state;
     dispatch({
-      type: 'rule/removeText',
+      type: 'rule/removeArticle',
       payload: {
         aid,
         category
@@ -173,7 +173,7 @@ class BasicList extends PureComponent {
   adding = () => {
     const { dispatch } = this.props;
     dispatch(routerRedux.push({
-      pathname: '/list/adding-list/',
+      pathname: '/article/adding-article/',
     }))
   }
 
@@ -236,7 +236,7 @@ class BasicList extends PureComponent {
             </Popconfirm>
             <Divider type="vertical" />
             <Link
-              to={`/list/adding-list/${record.aid}`}
+              to={`/article/editing-article/${record.aid}`}
             >
               编辑
             </Link>
@@ -282,4 +282,4 @@ class BasicList extends PureComponent {
   }
 }
 
-export default BasicList;
+export default ArticleList;

@@ -1,10 +1,7 @@
 import {
-  queryArticleList,
-  addArticle,
-  updateAritcleList,
-  addPictureList,
+  addPicture,
   queryPictureList,
-  removeBanner,
+  removePicture,
   getPicture,
   updatePicture,
   uploadPicture
@@ -14,11 +11,12 @@ import router from "umi/router";
 export default {
   namespace: "list",
   state: {
+    data: {},
     list: []
   },
 
   effects: {
-    *fetch({ payload }, { call, put }) {
+    *queryPictureList({ payload }, { call, put }) {
       const response = yield call(queryPictureList, payload);
       if (response.status !== 0) {
         return
@@ -28,30 +26,12 @@ export default {
         payload: response
       });
     },
-    *addArticle({ payload }, { call, put }) {
-      const response = yield call(addArticle, payload);
-      if(response === undefined) {
-        router.push("/exception/500")
-      }
-      if(response.status != 200) {
-        return false
-      } else {
-        const addResponse = yield call(queryArticleList, payload);
-        if (addResponse.status != 200) {
-          return false
-        }
-        yield put({
-          type: 'queryPictureList',
-          payload: addResponse.data,
-        });
-      }
-    },
-    *addPictureList({ payload }, { call, put }) {
+    *addPicture({ payload }, { call, put }) {
       let callback;
       if(payload.BannerId) {
         callback = updatePicture;
       } else {
-        callback = addPictureList;
+        callback = addPicture;
       }
       const response = yield call(callback, payload);
       if(response === undefined) {
@@ -62,18 +42,8 @@ export default {
         payload: response,
       })
     },
-    *updateArticle({ payload }, { call, put }) {
-      const response = yield call(updateAritcleList, payload);
-      if (response.status !== 0) {
-        return
-      }
-      yield put({
-        type: "updateArticle",
-        payload: response.data
-      })
-    },
     *removePicture({ payload, callback }, { call, put }) {
-      const response = yield call(removeBanner, payload);
+      const response = yield call(removePicture, payload);
       //更新删除后数据
       if (response.status === 0) {
         const response = yield call(queryPictureList, payload);
@@ -83,14 +53,14 @@ export default {
         });
       }
     },
-    *picture({ payload }, { call, put }) {
+    *getPicture({ payload }, { call, put }) {
       const response = yield call(getPicture, payload);
       yield put({
         type: "edictPicture",
         payload: response.data
       })
     },
-    *upload({ payload }, { call, put }) {
+    *uploadPicture({ payload }, { call, put }) {
       const response = yield call(uploadPicture, payload);
       yield put({
         type: "uploadPicture",
@@ -106,41 +76,11 @@ export default {
         data: payload,
       };
     },
-    savePicture(state, { payload }) {
-      return {
-        ...state,
-        data: payload
-      };
-    },
     queryPictureList(state, { payload }) {
       return {
         ...state,
         list: payload
       };
-    },
-    updateArticle(state, { payload }) {
-      return {
-        ...state,
-        list: payload,
-      };
-    },
-    addArticle(state, { payload }) {
-      return {
-        ...state,
-        list: payload,
-      };
-    },
-    addPictureList(state, { payload }) {
-      return {
-        ...state,
-        list: payload,
-      };
-    },
-    removeList(state, { payload }) {
-      return {
-        ...state,
-        list: payload,
-      }
     },
     uploadPicture(state, { payload }) {
       return {

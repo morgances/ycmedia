@@ -22,7 +22,7 @@ import BraftEditor from 'braft-editor';
 import 'braft-editor/dist/index.css';
 import Axios from 'axios';
 import { routerRedux } from 'dva/router';
-import styles from './Adding.less';
+import styles from './EditingArticle.less';
 import { getToken } from "../../services/token";
 
 
@@ -79,7 +79,7 @@ const secondCityData = {
   loading: loading.models.rule,
 }))
 @Form.create()
-class Adding extends React.Component {
+class EditingArticle extends React.Component {
   formLayout = {
     labelCol: { span: 7 },
     wrapperCol: { span: 13 },
@@ -110,7 +110,7 @@ class Adding extends React.Component {
     }
     const aid = Number(match.params.aid);
     dispatch({
-      type: 'rule/text',
+      type: 'rule/getArticle',
       payload: {
         aid,
       },
@@ -197,7 +197,7 @@ class Adding extends React.Component {
           done: true,
         });
         dispatch({
-          type: 'list/updateArticle',
+          type: 'rule/updateArticle',
           payload: {
             ...fieldsValue,
             aid,
@@ -219,7 +219,6 @@ class Adding extends React.Component {
   handleChange = info => {
     const fileList = info.fileList;
     this.setState({ fileList });
-    let value = info.file;
     // const isJPG = info.file.type === 'image/jpeg';
     // const isPNG = info.file.type === 'image/png';
     // if(!isJPG && !isPNG) {
@@ -234,7 +233,7 @@ class Adding extends React.Component {
     // }
     const formData = new window.FormData();
     let token = getToken()
-    if (!value.url) {
+    if (fileList.length === 1) {
       formData.append('file',info.file,info.file.name)
     }
     Axios({
@@ -280,7 +279,7 @@ class Adding extends React.Component {
     const { dispatch } = this.props;
     dispatch(
       routerRedux.push({
-        pathname: '/list/basic-list/',
+        pathname: '/article/article-list/',
       })
     );
   };
@@ -487,4 +486,4 @@ class Adding extends React.Component {
   }
 }
 
-export default Adding;
+export default EditingArticle;

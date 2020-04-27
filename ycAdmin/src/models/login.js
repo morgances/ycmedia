@@ -28,7 +28,7 @@ export default {
         return setToken(response.data)
       }
       if (response.status === 200) {
-        window.location.href = "http://localhost:8000/list/basic-list";
+        window.location.href = "http://localhost:8000/article/article-list";
         return;
       }
     }

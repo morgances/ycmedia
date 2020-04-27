@@ -1,7 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import { Table, Alert } from 'antd';
 import styles from './index.less';
-import rule from '@/pages/List/models/rule';
+import rule from '@/pages/Article/models/rule';
 
 function initTotalList(columns) {
   const totalList = [];

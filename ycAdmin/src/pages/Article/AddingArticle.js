@@ -2,7 +2,7 @@ import React from "react";
 import { findDOMNode } from "react-dom";
 import { Button, Card, Modal, Form, Input, Cascader, Upload, Icon, message, Select } from "antd";
 import Result from "@/components/Result";
-import styles from "./AddText.less";
+import styles from "./AddingArticle.less";
 import { connect } from "dva";
 import PageHeaderWrapper from "@/components/PageHeaderWrapper";
 import moment from 'moment';
@@ -56,7 +56,7 @@ const secondCityData = {
   loading: loading.models.list
 }))
 @Form.create()
-class AddText extends React.Component {
+class AddingArticle extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -150,7 +150,7 @@ class AddText extends React.Component {
           });
         }
         dispatch({
-          type: "list/addArticle",
+          type: "rule/addArticle",
           payload: {
             ...fieldsValue,
             text: fieldsValue.text.toHTML(),
@@ -170,7 +170,6 @@ class AddText extends React.Component {
   //上传图片
   handleChange = (info) => {
     const fileList = info.fileList;
-    let value = info.file;
     this.setState({ fileList });
     // const isJPG = info.file.type === 'image/jpeg';
     // const isPNG = info.file.type === 'image/png';
@@ -186,7 +185,7 @@ class AddText extends React.Component {
     // }
     let formData = new window.FormData()
     let token = getToken()
-    if (!value.url) {
+    if (fileList.length === 1) {
       formData.append('file',info.file,info.file.name)
     }
     Axios({
@@ -230,7 +229,7 @@ class AddText extends React.Component {
   articlelist = () => {
     const { dispatch } = this.props;
     dispatch(routerRedux.push({
-      pathname: '/list/basic-list/',
+      pathname: '/article/article-list/',
     }))
   }
 
@@ -419,4 +418,4 @@ class AddText extends React.Component {
   }
 }
 
-export default AddText;
+export default AddingArticle;

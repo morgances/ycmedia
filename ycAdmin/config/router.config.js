@@ -81,40 +81,40 @@ export default [
       // list
       { path: '/', redirect: '/user/login' },
       {
-        path: "/list",
+        path: "/article",
         icon: "file-text",
-        name: "list",
+        name: "article",
         routes: [
           {
-            path: "/list/basic-list",
-            name: "basiclist",
-            component: "./List/BasicList"
+            path: "/article/article-list",
+            name: "articlelist",
+            component: "./Article/ArticleList"
           },
           {
-            path:"/list/adding-list",
-            name: "addinglist",
-            component: "./List/AddText",
+            path:"/article/adding-article",
+            name: "addingarticle",
+            component: "./Article/AddingArticle",
             hideInMenu: true
           },
           {
-            path: "/list/adding-list/:aid",
-            name: "addinglistaid",
-            component: "./List/Adding",
+            path: "/article/editing-article/:aid",
+            name: "editingarticle",
+            component: "./Article/EditingArticle",
             hideInMenu: true
           }
         ]
       },
 
-      // post
+      // Carousel
       {
-        path: "/post",
+        path: "/picture",
         icon: "picture",
-        name: "post",
+        name: "picture",
         routes: [
           {
-            path: "/post/dynamic-post",
-            name: "dynamicpost",
-            component: "./Post/DynamicPost"
+            path: "/picture/carousel-list",
+            name: "carousel",
+            component: "./Picture/Carousel"
           }
         ]
       },

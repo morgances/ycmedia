@@ -4,12 +4,13 @@ import { findDOMNode } from "react-dom";
 import { Avatar, Upload, Button, message, Icon, Card, Modal, Table, Popconfirm, Divider, Input, Form, DatePicker } from "antd";
 import PageHeaderWrapper from "@/components/PageHeaderWrapper";
 import Result from "@/components/Result";
-import styles from "./DynamicPost.less";
+import styles from "./Carousel.less";
 import moment from 'moment';
 import Axios from 'axios';
 import ImageGallery from 'react-image-gallery';
 import { routerRedux } from "dva/router";
 import { getToken } from "../../services/token";
+import { object } from "prop-types";
 
 const FormItem = Form.Item;
 @connect(({ list, rule, loading }) => ({
@@ -18,7 +19,7 @@ const FormItem = Form.Item;
   loading: loading.models.rule,
 }))
 @Form.create()
-class DynamicPost extends Component {
+class Carousel extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -41,7 +42,7 @@ class DynamicPost extends Component {
       loading === false
     }
     dispatch({
-      type: "list/fetch",
+      type: "list/queryPictureList",
       payload: {}
     });
   };
@@ -95,7 +96,7 @@ class DynamicPost extends Component {
     const { BannerId } = id;
     const { dispatch } = this.props;
     dispatch ({
-      type: 'list/picture',
+      type: 'list/getPicture',
       payload: {
         BannerId
       }
@@ -119,7 +120,7 @@ class DynamicPost extends Component {
           done: true,
         });
         dispatch({
-          type: "list/addPictureList",
+          type: "list/addPicture",
           payload: {
             BannerId,
             ...fieldsValue,
@@ -139,7 +140,6 @@ class DynamicPost extends Component {
   handleChange = (info) => {
     const { dispatch } = this.props;
     let fileList = info.fileList;
-    let value = info.file;
     this.setState({ fileList });
     // const isJPG = info.file.type === 'image/jpeg';
     // const isPNG = info.file.type === 'image/png';
@@ -154,15 +154,9 @@ class DynamicPost extends Component {
     //   return false;
     // }
     let formData = new FormData()
-    if (!value.url) {
+    if (fileList.length === 1) {
       formData.append('file',info.file,info.file.name)
     }
-    // dispatch({
-    //   type: "list/upload",
-    //   payload: {
-    //     value
-    //   },
-    // });
     let token = getToken()
     Axios({
       headers: {
@@ -358,4 +352,4 @@ class DynamicPost extends Component {
   }
 }
 
-export default DynamicPost;
+export default Carousel;

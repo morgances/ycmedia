@@ -30,7 +30,7 @@ export async function removeArticle(params) {
   });
 }
 
-export async function getText(params) {
+export async function getArticle(params) {
   return request("/api/v1/article/gettext",{
     method: "POST",
     body: {
@@ -40,7 +40,7 @@ export async function getText(params) {
   })
 }
 
-export async function updateAritcleList(params) {
+export async function updateAritcle(params) {
   return request("/api/v1/article/update", {
     method: "POST",
     body: {
@@ -58,7 +58,7 @@ export async function queryArticleList(params) {
   });
 }
 
-export async function removeBanner(params) {
+export async function removePicture(params) {
   return request("/api/v1/banner/delete", {
     method: "POST",
     body: {
@@ -87,7 +87,7 @@ export async function queryPictureList(params) {
   });
 }
 
-export async function addPictureList(params) {
+export async function addPicture(params) {
   return request("/api/v1/banner/create", {
     method: "POST",
     body: {
@@ -108,7 +108,6 @@ export async function updatePicture(params) {
 
 
 export async function uploadPicture(params) {
-  console.log(params, "params")
   return request("/api/v1/upload", {
     method: "POST",
     body: {
