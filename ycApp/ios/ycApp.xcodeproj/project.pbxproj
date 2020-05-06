@@ -12,7 +12,6 @@
 		00C302E91ABCBA2D00DB3ED1 /* libRCTNetwork.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302DC1ABCB9D200DB3ED1 /* libRCTNetwork.a */; };
 		00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302E41ABCB9EE00DB3ED1 /* libRCTVibration.a */; };
 		00E356F31AD99517003FC87E /* ycAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* ycAppTests.m */; };
-		0E3482DFC06D4B7626F6EE56 /* libPods-ycApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 90A3EF549C3F34811D80AC5A /* libPods-ycApp.a */; };
 		11D1A2F320CAFA9E000508D9 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
 		133E29F31AD74F7200F7D852 /* libRCTLinking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78C398B91ACF4ADC00677621 /* libRCTLinking.a */; };
 		139105C61AF99C1200B5F7CC /* libRCTSettings.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 139105C11AF99BAD00B5F7CC /* libRCTSettings.a */; };
@@ -37,6 +36,7 @@
 		2DCD954D1E0B4F2C00145EB5 /* ycAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* ycAppTests.m */; };
 		2DF0FFEE2056DD460020B375 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAD3EA31DF850E9000B6D8A /* libReact.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
+		988B2A9066F0C2FCA5E1BE6B /* libPods-ycApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CB7D38995CC685F13F60A37 /* libPods-ycApp.a */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
 		A2610872A4124C12AB258A1E /* RefreshDemo.app in Resources */ = {isa = PBXBuildFile; fileRef = FAA8A1E6418342C5BDDBB646 /* RefreshDemo.app */; };
 		7B0BDC40DE5147DBBD56441E /* RefreshDemoTests.xctest in Resources */ = {isa = PBXBuildFile; fileRef = E7DE7D1AEC924F02906F9A11 /* RefreshDemoTests.xctest */; };
@@ -357,12 +357,15 @@
 		2D02E47B1E0B4A5D006451C7 /* ycApp-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ycApp-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* ycApp-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ycApp-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		3CB7D38995CC685F13F60A37 /* libPods-ycApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ycApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
+		72D0C475DCD171EFA58BFB76 /* Pods-ycApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ycApp.debug.xcconfig"; path = "Target Support Files/Pods-ycApp/Pods-ycApp.debug.xcconfig"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
-		90A3EF549C3F34811D80AC5A /* libPods-ycApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ycApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		98DF60867088E0358E99E48C /* Pods-ycApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ycApp.release.xcconfig"; path = "Target Support Files/Pods-ycApp/Pods-ycApp.release.xcconfig"; sourceTree = "<group>"; };
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
+<<<<<<< HEAD
+		D7514232CDBCB57AB0F41B51 /* Pods-ycApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ycApp.release.xcconfig"; path = "Target Support Files/Pods-ycApp/Pods-ycApp.release.xcconfig"; sourceTree = "<group>"; };
+=======
 		C9970C4D4BEB6643E9FCA170 /* Pods-ycApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ycApp.debug.xcconfig"; path = "Target Support Files/Pods-ycApp/Pods-ycApp.debug.xcconfig"; sourceTree = "<group>"; };
 		ED874FEC69BE44369D298B6D /* RefreshDemo.xcodeproj */ = {isa = PBXFileReference; name = "RefreshDemo.xcodeproj"; path = "../node_modules/react-native-swRefresh/RefreshDemo/ios/RefreshDemo.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		FAA8A1E6418342C5BDDBB646 /* RefreshDemo.app */ = {isa = PBXFileReference; name = "RefreshDemo.app"; path = "RefreshDemo.app"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.application; explicitFileType = undefined; includeInIndex = 0; };
@@ -383,6 +386,7 @@
 		1C4CBBDA1FAA4622BEE4231F /* Octicons.ttf */ = {isa = PBXFileReference; name = "Octicons.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		BBB445B9EF044A1FADBCF8D2 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; name = "SimpleLineIcons.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		A7598F58C2CF4F39B267DCD6 /* Zocial.ttf */ = {isa = PBXFileReference; name = "Zocial.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+>>>>>>> fe144d4245685b9bdd52add54729aef0b3fd547d
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -410,9 +414,13 @@
 				832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */,
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
+<<<<<<< HEAD
+				988B2A9066F0C2FCA5E1BE6B /* libPods-ycApp.a in Frameworks */,
+=======
 				0E3482DFC06D4B7626F6EE56 /* libPods-ycApp.a in Frameworks */,
 				A2610872A4124C12AB258A1E /* RefreshDemo.app in Resources */,
 				7B0BDC40DE5147DBBD56441E /* RefreshDemoTests.xctest in Resources */,
+>>>>>>> fe144d4245685b9bdd52add54729aef0b3fd547d
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -562,17 +570,18 @@
 			isa = PBXGroup;
 			children = (
 				2D16E6891FA4F8E400B85C8A /* libReact.a */,
-				90A3EF549C3F34811D80AC5A /* libPods-ycApp.a */,
+				3CB7D38995CC685F13F60A37 /* libPods-ycApp.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		54C3A798EDCDF1A47D38F146 /* Pods */ = {
+		401C935EF3747B6233F2715C /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				C9970C4D4BEB6643E9FCA170 /* Pods-ycApp.debug.xcconfig */,
-				98DF60867088E0358E99E48C /* Pods-ycApp.release.xcconfig */,
+				72D0C475DCD171EFA58BFB76 /* Pods-ycApp.debug.xcconfig */,
+				D7514232CDBCB57AB0F41B51 /* Pods-ycApp.release.xcconfig */,
 			);
+			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -631,8 +640,12 @@
 				00E356EF1AD99517003FC87E /* ycAppTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
+<<<<<<< HEAD
+				401C935EF3747B6233F2715C /* Pods */,
+=======
 				54C3A798EDCDF1A47D38F146 /* Pods */,
 				A518EFF38669414AB29B3A53 /* Resources */,
+>>>>>>> fe144d4245685b9bdd52add54729aef0b3fd547d
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -708,12 +721,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "ycApp" */;
 			buildPhases = (
-				69B621152EF09FF50534E93F /* [CP] Check Pods Manifest.lock */,
+				FFC79008DB078E70C772167E /* [CP] Check Pods Manifest.lock */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				27BC0843E95FF950A8CAC27D /* [CP] Copy Pods Resources */,
+				2AA8D06298858592772E03EA /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -789,7 +802,6 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				English,
 				en,
 				Base,
 			);
@@ -1183,7 +1195,7 @@
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
 		};
-		27BC0843E95FF950A8CAC27D /* [CP] Copy Pods Resources */ = {
+		2AA8D06298858592772E03EA /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1247,7 +1259,7 @@
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
 		};
-		69B621152EF09FF50534E93F /* [CP] Check Pods Manifest.lock */ = {
+		FFC79008DB078E70C772167E /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1393,13 +1405,12 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C9970C4D4BEB6643E9FCA170 /* Pods-ycApp.debug.xcconfig */;
+			baseConfigurationReference = 72D0C475DCD171EFA58BFB76 /* Pods-ycApp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				INFOPLIST_FILE = ycApp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -1408,7 +1419,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = ycApp;
-				USER_HEADER_SEARCH_PATHS = "${SRCROOT} /**";
 				VERSIONING_SYSTEM = "apple-generic";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1419,12 +1429,11 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 98DF60867088E0358E99E48C /* Pods-ycApp.release.xcconfig */;
+			baseConfigurationReference = D7514232CDBCB57AB0F41B51 /* Pods-ycApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
 				INFOPLIST_FILE = ycApp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -1433,7 +1442,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = ycApp;
-				USER_HEADER_SEARCH_PATHS = "${SRCROOT} /**";
 				VERSIONING_SYSTEM = "apple-generic";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1630,8 +1638,6 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
-				USER_HEADER_SEARCH_PATHS = "";
-				"USER_HEADER_SEARCH_PATHS[arch=*]" = "";
 			};
 			name = Debug;
 		};
@@ -1677,7 +1683,6 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
-				USER_HEADER_SEARCH_PATHS = "";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

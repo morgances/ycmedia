@@ -37,7 +37,7 @@ import SpendingScreen from './pages/MainModules/Spending'
 import BrandScreen from './pages/MainModules/Brand'
 import CityScreen from './pages/MainModules/City'
 import DetailScreen from './pages/Detail'
-import MapScreen from './pages/MainModules/Map'
+// import MapScreen from './pages/MainModules/Map'
 
 const Navigations = {
   Basic: { 
@@ -70,9 +70,9 @@ const Navigations = {
   Detail: {
     screen: DetailScreen
   },
-  Map: {
-    screen: MapScreen
-  }
+  // Map: {
+  //   screen: MapScreen
+  // }
 };
 
 export default Navigations;

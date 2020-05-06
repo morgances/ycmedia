@@ -14,7 +14,7 @@ PODS:
   - react-native-amap3d (1.1.1):
     - AMap3DMap (~> 6.6.0)
     - React
-  - react-native-appearance (0.3.3):
+  - react-native-appearance (0.3.4):
     - React
   - React/Core (0.57.8):
     - yoga (= 0.57.8.React)
@@ -97,8 +97,8 @@ SPEC CHECKSUMS:
   Folly: c89ac2d5c6ab169cd7397ef27485c44f35f742c7
   glog: e8acf0ebbf99759d3ff18c86c292a5898282dcde
   React: adbac0757ce35e92fbd447ab98c810209d27d9b0
-  react-native-amap3d: 7ee6406ae17b263f4ae4bbb9eacd1bc53cc8bd4f
-  react-native-appearance: 98e4530857c366de634f58e5db91bf97feaa96ff
+  react-native-amap3d: 8dda78f6605472b50a17818f5af185518081eec7
+  react-native-appearance: fc2014516054585d531e07aa0b40ab0de1d2be85
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   yoga: 74cdf036c30820443b25ade59916236b1e95ee93
 

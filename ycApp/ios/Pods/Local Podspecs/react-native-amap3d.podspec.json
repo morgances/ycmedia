@@ -5,13 +5,13 @@
   "authors": {
     "Qiu Xiang": "i@7c00.cc"
   },
-  "homepage": "https://github.com/qiuxiang/react-native-amap3d",
+  "homepage": "git+https://github.com/qiuxiang/react-native-amap3d.git",
   "license": "MIT",
   "platforms": {
     "ios": "8.0"
   },
   "source": {
-    "git": "https://github.com/qiuxiang/react-native-amap3d"
+    "git": "git+https://github.com/qiuxiang/react-native-amap3d.git"
   },
   "source_files": "**/*.{h,m}",
   "dependencies": {
