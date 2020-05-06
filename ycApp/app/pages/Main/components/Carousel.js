@@ -21,7 +21,6 @@ export default (props) => {
         selectedIndex={0}
         autoplay
         infinite
-        dotActiveStyle={styles.dotActive}
       >
         {List()}
       </Carousel>
@@ -32,8 +31,5 @@ export default (props) => {
 const styles = StyleSheet.create({
   containerHorizontal: {
     height: Styles.Height(300)
-  },
-  dotActive: {
-    backgroundColor: Colors.primary
   }
 })

@@ -18,7 +18,7 @@ import Inform from './components/Inform'
 import Policies from './components/Policies'
 import Free from './components/Free'
 
-class Main extends Component<{}> {
+class Main extends Component {
   static navigationOptions = {
     title: '文化资讯',
     headerStyle: {

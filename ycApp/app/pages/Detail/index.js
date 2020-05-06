@@ -5,12 +5,11 @@ import { WingBlank, Flex } from 'antd-mobile-rn';
 import HTMLView from 'react-native-htmlview';
 import { Appearance } from 'react-native-appearance';
 
-import Colors from '../../res/Colors'
 import Styles from '../../res/Styles'
 import Size from '../../res/Fonts/size'
 
 
-class Detail extends Component<{}> {
+class Detail extends Component {
   static navigationOptions = {
     title: '文章详情',
     headerStyle: {

@@ -8,16 +8,14 @@ import Size from '../../../res/Fonts/size'
 import Cinema from './components/Cinema'
 import Theatre from './components/Theatre'
 
-export default class Main extends Component<{}> {
+export default class Main extends Component {
   static navigationOptions = {
     title: '文化消费',
     headerStyle: {
-      backgroundColor: Colors.primary,
       elevation: 0,
       shadowOpacity: 0,
       height: 44
     },
-    headerTintColor: Colors.white,
     headerTitleStyle: {
       fontSize: Size.large,
       fontWeight: null,

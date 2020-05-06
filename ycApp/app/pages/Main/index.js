@@ -122,14 +122,14 @@ class Main extends Component {
     return (
         <ScrollView
           showsVerticalScrollIndicator={false}
-          style={{backgroundColor: this.props.theme.background}}
+          style={{backgroundColor: this.props.theme.background || ""}}
           refreshControl={
             <RefreshControl
               refreshing={this.state.isRefreshing}
               onRefresh={this._onRefreshing.bind(this, [this.props, 'home'])}
               titleColor={this.props.theme.title}
               colors={["#00b9a2"]}
-              progressBackgroundColor={this.props.theme.background}
+              progressBackgroundColor={this.props.theme.background || ""}
             />
           }
           onScroll={this._onLoadingMore.bind(this)}
@@ -138,12 +138,12 @@ class Main extends Component {
           <StatusBar  
             animated={true}
             hidden={false}  
-            backgroundColor={ this.props.theme.primary } 
+            backgroundColor={ this.props.theme.primary || "" } 
             translucent={false}
             barStyle={'light-content'}
           >  
           </StatusBar>
-          <View style={{backgroundColor: this.props.theme.background}}>
+          <View style={{backgroundColor: this.props.theme.background || ""}}>
             <Carousel banners={this.props.banners}></Carousel>
             <Modules navigation={this.props.navigation}></Modules>
             <View style={{background: this.props.theme.background, ...styles.news}}>
@@ -152,7 +152,7 @@ class Main extends Component {
                   <Text style={{ fontSize: Size.xlarge, color: this.props.theme.title }}>最新资讯</Text>
                 </Flex>
               </View>
-              <View style={{ backgroundColor: this.props.theme.background, ...styles.news_content_view}}>
+              <View style={{ backgroundColor: this.props.theme.background || "", ...styles.news_content_view}}>
                 <WingBlank size="lg">
                   {
                     this.props.articleList.length > 0 ? 
@@ -160,7 +160,7 @@ class Main extends Component {
                           <Item data={this.props} navigation={this.props.navigation} theme={this.props.theme}></Item>
                       </View>
                       : 
-                      <Image source= { require('../../assets/images/th.gif') } style={{backgroundColor: this.props.theme.background, height: Styles.Height(400), width: Styles.Width() - 30 }}></Image>
+                      <Image source= { require('../../assets/images/th.gif') } style={{backgroundColor: this.props.theme.background || "", height: Styles.Height(400), width: Styles.Width() - 30 }}></Image>
                     }          
                   { this.state.loadMore ? <Loadmore theme={this.props.theme} data={ this.state.loadMore }></Loadmore> : null }
                 </WingBlank>

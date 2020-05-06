@@ -16,7 +16,7 @@ import Colors from '../../../res/Colors'
 import Memory from './components/Memory'
 import Culture from './components/Culture'
 
-class Main extends Component<{}> {
+class Main extends Component {
   static navigationOptions = {
     title: '凤城演绎',
     headerStyle: {

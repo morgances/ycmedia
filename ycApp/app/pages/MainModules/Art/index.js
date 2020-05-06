@@ -18,7 +18,7 @@ import News from  './components/News'
 import Artists from './components/Artists'
 import Venues from './components/Venues'
 
-class Main extends Component<{}> {
+class Main extends Component {
   constructor(props) {
     super(props)
   }

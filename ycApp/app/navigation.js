@@ -31,9 +31,9 @@ import MainScreen from './pages/Main';
 import CultureScreen from './pages/MainModules/Culture'
 import ArtScreen from './pages/MainModules/Art'
 import IntangibleScreen from './pages/MainModules/Intangible'
-import TravelScreen from './pages/MainModules/Travel'
+// import TravelScreen from './pages/MainModules/Travel'
 import BookScreen from './pages/MainModules/Book'
-import SpendingScreen from './pages/MainModules/Spending'
+// import SpendingScreen from './pages/MainModules/Spending'
 import BrandScreen from './pages/MainModules/Brand'
 import CityScreen from './pages/MainModules/City'
 import DetailScreen from './pages/Detail'
@@ -52,15 +52,15 @@ const Navigations = {
   Intangible: {
     screen: IntangibleScreen
   },
-  Travel: {
-    screen: TravelScreen
-  },
+  // Travel: {
+  //   screen: TravelScreen
+  // },
   Book: {
     screen: BookScreen
   },
-  Spending: {
-    screen: SpendingScreen
-  },
+  // Spending: {
+  //   screen: SpendingScreen
+  // },
   Brand: {
     screen: BrandScreen
   },

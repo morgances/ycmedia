@@ -20,7 +20,7 @@ import Loadmore from '../../../components/LoadMore'
 import refresh_result from '../../../components/Refresh_result'
 import NoData from '../../../components/NoData'
 
-class Brand extends Component<{}> {
+class Brand extends Component {
   static navigationOptions = {
     title: '文化品牌',
     headerStyle: {

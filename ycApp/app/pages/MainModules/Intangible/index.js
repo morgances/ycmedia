@@ -15,7 +15,7 @@ import Size from '../../../res/Fonts/size'
 import Culture from './components/Culture'
 import Smriti from './components/Smriti'
 
-class Main extends Component<{}> {
+class Main extends Component {
   static navigationOptions = {
     title: '遗脉相承',
     headerStyle: {

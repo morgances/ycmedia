@@ -17,7 +17,7 @@ class Modules extends React.Component {
     return (
       <WingBlank size='md' style={{ paddingTop: 6 }}>
         <Flex>
-          <Flex.Item style={{backgroundColor: this.props.theme.containerbg, ...styles.module}}>
+          <Flex.Item style={{backgroundColor: this.props.theme.containerbg || "", ...styles.module}}>
             <TouchableOpacity onPress={() => dispatch(Navigator.navigate('Culture'))}>
               <View style={styles.viewFlex}>
                 <Image style={styles.image} source={require('../../../assets/images/Main/module_one.png')}></Image>
@@ -25,7 +25,7 @@ class Modules extends React.Component {
               </View>
             </TouchableOpacity>
           </Flex.Item>
-          <Flex.Item style={{backgroundColor: this.props.theme.containerbg, ...styles.module}}>
+          <Flex.Item style={{backgroundColor: this.props.theme.containerbg || "", ...styles.module}}>
             <TouchableOpacity onPress={() => dispatch(Navigator.navigate('Book'))}>
               <View style={styles.viewFlex}>
                 <Image style={styles.image} source={require('../../../assets/images/Main/module_two.png')}></Image>
@@ -33,7 +33,7 @@ class Modules extends React.Component {
               </View>
             </TouchableOpacity>
           </Flex.Item>
-          <Flex.Item style={{backgroundColor: this.props.theme.containerbg, ...styles.module}}>
+          <Flex.Item style={{backgroundColor: this.props.theme.containerbg || "", ...styles.module}}>
             <TouchableOpacity onPress={() => dispatch(Navigator.navigate('Intangible'))}>
               <View style={styles.viewFlex}>
                 <Image style={styles.image} source={require('../../../assets/images/Main/module_three.png')}></Image>
@@ -43,7 +43,7 @@ class Modules extends React.Component {
           </Flex.Item>
         </Flex>
         <Flex>
-          <Flex.Item style={{backgroundColor: this.props.theme.containerbg, ...styles.module}}>
+          <Flex.Item style={{backgroundColor: this.props.theme.containerbg || "", ...styles.module}}>
             <TouchableOpacity onPress={() => dispatch(Navigator.navigate('Art'))}>
               <View style={styles.viewFlex}>
                 <Image style={styles.image} source={require('../../../assets/images/Main/module_five.png')}></Image>
@@ -51,7 +51,7 @@ class Modules extends React.Component {
               </View>
             </TouchableOpacity>
           </Flex.Item>
-          <Flex.Item style={{backgroundColor: this.props.theme.containerbg, ...styles.module}}>
+          <Flex.Item style={{backgroundColor: this.props.theme.containerbg || "", ...styles.module}}>
             <TouchableOpacity onPress={() => dispatch(Navigator.navigate('Brand'))}>
               <View style={styles.viewFlex}>
                 <Image style={styles.image} source={require('../../../assets/images/Main/module_seven.png')}></Image>
@@ -59,7 +59,7 @@ class Modules extends React.Component {
               </View>
             </TouchableOpacity>
           </Flex.Item>
-          <Flex.Item style={{backgroundColor: this.props.theme.containerbg, ...styles.module}}>
+          <Flex.Item style={{backgroundColor: this.props.theme.containerbg || "", ...styles.module}}>
             <TouchableOpacity onPress={() => dispatch(Navigator.navigate('City'))}>
               <View style={styles.viewFlex}>
                 <Image style={styles.image} source={require('../../../assets/images/Main/module_eight.png')}></Image>

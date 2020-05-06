@@ -18,7 +18,7 @@ import Web from './components/Web'
 import Resources from './components/Resources'
 import Service from './components/Service'
 
-class Main extends Component<{}> {
+class Main extends Component {
   static navigationOptions = {
     title: '书香银川',
     headerStyle: {
