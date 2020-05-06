@@ -18,13 +18,12 @@ export default (props) => {
   return (
     <View>
       <Carousel
-        style={styles.wrapper}
         selectedIndex={0}
         autoplay
         infinite
         dotActiveStyle={styles.dotActive}
       >
-        <List></List>
+        {List()}
       </Carousel>
     </View>
   )
