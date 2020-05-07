@@ -25,18 +25,20 @@ export default (props) => {
           }
           {
             item.image != '' ? 
-              <Flex.Item style={{ flex: 3.5, paddingLeft: 20 }}>
+              <Flex.Item style={{ flex: 3.5, paddingLeft: 20, paddingRight: 20, marginLeft: 20 }}>
                 <View>
                   <Text numberOfLines={2} style={{ fontSize: FontSize.medium, color: theme.text }}>{item.title}</Text>
                 </View>
                 <View style={ styles.news_content_time_view}>
-                  <Text style={{ ...styles.news_content_time, color: theme.text }}>{item.time}</Text>
+                  <Text style={{ ...styles.news_content_time, color: theme.subTitle }}>{item.time}</Text>
                 </View>
               </Flex.Item>
               :
-              <Flex.Item style={{ flex: 3.5, paddingLeft: 10, height: Styles.Height(90) }}>
-                <Text numberOfLines={2} style={{ fontSize: FontSize.medium, color: theme.text,  }}>{item.title}</Text>
-                <View style={ styles.news_content_time_view}>
+              <Flex.Item style={{ flex: 3.5, paddingLeft: 10, height: Styles.Height(100), paddingRight: 10 }}>
+                <View style={ styles.news_content_time_title }>
+                  <Text numberOfLines={2} style={{ fontSize: FontSize.medium, color: theme.text }}>{item.title}</Text>
+                </View>
+                <View style={ styles.news_content_time_view }>
                   <Text style={{...styles.news_content_time, color: theme.subTitle}}>{item.time}</Text>
                 </View>
               </Flex.Item>
@@ -67,7 +69,9 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   news_content_time_view: {
-    position: "relative",
-    top: Styles.Height(36)
+    height: Styles.Height(30),
   },
+  news_content_time_title: {
+    height: Styles.Height(70),
+  }
 })
