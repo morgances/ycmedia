@@ -91,7 +91,7 @@ def enableSeparateBuildPerCPUArchitecture = false
 /**
  * Run Proguard to shrink the Java bytecode in release builds.
  */
-def enableProguardInReleaseBuilds = false
+def enableProguardInReleaseBuilds = true
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -107,6 +107,14 @@ android {
             abiFilters "armeabi-v7a", "x86"
         }
     }
+    signingConfigs {
+        release {
+            storeFile file("/Users/bofeng/Documents/GitHub/ycmedia/ycApp/android/app/my-release-key.keystore")
+            storePassword "wangbofenglc1314"
+            keyAlias "my-key-alias"
+            keyPassword "wangbofenglc1314"
+        }
+    }
     splits {
         abi {
             reset()
@@ -117,6 +125,7 @@ android {
     }
     buildTypes {
         release {
+            signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
@@ -137,7 +146,8 @@ android {
 }
 
 dependencies {
-    compile project(':react-native-appearance')
+    implementation project(':react-native-amap3d')
+    implementation project(':react-native-appearance')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
     implementation "com.facebook.react:react-native:+"  // From node_modules
