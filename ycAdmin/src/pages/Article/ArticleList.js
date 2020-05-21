@@ -114,17 +114,17 @@ class ArticleList extends PureComponent {
   componentDidMount() {
     const { category } = this.state;
     const { dispatch, rule, loading } = this.props;
-    if(rule.data === {}) {
-      loading === true
-    } else {
-      loading === false
-    }
     dispatch({
       type: "rule/queryArticleList",
       payload: {
         category
       }
     });
+    if(rule.data === {}) {
+      loading === true
+    } else {
+      loading === false
+    }
   };
 
   handleChange = (e) => {
