@@ -36,7 +36,7 @@ class Carousel extends Component {
 
   componentDidMount() {
     const { dispatch, loading, list } = this.props;
-    if(list.list.data.length === 0) {
+    if(list.list.data === []) {
       loading === true
     } else {
       loading === false
