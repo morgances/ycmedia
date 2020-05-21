@@ -61,7 +61,6 @@ func (f *JWTFilter) Check(ctx *server.Context) bool {
 	c.SetUID(rawUID)
 	//c.SetUID(1000)
 
-
 	//which to authentication
 	//url := c.Request().URL.Path
 	// result, err := mysql.Service.URLPermissions(f.db, url)
@@ -94,7 +93,9 @@ func (f *JWTFilter) checkJWT(ctx *base.Context) (jwtgo.MapClaims, error) {
 	}
 
 	tokenString := kv[1]
-
+	if tokenString == "" {
+		return nil, errors.New("Get No token")
+	}
 	token, _ := jwtgo.Parse(tokenString, func(token *jwtgo.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwtgo.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
