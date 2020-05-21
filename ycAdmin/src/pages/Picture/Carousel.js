@@ -16,7 +16,7 @@ const FormItem = Form.Item;
 @connect(({ list, rule, loading }) => ({
   list,
   rule,
-  loading: loading.models.rule,
+  loading: loading.models.list,
 }))
 @Form.create()
 class Carousel extends Component {
@@ -35,8 +35,8 @@ class Carousel extends Component {
   }
 
   componentDidMount() {
-    const { dispatch, loading, rule } = this.props;
-    if(rule.data === {}) {
+    const { dispatch, loading, list } = this.props;
+    if(list.list.data.length === 0) {
       loading === true
     } else {
       loading === false
@@ -223,7 +223,7 @@ class Carousel extends Component {
         return (
           <Result
             type="success"
-            title="添加成功"
+            title="操作成功"
             actions={
               <Button loading={this.state.loading} type="primary" onClick={this.handlePictureDone}>
                 知道了
