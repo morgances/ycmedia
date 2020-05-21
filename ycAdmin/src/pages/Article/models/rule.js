@@ -28,17 +28,12 @@ export default {
       if(response === undefined) {
         router.push("/exception/500")
       }
-      if(response.status != 200) {
-        return false
-      } else {
-        const addResponse = yield call(queryArticleList, payload);
-        if (addResponse.status != 200) {
-          return false
-        }
+      if(response.status === 200) {
+        const res = yield call(queryArticleList, payload);
         yield put({
-          type: 'queryArticleList',
-          payload: addResponse.data,
-        });
+          type: 'save',
+          payload: res,
+        })
       }
     },
     *removeArticle({ payload }, { call, put }) {
@@ -75,12 +70,6 @@ export default {
       return {
         ...state,
         data: payload
-      };
-    },
-    queryArticleList(state, { payload }) {
-      return {
-        ...state,
-        list: payload
       };
     },
     updateArticle(state, { payload }) {

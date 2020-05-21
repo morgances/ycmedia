@@ -35,15 +35,15 @@ class Carousel extends Component {
   }
 
   componentDidMount() {
-    const { dispatch, loading, list } = this.props;
+    const { dispatch, list, loading } = this.props;
     dispatch({
       type: "list/queryPictureList",
       payload: {}
     });
     if(list.list.data === []) {
-      loading === true
-    } else {
-      loading === false
+      this.setState({
+        loading: loading
+      });
     }
   };
 
@@ -201,9 +201,9 @@ class Carousel extends Component {
     const {
       form: { getFieldDecorator },
       list: { list: { data } },
-      rowKey
+      rowKey,
     } = this.props;
-    const { previewVisible, modalVisible, visible, done, current = {}, imageUrl, fileList, previewImage } = this.state;
+    const { previewVisible, modalVisible, visible, done, current = {}, imageUrl, fileList, previewImage, loading } = this.state;
     const modalFooter = done
       ? { footer: null, onCancel: this.handleDone }
       : {
@@ -331,6 +331,7 @@ class Carousel extends Component {
           <Table
             bordered
             rowKey={rowKey || 'BannerId'}
+            loading={loading}
             dataSource={data}
             columns={columns}
             pagination={{ pageSize: 5 }}
